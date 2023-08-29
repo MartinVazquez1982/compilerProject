@@ -7,13 +7,29 @@
 //============================================================================
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
-void func(){
-	cout << "Soy la funcion 1" << endl;
-}
+int main(int argc, char *argv[]) {
+	if (argc != 2) {
+		cout << "Uso: " << argv[0] << " <nombre_del_archivo>" << endl;
+		return 1;
+	}
 
-int main() {
-	cout << "A joaco le gusta el pene" << endl;// prints !!!Hello World!!!
+	const char* nombreArchivo = argv[1];
+	ifstream archivo(nombreArchivo);
+
+	if (!archivo) {
+		cout << "No se pudo abrir el archivo." << endl;
+		return 1;
+	}
+
+	char caracter;
+	while (archivo.get(caracter)) {
+		cout << caracter << endl;
+	}
+
+	archivo.close();
+	cout << "fin ejecucion";
 	return 0;
 }
