@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <fstream>
+#include "./AnalisisLexico/Headers/AccionesSemanticas.h"
 using namespace std;
 
 int main(int argc, char *argv[]) {
@@ -28,8 +29,7 @@ int main(int argc, char *argv[]) {
 	while (archivo.get(caracter)) {
 		cout << caracter << endl;
 	}
-
 	archivo.close();
-	cout << "fin ejecucion";
+	AccionesSemanticas::AS1();
 	return 0;
 }
