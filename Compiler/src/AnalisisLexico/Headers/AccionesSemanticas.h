@@ -16,13 +16,10 @@ class AccionesSemanticas{
 		static string cadena;
 	public:
 		/**
-		 *  [Descripcion]
+		 *  Cuenta cantidad de lineas del archivo fuente
 		 *
-		 *  @param nro1
-		 *  @param nro2
-		 *  @return lo que retorna
 		 */
-		static void AS1();
+		static void AS1(char caracter);
 };
 
 

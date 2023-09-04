@@ -11,7 +11,7 @@
 #include <unordered_map>
 
 using namespace std;
-using FuncPtr = void (*)();
+using FuncPtr = void (*)(char caracter);
 
 struct Dato{
 	int estadoSiguiente;

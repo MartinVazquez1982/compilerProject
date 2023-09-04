@@ -7,11 +7,12 @@
 
 #include "../Headers/Automata.h"
 #include<iostream>
+#include "../Headers/AccionesSemanticas.h"
 using namespace std;
 
 int Automata::estadoActual = 0;
 const Dato constexpr Automata::AutomataMatriz[FILAS][COLUMNAS] = {
-	/*0*/	{{1, nullptr },{5, nullptr},{6, nullptr},{5, nullptr},{13, nullptr},{-1, nullptr},{4, nullptr},{7, nullptr},{-1, nullptr},{-1, nullptr},{10, nullptr},{11, nullptr},{12, nullptr},{18, nullptr},{0, nullptr},{-1, nullptr},{5, nullptr},{5, nullptr},{5, nullptr},{5, nullptr},{6, nullptr},{-2, nullptr},{-1, nullptr}},
+	/*0*/	{{1, nullptr },{5, nullptr},{6, nullptr},{5, nullptr},{13, nullptr},{-1, nullptr},{4, nullptr},{7, nullptr},{-1, nullptr},{-1, nullptr},{10, nullptr},{11, nullptr},{12, nullptr},{18, nullptr},{0, AccionesSemanticas::AS1},{-1, nullptr},{5, nullptr},{5, nullptr},{5, nullptr},{5, nullptr},{6, nullptr},{-2, nullptr},{-1, nullptr}},
 	/*1*/	{{1, nullptr},{-2, nullptr},{-2, nullptr},{2, nullptr},{13, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr}},
 	/*2*/	{{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{3, nullptr},{-2, nullptr},{-1, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr}},
 	/*3*/	{{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-1, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr},{-2, nullptr}},

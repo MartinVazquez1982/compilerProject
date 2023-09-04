@@ -16,6 +16,7 @@ void analisisLexico(ifstream& codigoFuente){
 	char caracter;
 	while (codigoFuente.get(caracter)){
 		Dato estado = Automata::pasoAutomata(caracter);
-		cout << estado.estadoSiguiente << endl;
+		//cout << estado.estadoSiguiente << endl;
+		estado.AS(caracter);
 	}
 }
