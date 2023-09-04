@@ -8,8 +8,9 @@
 
 #include <iostream>
 #include <fstream>
-#include "./AnalisisLexico/Headers/AccionesSemanticas.h"
+#include "./AnalisisLexico/AnalizadorLexico.h"
 using namespace std;
+
 
 int main(int argc, char *argv[]) {
 	if (argc != 2) {
@@ -25,11 +26,9 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	char caracter;
-	while (archivo.get(caracter)) {
-		cout << caracter << endl;
+	if (archivo.is_open()){
+		analisisLexico(archivo);
 	}
 	archivo.close();
-	AccionesSemanticas::AS1();
 	return 0;
 }
