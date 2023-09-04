@@ -27,7 +27,7 @@ class Automata{
 
 	public:
 		const static Dato AutomataMatriz[FILAS][COLUMNAS];
-		static unordered_map<char, int> hashIndices;
+		const static unordered_map<char, int> hashIndices;
 
 		//Pensar como hacemos para transformar ese caracter en un nro de columna
 
