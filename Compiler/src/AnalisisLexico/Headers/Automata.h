@@ -29,14 +29,10 @@ class Automata{
 		const static Dato AutomataMatriz[FILAS][COLUMNAS];
 		const static unordered_map<char, int> hashIndices;
 
-		//Pensar como hacemos para transformar ese caracter en un nro de columna
-
-	public:
 		Dato static pasoAutomata(char caracter);
 
 	private:
-		void static cargarMatriz();
-		int static indiceCaracter(char caraacter);
+		int static indiceCaracter(char caracter);
 };
 
 

@@ -1,6 +1,6 @@
 //============================================================================
 // Name        : Compiler.cpp
-// Author      : 
+// Authors     : Burckhardt, David | Benecier, Joaquin | Vazquez Arispe, Martin
 // Version     :
 // Copyright   : Your copyright notice
 // Description : Hello World in C++, Ansi-style
@@ -13,22 +13,20 @@ using namespace std;
 
 
 int main(int argc, char *argv[]) {
-	if (argc != 2) {
-		cout << "Uso: " << argv[0] << " <nombre_del_archivo>" << endl;
-		return 1;
+	if (argc > 2) {
+		throw runtime_error("Demasiados argumentos.");
+	} else if (argc < 2){
+		throw runtime_error("Falta codigo fuente a compilar.");
 	}
 
 	const char* nombreArchivo = argv[1];
 	ifstream archivo(nombreArchivo);
 
-	if (!archivo) {
-		cout << "No se pudo abrir el archivo." << endl;
-		return 1;
+	if (!archivo.is_open()) {
+		throw runtime_error("No se ha podido abrir el codigo fuente.");
 	}
 
-	if (archivo.is_open()){
-		analisisLexico(archivo);
-	}
+	analisisLexico(archivo);
 	archivo.close();
 	return 0;
 }
