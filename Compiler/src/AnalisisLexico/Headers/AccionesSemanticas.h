@@ -14,8 +14,11 @@ class AccionesSemanticas{
 	private:
 		static int nroLineas;
 		static string entrada;
+		static bool habilitarLectura;
 
 	public:
+		static bool LeerCaracter();
+
 		static void AS1(char caracter); // Cuenta la cantidad de lineas del archivo fuente
 
 		static void AS2(char caracter);

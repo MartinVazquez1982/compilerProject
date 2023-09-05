@@ -22,7 +22,6 @@ class Automata{
 	private:
 		const static int FILAS = 19;
 		const static int COLUMNAS = 23;
-		const static int Final = -1;
 		static int estadoActual;
 
 	public:
@@ -30,6 +29,7 @@ class Automata{
 		const static unordered_map<char, int> hashIndices;
 
 		Dato static pasoAutomata(char caracter);
+		void static reiniciarRecorrido();
 
 	private:
 		int static indiceCaracter(char caracter);

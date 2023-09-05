@@ -6,15 +6,29 @@
  */
 
 #include "../Headers/AccionesSemanticas.h"
+#include "../Headers/Automata.h"
 #include <iostream>
 #include <cfloat>
 using namespace std;
 
 int AccionesSemanticas::nroLineas = 0;
 string AccionesSemanticas::entrada = "";
+bool AccionesSemanticas::habilitarLectura = true;
+
+bool AccionesSemanticas::LeerCaracter(){
+	if(!habilitarLectura){
+		habilitarLectura = true;
+		return false;
+	}
+	return true;
+}
 
 void AccionesSemanticas::AS1(char caracter){
 	if (caracter == '\n') AccionesSemanticas::nroLineas++;
+}
+
+void AccionesSemanticas::AS2(char caracter){
+	throw runtime_error("Error al reconocer el Token");
 }
 
 void AccionesSemanticas::AS3(char caracter){
@@ -26,45 +40,48 @@ void AccionesSemanticas::AS4(char caracter){
 	entrada+=caracter;
 }
 
+void AccionesSemanticas::AS5(char caracter){
+	habilitarLectura = false;
+}
+
 void AccionesSemanticas::AS6(char caracter){
 	//Agregar a la TS
 }
 
 void AccionesSemanticas::AS7(char caracter){
-	float numero = stof(entrada);
-	if (numero < FLT_MIN || numero > FLT_MAX) {//FLT_MAX=3.40282e+38 | FLT_MIN=1.17549e-38
-		throw runtime_error("Flotante Fuera de rango - Linea" + nroLineas);
+	try{
+		cout << "pase";
+		float numero = stof(entrada);
+	} catch(const out_of_range & exception){
+		throw runtime_error("Flotante Fuera de rango - Linea " + to_string(nroLineas));
 	}
 }
 
 void AccionesSemanticas::AS8(char caracter){
-	size_t pos = entrada.find('_');
-	if (pos != string::npos && pos > 0) {
+	try{
+		size_t pos = entrada.find('_');
 		string numeroStr = entrada.substr(0, pos);
-		unsigned long long numero = strtoull(numeroStr.c_str(), nullptr, 10);
-		if (numero >= 0 && numero <= UINT32_MAX) {//UINT32_MAX=4,294,967,295=2^32 - 1
-			cout << "El número " << numero << " está dentro del rango 0 a 2^32 - 1." << endl;
-			rango=true;
-		} else {
-			cout << "El número " << numero << " está fuera del rango." << endl;
-			rango=false;
-		}
+		unsigned long numero = stoul(numeroStr);
+	}catch(const out_of_range & exception){
+		throw runtime_error("Entero Largo sin signo fuera de rango - Linea " + to_string(nroLineas));
 	}
 }
 
 void AccionesSemanticas::AS9(char caracter){
-	size_t pos = entrada.find('_');
-	if (pos != string::npos && pos > 0) {
+	try{
+		size_t pos = entrada.find('_');
 		string numeroStr = entrada.substr(0, pos);
-		unsigned long long numero = strtoull(numeroStr.c_str(), nullptr, 10);
-		if (numero >= 0 && numero <= UINT32_MAX) {//UINT32_MAX=4,294,967,295=2^32 - 1
-			cout << "El número " << numero << " está dentro del rango 0 a 2^32 - 1." << endl;
-			rango=true;
-		} else {
-			cout << "El número " << numero << " está fuera del rango." << endl;
-			rango=false;
+		int numero = stoi(numeroStr);
+		if (numero < 0 || numero > 128){
+			throw out_of_range("");
 		}
+	}catch(const out_of_range & exception){
+		throw runtime_error("Entero Corto con signo fuera de rango - Linea " + to_string(nroLineas));
 	}
+}
+
+void AccionesSemanticas::AS10(char caracter){
+	Automata::reiniciarRecorrido();
 }
 
 void AccionesSemanticas::AS11(char caracter){

@@ -9,14 +9,23 @@
 #include <iostream>
 #include "./AnalizadorLexico.h"
 #include "./Headers/Automata.h"
+#include "./Headers/AccionesSemanticas.h"
 using namespace std;
 
 
 void analisisLexico(ifstream& codigoFuente){
 	char caracter;
-	while (codigoFuente.get(caracter)){
-		Dato estado = Automata::pasoAutomata(caracter);
-		cout << estado.estadoSiguiente << endl;
-		if (estado.AS != nullptr) estado.AS(caracter);
+	bool finDeArchivo = false;
+	while (!finDeArchivo){
+		if (AccionesSemanticas::LeerCaracter()){
+			codigoFuente.get(caracter);
+		}
+		if (codigoFuente.eof()){
+			finDeArchivo = true;
+		} else {
+			Dato estado = Automata::pasoAutomata(caracter);
+			cout << estado.estadoSiguiente << endl;
+			if (estado.AS != nullptr) estado.AS(caracter);
+		}
 	}
 }

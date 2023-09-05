@@ -43,34 +43,37 @@ int Automata::indiceCaracter(char caracter){
 	if(isalpha(caracter)){
 		if(isupper(caracter)){
 			if (caracter == 'E'){
-				return Automata::hashIndices.at('E');
+				return hashIndices.at('E');
 			} else {
-				return Automata::hashIndices.at('A');
+				return hashIndices.at('A');
 			}
 		} else {
 			switch (caracter){
 				case 'u':
-					return Automata::hashIndices.at('u')
-							;
+					return hashIndices.at('u');
 				case 'l':
-					return Automata::hashIndices.at('l');
+					return hashIndices.at('l');
 				case 's':
-					return Automata::hashIndices.at('s');
+					return hashIndices.at('s');
 				case 'e':
-					return Automata::hashIndices.at('e');
+					return hashIndices.at('e');
 				default:
-					return Automata::hashIndices.at('a');
+					return hashIndices.at('a');
 			}
 		}
 	} else if (isdigit(caracter)){
-		return Automata::hashIndices.at('0');
+		return hashIndices.at('0');
 	} else {
-		return Automata::hashIndices.at(caracter);
+		return hashIndices.at(caracter);
 	}
 }
 
 Dato Automata::pasoAutomata(char caracter){
-	Dato celda = Automata::AutomataMatriz[Automata::estadoActual][Automata::indiceCaracter(caracter)];
-	Automata::estadoActual = celda.estadoSiguiente;
+	Dato celda = AutomataMatriz[Automata::estadoActual][Automata::indiceCaracter(caracter)];
+	estadoActual = celda.estadoSiguiente;
 	return celda;
+}
+
+void Automata::reiniciarRecorrido(){
+	estadoActual=0;
 }
