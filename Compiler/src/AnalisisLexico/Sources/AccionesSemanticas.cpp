@@ -7,6 +7,7 @@
 
 #include "../Headers/AccionesSemanticas.h"
 #include "../Headers/Automata.h"
+#include "../Headers/TablaPalabrasReservadas.h"
 #include <iostream>
 #include <cfloat>
 using namespace std;
@@ -125,11 +126,11 @@ void AccionesSemanticas::AS17(char caracter){
 	AS10(caracter);
 }
 
-void AccionesSemanticas::AS18(char caracter){
-	//chequear tabla de palabras reservadas
-}
-
 void AccionesSemanticas::AS19(char caracter){
-	AS18(caracter);
-	AS10(caracter);
+	int valor = TablaPalabrasReservadas::buscar(entrada);
+	if(valor == -1){
+        throw runtime_error("No existe esa palabra reservada - Linea " + to_string(nroLineas));
+	}
+    cout << valor << endl;
+    AS13();
 }
