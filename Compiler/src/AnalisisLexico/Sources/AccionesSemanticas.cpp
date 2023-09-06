@@ -29,7 +29,7 @@ void AccionesSemanticas::AS1(char caracter){
 }
 
 void AccionesSemanticas::AS2(char caracter){
-	throw runtime_error("Error al reconocer el Token");
+	throw runtime_error("Error al reconocer el Token - Linea " + to_string(nroLineas));
 }
 
 void AccionesSemanticas::AS3(char caracter){

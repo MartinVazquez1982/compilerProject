@@ -15,17 +15,15 @@ using namespace std;
 
 void analisisLexico(ifstream& codigoFuente){
 	char caracter;
-	bool finDeArchivo = false;
-	while (!finDeArchivo){
+	while (!codigoFuente.eof()){
 		if (AccionesSemanticas::LeerCaracter()){
 			codigoFuente.get(caracter);
 		}
 		if (codigoFuente.eof()){
-			finDeArchivo = true;
-		} else {
-			Dato estado = Automata::pasoAutomata(caracter);
-			//cout << estado.estadoSiguiente << endl;
-			if (estado.AS != nullptr) estado.AS(caracter);
+			caracter='\0';
 		}
+		Dato estado = Automata::pasoAutomata(caracter);
+		//cout << "Estado: " << estado.estadoSiguiente << endl;
+		if (estado.AS != nullptr) estado.AS(caracter);
 	}
 }

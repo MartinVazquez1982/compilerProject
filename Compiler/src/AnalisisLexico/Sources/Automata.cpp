@@ -36,7 +36,7 @@ const Dato constexpr Automata::AutomataMatriz[FILAS][COLUMNAS] = {
 const unordered_map<char, int> Automata::hashIndices = {
 		{'a',1},{'0',0},{'A',2},{'_',3},{'.',4},{'+',5},{'-',6},{'*',7},{'{',8},{'}',9},{'=',10},
 		{'!',11},{'<',12},{'>',12},{'%',13},{' ',14},{'\n',14},{'	',14},{';',15},{'/',15},{'(',15},
-		{')',15},{',',15},{'u',16},{'l',17},{'s',18},{'e',19},{'E',20}
+		{')',15},{',',15},{'u',16},{'l',17},{'s',18},{'e',19},{'E',20},{'\0',22}
 };
 
 int Automata::indiceCaracter(char caracter){
@@ -64,12 +64,16 @@ int Automata::indiceCaracter(char caracter){
 	} else if (isdigit(caracter)){
 		return hashIndices.at('0');
 	} else {
-		return hashIndices.at(caracter);
+		try {
+			return hashIndices.at(caracter);
+		} catch (out_of_range & exception){
+			return 21;
+		}
 	}
 }
 
 Dato Automata::pasoAutomata(char caracter){
-	Dato celda = AutomataMatriz[Automata::estadoActual][Automata::indiceCaracter(caracter)];
+	Dato celda = AutomataMatriz[estadoActual][indiceCaracter(caracter)];
 	estadoActual = celda.estadoSiguiente;
 	return celda;
 }
