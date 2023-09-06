@@ -56,6 +56,10 @@ class AccionesSemanticas{
 		static void AS18(char caracter); // Chequear Tabla de palabras reservadas
 
 		static void AS19(char caracter);
+
+		static void AS20(char caracter);
+
+		static void AS21(char caracter);
 };
 
 

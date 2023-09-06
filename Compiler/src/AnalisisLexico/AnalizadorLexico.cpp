@@ -24,7 +24,7 @@ void analisisLexico(ifstream& codigoFuente){
 			finDeArchivo = true;
 		} else {
 			Dato estado = Automata::pasoAutomata(caracter);
-			cout << estado.estadoSiguiente << endl;
+			//cout << estado.estadoSiguiente << endl;
 			if (estado.AS != nullptr) estado.AS(caracter);
 		}
 	}

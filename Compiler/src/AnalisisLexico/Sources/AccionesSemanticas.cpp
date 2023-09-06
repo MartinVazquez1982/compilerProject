@@ -34,7 +34,6 @@ void AccionesSemanticas::AS2(char caracter){
 
 void AccionesSemanticas::AS3(char caracter){
 	entrada.clear();
-	cout << "String inicializado" << endl;
 }
 
 void AccionesSemanticas::AS4(char caracter){
@@ -51,7 +50,6 @@ void AccionesSemanticas::AS6(char caracter){
 
 void AccionesSemanticas::AS7(char caracter){
 	try{
-		cout << "pase";
 		float numero = stof(entrada);
 	} catch(const out_of_range & exception){
 		throw runtime_error("Flotante Fuera de rango - Linea " + to_string(nroLineas));
@@ -126,11 +124,62 @@ void AccionesSemanticas::AS17(char caracter){
 	AS10(caracter);
 }
 
+void AccionesSemanticas::AS18(char caracter){
+	//Seguro haya que reemplazarlo para que retorne el ASCII
+	switch(caracter){
+		case '+':
+			cout << 11 << endl;
+			break;
+		case ';':
+			cout << 16 << endl;
+			break;
+		case '/':
+			cout << 15 << endl;
+			break;
+		case '{':
+			cout << 17 << endl;
+			break;
+		case '}':
+			cout << 18 << endl;
+			break;
+		case '(':
+			cout << 19 << endl;
+			break;
+		case ')':
+			cout << 20 << endl;
+			break;
+		case ',':
+			cout << 21 << endl;
+			break;
+	}
+	AS10(caracter);
+}
+
 void AccionesSemanticas::AS19(char caracter){
 	int valor = TablaPalabrasReservadas::buscar(entrada);
 	if(valor == -1){
         throw runtime_error("No existe esa palabra reservada - Linea " + to_string(nroLineas));
 	}
-    cout << valor << endl;
-    AS13();
+    //cout << valor << endl; Ver donde devolver Token
+    AS13(caracter);
+}
+
+void AccionesSemanticas::AS20(char caracter){
+	if (caracter=='='){
+		cout << 24 << endl;
+		AS10(caracter);
+	} else {
+		cout << 23 << endl;
+		AS13(caracter);
+	}
+}
+
+void AccionesSemanticas::AS21(char caracter){
+	if (caracter=='-'){
+		cout << 13 << endl;
+		AS10(caracter);
+	} else {
+		cout << 12 << endl;
+		AS13(caracter);
+	}
 }
