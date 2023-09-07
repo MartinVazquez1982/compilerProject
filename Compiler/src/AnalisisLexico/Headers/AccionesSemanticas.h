@@ -15,6 +15,7 @@ class AccionesSemanticas{
 		static int nroLineas;
 		static string entrada;
 		static bool habilitarLectura;
+		static bool enviarWarning;
 
 	public:
 		static bool LeerCaracter();
@@ -60,6 +61,8 @@ class AccionesSemanticas{
 		static void AS20(char caracter);
 
 		static void AS21(char caracter);
+
+		static void AS22(char caracter);
 };
 
 

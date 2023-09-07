@@ -15,6 +15,7 @@ using namespace std;
 int AccionesSemanticas::nroLineas = 0;
 string AccionesSemanticas::entrada = "";
 bool AccionesSemanticas::habilitarLectura = true;
+bool AccionesSemanticas::enviarWarning = true;
 
 bool AccionesSemanticas::LeerCaracter(){
 	if(!habilitarLectura){
@@ -25,7 +26,7 @@ bool AccionesSemanticas::LeerCaracter(){
 }
 
 void AccionesSemanticas::AS1(char caracter){
-	if (caracter == '\n') AccionesSemanticas::nroLineas++;
+	if (caracter == '\n') nroLineas++;
 }
 
 void AccionesSemanticas::AS2(char caracter){
@@ -160,7 +161,7 @@ void AccionesSemanticas::AS19(char caracter){
 	if(valor == -1){
         throw runtime_error("No existe esa palabra reservada - Linea " + to_string(nroLineas));
 	}
-    //cout << valor << endl; Ver donde devolver Token
+    cout << valor << endl; //Ver donde devolver Token
     AS13(caracter);
 }
 
@@ -181,5 +182,15 @@ void AccionesSemanticas::AS21(char caracter){
 	} else {
 		cout << 12 << endl;
 		AS13(caracter);
+	}
+}
+
+void AccionesSemanticas::AS22(char caracter){
+	if (entrada.length() < 20){
+		AS4(caracter);
+		enviarWarning = true;
+	} else if (enviarWarning){
+		enviarWarning = false;
+		cout << "Warning: Identificador Linea " + to_string(nroLineas) + " contiene mas de 20 caracteres" << endl;
 	}
 }
