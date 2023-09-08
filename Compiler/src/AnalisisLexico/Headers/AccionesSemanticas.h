@@ -16,9 +16,17 @@ class AccionesSemanticas{
 		static string entrada;
 		static bool habilitarLectura;
 		static bool enviarWarning;
+		static bool tokenIdentificado;
+		static char caracterAnterior;
 
 	public:
+		static int nroToken;
+
+		static char caracterLeido();
+
 		static bool LeerCaracter();
+
+		static bool tokenReconocido();
 
 		static void AS1(char caracter); // Cuenta la cantidad de lineas del archivo fuente
 

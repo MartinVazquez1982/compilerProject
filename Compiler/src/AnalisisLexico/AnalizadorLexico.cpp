@@ -13,17 +13,21 @@
 using namespace std;
 
 
-void analisisLexico(ifstream& codigoFuente){
+int analisisLexico(ifstream& codigoFuente){
 	char caracter;
 	while (!codigoFuente.eof()){
 		if (AccionesSemanticas::LeerCaracter()){
 			codigoFuente.get(caracter);
+		} else {
+			caracter = AccionesSemanticas::caracterLeido();
 		}
 		if (codigoFuente.eof()){
 			caracter='\0';
 		}
 		Dato estado = Automata::pasoAutomata(caracter);
-		//cout << "Estado: " << estado.estadoSiguiente << endl;
 		if (estado.AS != nullptr) estado.AS(caracter);
+		if(AccionesSemanticas::tokenReconocido()){
+			return AccionesSemanticas::nroToken;
+		}
 	}
 }

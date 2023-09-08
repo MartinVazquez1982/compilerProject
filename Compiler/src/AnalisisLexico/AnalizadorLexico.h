@@ -11,7 +11,7 @@
 #include <fstream>
 using namespace std;
 
-void analisisLexico(ifstream& codigoFuente);
+int analisisLexico(ifstream& codigoFuente);
 
 
 #endif /* ANALISISLEXICO_ANALIZADORLEXICO_H_ */

@@ -8,6 +8,7 @@
 #include "../Headers/AccionesSemanticas.h"
 #include "../Headers/Automata.h"
 #include "../Headers/TablaPalabrasReservadas.h"
+#include "../../TablaDeSimbolos/TablaDeSimbolos.h"
 #include <iostream>
 #include <cfloat>
 using namespace std;
@@ -16,6 +17,21 @@ int AccionesSemanticas::nroLineas = 0;
 string AccionesSemanticas::entrada = "";
 bool AccionesSemanticas::habilitarLectura = true;
 bool AccionesSemanticas::enviarWarning = true;
+bool AccionesSemanticas::tokenIdentificado = false;
+int AccionesSemanticas::nroToken;
+char AccionesSemanticas::caracterAnterior;
+
+char AccionesSemanticas::caracterLeido(){
+	return caracterAnterior;
+}
+
+bool AccionesSemanticas::tokenReconocido(){
+	if (tokenIdentificado){
+		tokenIdentificado = false;
+		return true;
+	}
+	return false;
+}
 
 bool AccionesSemanticas::LeerCaracter(){
 	if(!habilitarLectura){
@@ -43,10 +59,12 @@ void AccionesSemanticas::AS4(char caracter){
 
 void AccionesSemanticas::AS5(char caracter){
 	habilitarLectura = false;
+	caracterAnterior = caracter;
 }
 
 void AccionesSemanticas::AS6(char caracter){
-	//Agregar a la TS
+	TablaDeSimbolos::add(entrada);
+	TablaDeSimbolos::imprimir();
 }
 
 void AccionesSemanticas::AS7(char caracter){
@@ -126,42 +144,17 @@ void AccionesSemanticas::AS17(char caracter){
 }
 
 void AccionesSemanticas::AS18(char caracter){
-	//Seguro haya que reemplazarlo para que retorne el ASCII
-	switch(caracter){
-		case '+':
-			cout << 11 << endl;
-			break;
-		case ';':
-			cout << 16 << endl;
-			break;
-		case '/':
-			cout << 15 << endl;
-			break;
-		case '{':
-			cout << 17 << endl;
-			break;
-		case '}':
-			cout << 18 << endl;
-			break;
-		case '(':
-			cout << 19 << endl;
-			break;
-		case ')':
-			cout << 20 << endl;
-			break;
-		case ',':
-			cout << 21 << endl;
-			break;
-	}
+	AccionesSemanticas::nroToken = int(caracter);
+	tokenIdentificado = true;
 	AS10(caracter);
 }
 
 void AccionesSemanticas::AS19(char caracter){
-	int valor = TablaPalabrasReservadas::buscar(entrada);
-	if(valor == -1){
+	nroToken = TablaPalabrasReservadas::buscar(entrada);
+	if(nroToken == -1){
         throw runtime_error("No existe esa palabra reservada - Linea " + to_string(nroLineas));
 	}
-    cout << valor << endl; //Ver donde devolver Token
+    tokenIdentificado = true;
     AS13(caracter);
 }
 
@@ -170,7 +163,8 @@ void AccionesSemanticas::AS20(char caracter){
 		cout << 24 << endl;
 		AS10(caracter);
 	} else {
-		cout << 23 << endl;
+		nroToken = int('=');
+		tokenIdentificado = true;
 		AS13(caracter);
 	}
 }
@@ -180,7 +174,8 @@ void AccionesSemanticas::AS21(char caracter){
 		cout << 13 << endl;
 		AS10(caracter);
 	} else {
-		cout << 12 << endl;
+		nroToken = int('-');
+		tokenIdentificado = true;
 		AS13(caracter);
 	}
 }
