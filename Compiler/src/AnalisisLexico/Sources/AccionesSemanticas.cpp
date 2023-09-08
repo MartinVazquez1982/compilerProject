@@ -46,7 +46,7 @@ void AccionesSemanticas::AS1(char caracter){
 }
 
 void AccionesSemanticas::AS2(char caracter){
-	throw runtime_error("Error al reconocer el Token - Linea " + to_string(nroLineas));
+	throw runtime_error("Linea: " + to_string(nroLineas) + "Error al reconocer el Token");
 }
 
 void AccionesSemanticas::AS3(char caracter){
@@ -54,7 +54,11 @@ void AccionesSemanticas::AS3(char caracter){
 }
 
 void AccionesSemanticas::AS4(char caracter){
-	entrada+=caracter;
+	if (caracter != '\n'){
+		entrada+=caracter;
+	} else {
+		AS1(caracter);
+	}
 }
 
 void AccionesSemanticas::AS5(char caracter){
@@ -109,9 +113,9 @@ void AccionesSemanticas::AS11(char caracter){
 
 void AccionesSemanticas::AS12(char caracter){
 	AS7(caracter);
-	AS6(caracter);
 	AS10(caracter);
 	AS5(caracter);
+	AS25(caracter);
 }
 
 void AccionesSemanticas::AS13(char caracter){
@@ -126,15 +130,17 @@ void AccionesSemanticas::AS14(char caracter){
 
 void AccionesSemanticas::AS15(char caracter){
 	AS4(caracter);
-	AS6(caracter);
+	AS23(caracter);
 	AS10(caracter);
+	AS24(caracter);
 }
 
 void AccionesSemanticas::AS16(char caracter){
 	AS9(caracter);
-	AS6(caracter);
 	AS4(caracter);
+	AS23(caracter);
 	AS10(caracter);
+	AS24(caracter);
 }
 
 void AccionesSemanticas::AS17(char caracter){
@@ -159,23 +165,23 @@ void AccionesSemanticas::AS19(char caracter){
 }
 
 void AccionesSemanticas::AS20(char caracter){
+	tokenIdentificado = true;
 	if (caracter=='='){
-		cout << 24 << endl;
+		nroToken = 269;
 		AS10(caracter);
 	} else {
 		nroToken = int('=');
-		tokenIdentificado = true;
 		AS13(caracter);
 	}
 }
 
 void AccionesSemanticas::AS21(char caracter){
+	tokenIdentificado = true;
 	if (caracter=='-'){
-		cout << 13 << endl;
+		nroToken = 268;
 		AS10(caracter);
 	} else {
 		nroToken = int('-');
-		tokenIdentificado = true;
 		AS13(caracter);
 	}
 }
@@ -188,4 +194,36 @@ void AccionesSemanticas::AS22(char caracter){
 		enviarWarning = false;
 		cout << "Warning: Identificador Linea " + to_string(nroLineas) + " contiene mas de 20 caracteres" << endl;
 	}
+}
+
+void AccionesSemanticas::AS23(char caracter){
+	if (caracter == '%'){
+		TablaDeSimbolos::add(entrada, entrada.substr(1,entrada.length()-2),"STRING");
+	} else {
+		size_t pos = entrada.find('_');
+		string valor = entrada.substr(0, pos);
+		if (caracter == 's'){
+			TablaDeSimbolos::add(entrada, valor ,"SHORT");
+		} else {
+			TablaDeSimbolos::add(entrada, valor ,"ULONG");
+		}
+	}
+	TablaDeSimbolos::imprimir();
+}
+
+void AccionesSemanticas::AS24(char caracter){
+	tokenIdentificado = true;
+	if(caracter == '%'){
+		nroToken = 276;
+	} else if (caracter == 's'){
+		nroToken = 273;
+	} else {
+		nroToken = 274;
+	}
+}
+
+void AccionesSemanticas::AS25(char caracter){
+	TablaDeSimbolos::add(entrada, entrada,"FLOAT");
+	tokenIdentificado = true;
+	nroToken = 275;
 }

@@ -30,4 +30,5 @@ int analisisLexico(ifstream& codigoFuente){
 			return AccionesSemanticas::nroToken;
 		}
 	}
+	return 0;
 }
