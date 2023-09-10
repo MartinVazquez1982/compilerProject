@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 		throw runtime_error("No se ha podido abrir el codigo fuente.");
 	}
 	while (!archivo.eof()) {
-		cout << analisisLexico(archivo) << endl;
+		cout << yylex(archivo) << endl;
 	}
 	archivo.close();
 	return 0;

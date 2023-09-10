@@ -13,7 +13,7 @@
 using namespace std;
 
 
-int analisisLexico(ifstream& codigoFuente){
+int yylex(ifstream& codigoFuente){
 	char caracter;
 	while (!codigoFuente.eof()){
 		if (AccionesSemanticas::LeerCaracter()){
