@@ -46,7 +46,7 @@ void AccionesSemanticas::AS1(char caracter){
 }
 
 void AccionesSemanticas::AS2(char caracter){
-	throw runtime_error("Linea: " + to_string(nroLineas) + "Error al reconocer el Token");
+	throw runtime_error("Linea: " + to_string(nroLineas) + " Error al reconocer el Token");
 }
 
 void AccionesSemanticas::AS3(char caracter){
@@ -72,33 +72,36 @@ void AccionesSemanticas::AS6(char caracter){
 }
 
 void AccionesSemanticas::AS7(char caracter){
+	// 1.17549435E-38 < x 3.40282347E+38 U -3.40282347E+38 < x < -1.17549435E-38 U 0.0
 	try{
 		float numero = stof(entrada);
 	} catch(const out_of_range & exception){
-		throw runtime_error("Flotante Fuera de rango - Linea " + to_string(nroLineas));
+		throw runtime_error("Linea: " + to_string(nroLineas) + ": Constante FLOAT fuera del rango permitido");
 	}
 }
 
 void AccionesSemanticas::AS8(char caracter){
+	//0 < x < 2^32-1
 	try{
 		size_t pos = entrada.find('_');
 		string numeroStr = entrada.substr(0, pos);
 		unsigned long numero = stoul(numeroStr);
 	}catch(const out_of_range & exception){
-		throw runtime_error("Entero Largo sin signo fuera de rango - Linea " + to_string(nroLineas));
+		throw runtime_error("Linea: " + to_string(nroLineas) + ": Constante ULONG fuera del rango permitido");
 	}
 }
 
 void AccionesSemanticas::AS9(char caracter){
+	//-2^7 < x < 2^7-1
 	try{
 		size_t pos = entrada.find('_');
 		string numeroStr = entrada.substr(0, pos);
 		int numero = stoi(numeroStr);
-		if (numero < 0 || numero > 128){
+		if (numero > 128){
 			throw out_of_range("");
 		}
 	}catch(const out_of_range & exception){
-		throw runtime_error("Entero Corto con signo fuera de rango - Linea " + to_string(nroLineas));
+		throw runtime_error("Linea: " + to_string(nroLineas) + ": Constante SHORT fuera del rango permitido");
 	}
 }
 
@@ -137,10 +140,7 @@ void AccionesSemanticas::AS15(char caracter){
 
 void AccionesSemanticas::AS16(char caracter){
 	AS9(caracter);
-	AS4(caracter);
-	AS23(caracter);
-	AS10(caracter);
-	AS24(caracter);
+	AS15(caracter);
 }
 
 void AccionesSemanticas::AS17(char caracter){
@@ -150,7 +150,7 @@ void AccionesSemanticas::AS17(char caracter){
 }
 
 void AccionesSemanticas::AS18(char caracter){
-	AccionesSemanticas::nroToken = int(caracter);
+	nroToken = int(caracter);
 	tokenIdentificado = true;
 	AS10(caracter);
 }
@@ -158,7 +158,7 @@ void AccionesSemanticas::AS18(char caracter){
 void AccionesSemanticas::AS19(char caracter){
 	nroToken = TablaPalabrasReservadas::buscar(entrada);
 	if(nroToken == -1){
-        throw runtime_error("No existe esa palabra reservada - Linea " + to_string(nroLineas));
+        throw runtime_error("Linea: " + to_string(nroLineas) + ": NO existe la palabra reservada " + entrada);
 	}
     tokenIdentificado = true;
     AS13(caracter);
@@ -192,7 +192,7 @@ void AccionesSemanticas::AS22(char caracter){
 		enviarWarning = true;
 	} else if (enviarWarning){
 		enviarWarning = false;
-		cout << "Warning: Identificador Linea " + to_string(nroLineas) + " contiene mas de 20 caracteres" << endl;
+		cout << "Warning: Linea " + to_string(nroLineas) + ": El Identificador contiene mas de 20 caracteres" << endl;
 	}
 }
 
@@ -227,3 +227,41 @@ void AccionesSemanticas::AS25(char caracter){
 	tokenIdentificado = true;
 	nroToken = 275;
 }
+
+void AccionesSemanticas::AS26(char caracter){
+	tokenIdentificado = true;
+	if (caracter == '='){
+		if (entrada == ">"){
+			nroToken = 271;
+		} else {
+			nroToken = 272;
+		}
+		AS10(caracter);
+	} else {
+		nroToken = int(entrada[0]);
+		AS13(caracter);
+	}
+}
+
+void AccionesSemanticas::AS27(char caracter){
+	nroToken = 270;
+	tokenIdentificado = true;
+	AS10(caracter);
+}
+
+void AccionesSemanticas::AS28(char caracter){
+	AS17(caracter);
+	nroToken = 277;
+	tokenIdentificado = true;
+}
+
+void AccionesSemanticas::AS29(char caracter){
+	AS5(caracter);
+	AS18('.');
+}
+
+void AccionesSemanticas::AS30(char caracter){
+	AS5(caracter);
+	AS18('*');
+}
+

@@ -5,8 +5,8 @@
 using namespace std;
 
 const unordered_map<string, int> TablaPalabrasReservadas::PalabrasReservadas= {
-            {"IF",0},{"ELSE",1},{"END_IF",2},{"PRINT",3},{"CLASS",4},
-            {"VOID",5},{"SHORT",6},{"ULONG",7},{"FLOAT",8},{"WHILE",9},{"DO",10}
+            {"IF",257},{"ELSE",258},{"END_IF",259},{"PRINT",260},{"CLASS",261},
+            {"VOID",262},{"SHORT",263},{"ULONG",264},{"FLOAT",265},{"WHILE",266},{"DO",267}
 };
 
 int TablaPalabrasReservadas::buscar(string palabra){

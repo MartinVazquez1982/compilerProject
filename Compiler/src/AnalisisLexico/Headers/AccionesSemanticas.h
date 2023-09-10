@@ -77,6 +77,16 @@ class AccionesSemanticas{
 		static void AS24(char caracter);
 
 		static void AS25(char caracter);
+
+		static void AS26(char caracter);
+
+		static void AS27(char caracter);
+
+		static void AS28(char caracter);
+
+		static void AS29(char caracter);
+
+		static void AS30(char caracter);
 };
 
 
