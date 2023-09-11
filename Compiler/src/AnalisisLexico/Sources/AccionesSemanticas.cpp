@@ -13,13 +13,14 @@
 #include <cfloat>
 using namespace std;
 
-int AccionesSemanticas::nroLineas = 0;
+int AccionesSemanticas::nroLineas = 1;
 string AccionesSemanticas::entrada = "";
 bool AccionesSemanticas::habilitarLectura = true;
 bool AccionesSemanticas::enviarWarning = true;
 bool AccionesSemanticas::tokenIdentificado = false;
 int AccionesSemanticas::nroToken;
 char AccionesSemanticas::caracterAnterior;
+int AccionesSemanticas::lineaInicioToken;
 
 char AccionesSemanticas::caracterLeido(){
 	return caracterAnterior;
@@ -46,7 +47,34 @@ void AccionesSemanticas::AS1(char caracter){
 }
 
 void AccionesSemanticas::AS2(char caracter){
-	throw runtime_error("Linea: " + to_string(nroLineas) + " Error al reconocer el Token");
+	AS13(caracter);
+	switch(Automata::getEstadoError()){
+		case 0:
+			cout << "Linea " + to_string(nroLineas) + ": caracter '" + caracter + "' invalido" << endl;
+			habilitarLectura = true;
+			break;
+		case 1:
+			cout << "Linea " + to_string(nroLineas) + ": falta sufijo en la definicion de la constante entera" << endl;
+			break;
+		case 2:
+		case 3:
+			cout << "Linea " + to_string(nroLineas) + ": falta sufijo o se encuentra mal definido en la definicion de la constante entera" << endl;
+			break;
+		case 8:
+		case 9:
+			cout << "Linea " + to_string(lineaInicioToken) + ": comentario sin finalizacion" << endl;
+			break;
+		case 11:
+			cout << "Linea " + to_string(nroLineas) + ": identificador distinto (!!) mal definido" << endl;
+			break;
+		case 15:
+		case 16:
+			cout << "Linea " + to_string(nroLineas) + ": constante flotante mal definida" << endl;
+			break;
+		case 18:
+			cout << "Linea " + to_string(lineaInicioToken) + ": cadena de texto mal definida" << endl;
+			break;
+	}
 }
 
 void AccionesSemanticas::AS3(char caracter){
@@ -112,6 +140,7 @@ void AccionesSemanticas::AS10(char caracter){
 void AccionesSemanticas::AS11(char caracter){
 	AS3(caracter);
 	AS4(caracter);
+	lineaInicioToken = nroLineas;
 }
 
 void AccionesSemanticas::AS12(char caracter){

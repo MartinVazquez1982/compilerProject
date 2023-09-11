@@ -18,6 +18,7 @@ class AccionesSemanticas{
 		static bool enviarWarning;
 		static bool tokenIdentificado;
 		static char caracterAnterior;
+		static int lineaInicioToken;
 
 	public:
 		static int nroToken;
