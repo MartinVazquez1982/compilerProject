@@ -13,6 +13,10 @@
 #include <cfloat>
 using namespace std;
 
+#define RESET   "\x1B[0m"
+#define YELLOW  "\x1B[33m"
+#define RED "\x1B[31m"
+
 int AccionesSemanticas::nroLineas = 1;
 string AccionesSemanticas::entrada = "";
 bool AccionesSemanticas::habilitarLectura = true;
@@ -50,29 +54,29 @@ void AccionesSemanticas::AS2(char caracter){
 	AS13(caracter);
 	switch(Automata::getEstadoError()){
 		case 0:
-			cout << "Linea " + to_string(nroLineas) + ": caracter '" + caracter + "' invalido" << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": caracter '" + caracter + "' invalido" << RESET << endl;
 			habilitarLectura = true;
 			break;
 		case 1:
-			cout << "Linea " + to_string(nroLineas) + ": falta sufijo en la definicion de la constante entera" << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": falta sufijo en la definicion de la constante entera" << RESET << endl;
 			break;
 		case 2:
 		case 3:
-			cout << "Linea " + to_string(nroLineas) + ": falta sufijo o se encuentra mal definido en la definicion de la constante entera" << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": se encuetra mal definido o falta el subfijo a la contante entera" << RESET << endl;
 			break;
 		case 8:
 		case 9:
-			cout << "Linea " + to_string(lineaInicioToken) + ": comentario sin finalizacion" << endl;
+			cout << RED << "Linea " + to_string(lineaInicioToken) + ": comentario sin finalizacion" << RESET << endl;
 			break;
 		case 11:
-			cout << "Linea " + to_string(nroLineas) + ": identificador distinto (!!) mal definido" << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": identificador distinto (!!) mal definido" << RESET << endl;
 			break;
 		case 15:
 		case 16:
-			cout << "Linea " + to_string(nroLineas) + ": constante flotante mal definida" << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": constante flotante mal definida" << RESET << endl;
 			break;
 		case 18:
-			cout << "Linea " + to_string(lineaInicioToken) + ": cadena de texto mal definida" << endl;
+			cout << RED << "Linea " + to_string(lineaInicioToken) + ": cadena de texto mal definida" << RESET << endl;
 			break;
 	}
 }
@@ -221,7 +225,7 @@ void AccionesSemanticas::AS22(char caracter){
 		enviarWarning = true;
 	} else if (enviarWarning){
 		enviarWarning = false;
-		cout << "Warning: Linea " + to_string(nroLineas) + ": El Identificador contiene mas de 20 caracteres" << endl;
+		cout << YELLOW <<"Warning - Linea " + to_string(nroLineas) + ": El Identificador contiene mas de 20 caracteres" << RESET << endl;
 	}
 }
 
