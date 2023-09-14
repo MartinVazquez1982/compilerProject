@@ -11,6 +11,7 @@
 using namespace std;
 
 int Automata::estadoActual = 0;
+int Automata::estadoError;
 const Dato constexpr Automata::AutomataMatriz[FILAS][COLUMNAS] = {
 	/*0*/	{{1, AccionesSemanticas::AS11 },{5, AccionesSemanticas::AS11},{6, AccionesSemanticas::AS11},{5, AccionesSemanticas::AS11},{13, AccionesSemanticas::AS11},{-1, AccionesSemanticas::AS18},{4, AccionesSemanticas::AS11},{7, AccionesSemanticas::AS11},{-1, AccionesSemanticas::AS18},{-1, AccionesSemanticas::AS18},{10, AccionesSemanticas::AS11},{11, AccionesSemanticas::AS11},{12, AccionesSemanticas::AS11},{18, AccionesSemanticas::AS11},{0, AccionesSemanticas::AS1},{-1, AccionesSemanticas::AS18},{5, AccionesSemanticas::AS11},{5, AccionesSemanticas::AS11},{5, AccionesSemanticas::AS11},{5, AccionesSemanticas::AS11},{6, AccionesSemanticas::AS11},{-2, AccionesSemanticas::AS2},{-1, nullptr}},
 	/*1*/	{{1, AccionesSemanticas::AS4},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{2, AccionesSemanticas::AS4},{13, AccionesSemanticas::AS4},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2},{-2, AccionesSemanticas::AS2}},
@@ -74,10 +75,17 @@ int Automata::indiceCaracter(char caracter){
 
 Dato Automata::pasoAutomata(char caracter){
 	Dato celda = AutomataMatriz[estadoActual][indiceCaracter(caracter)];
+	if (celda.estadoSiguiente == -2){
+		Automata::estadoError = estadoActual;
+	}
 	estadoActual = celda.estadoSiguiente;
 	return celda;
 }
 
 void Automata::reiniciarRecorrido(){
 	estadoActual=0;
+}
+
+int Automata::getEstadoError(){
+	return Automata::estadoError;
 }

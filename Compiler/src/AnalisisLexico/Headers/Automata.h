@@ -23,6 +23,7 @@ class Automata{
 		const static int FILAS = 19;
 		const static int COLUMNAS = 23;
 		static int estadoActual;
+		static int estadoError;
 
 	public:
 		const static Dato AutomataMatriz[FILAS][COLUMNAS];
@@ -30,6 +31,7 @@ class Automata{
 
 		Dato static pasoAutomata(char caracter);
 		void static reiniciarRecorrido();
+		int static getEstadoError();
 
 	private:
 		int static indiceCaracter(char caracter);
