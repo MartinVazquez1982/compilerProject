@@ -191,9 +191,10 @@ void AccionesSemanticas::AS18(char caracter){
 void AccionesSemanticas::AS19(char caracter){
 	nroToken = TablaPalabrasReservadas::buscar(entrada);
 	if(nroToken == -1){
-        throw runtime_error("Linea: " + to_string(nroLineas) + ": NO existe la palabra reservada " + entrada);
+        cout << RED << "Linea: " + to_string(nroLineas) + ": NO existe la palabra reservada " + entrada << RESET << endl;
+	} else {
+		tokenIdentificado = true;
 	}
-    tokenIdentificado = true;
     AS13(caracter);
 }
 
