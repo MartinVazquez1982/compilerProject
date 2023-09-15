@@ -25,9 +25,10 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo){
 	TablaDeSimbolos::table[lexema]=info;
 }
 
-void TablaDeSimbolos::imprimir() {
+string TablaDeSimbolos::imprimir() {
+	string salida = "\n			Tabla de Simbolos\n";
 	for (const auto& par : TablaDeSimbolos::table) {
-	        cout << "Clave: " << par.first << ", Valor: " << par.second.valor << " Tipo: " << par.second.tipo <<endl;
+		salida = salida + "Clave: " + par.first + " | Valor: " + par.second.valor + " | Tipo: " + par.second.tipo + "\n";
 	}
-	cout << "------------------------" << endl;
+	return salida;
 }

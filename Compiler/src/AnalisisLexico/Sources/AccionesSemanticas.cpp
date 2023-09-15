@@ -100,7 +100,7 @@ void AccionesSemanticas::AS5(char caracter){
 
 void AccionesSemanticas::AS6(char caracter){
 	TablaDeSimbolos::add(entrada);
-	TablaDeSimbolos::imprimir();
+	cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 void AccionesSemanticas::AS7(char caracter){
