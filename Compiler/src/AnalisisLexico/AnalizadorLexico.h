@@ -5,13 +5,22 @@
  *      Author: Martin
  */
 
-#ifndef ANALISISLEXICO_ANALIZADORLEXICO_H_
-#define ANALISISLEXICO_ANALIZADORLEXICO_H_
+#ifndef ANALIZADORLEXICO_H
+#define ANALIZADORLEXICO_H
 
-using namespace std;
+#ifdef __cplusplus
+#include <fstream>
+	using namespace std;
+	extern ifstream codigoFuente;
+#endif
 
-extern ifstream codigoFuente;
+#ifdef __cplusplus
+extern "C" {
+	#endif
 
-int yylex();
+	int yylex();
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* ANALISISLEXICO_ANALIZADORLEXICO_H_ */

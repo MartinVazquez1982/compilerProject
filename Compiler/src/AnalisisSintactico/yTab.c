@@ -1,5 +1,7 @@
 #include "../AnalisisLexico/AnalizadorLexico.h"
 
+int yylex();
+
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar	1.8 (Berkeley) 01/20/90";
 #endif
@@ -321,7 +323,7 @@ yyloop:
     goto yynewerror;
 #endif
 yynewerror:
-    yyerror("syntax error");
+    //yyerror("syntax error");
 #ifdef lint
     goto yyerrlab;
 #endif
@@ -447,7 +449,7 @@ to state %d\n", *yyssp, yystate);
     *++yyvsp = yyval;
     goto yyloop;
 yyoverflow:
-    yyerror("yacc stack overflow");
+    //yyerror("yacc stack overflow");
 yyabort:
     return (1);
 yyaccept:

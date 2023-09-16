@@ -8,7 +8,9 @@
 
 #include <iostream>
 #include <fstream>
-#include "./AnalisisLexico/AnalizadorLexico.h"
+#include "./AnalisisSintactico/yTab.c"
+
+
 using namespace std;
 
 ifstream codigoFuente;
@@ -27,13 +29,16 @@ int main(int argc, char *argv[]) {
 		throw runtime_error("No se ha podido abrir el codigo fuente.");
 	}
 
+	yyparse();
+
+	/*
 	int nro;
 
 	do {
 		nro = yylex();
 		cout << "\nNro de Token Reconocido: " << nro << endl;
 	} while (nro != 0);
-
+	*/
 	codigoFuente.close();
 
 	return 0;
