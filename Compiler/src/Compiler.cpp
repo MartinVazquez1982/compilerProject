@@ -11,6 +11,7 @@
 #include "./AnalisisLexico/AnalizadorLexico.h"
 using namespace std;
 
+ifstream codigoFuente;
 
 int main(int argc, char *argv[]) {
 	if (argc > 2) {
@@ -20,14 +21,20 @@ int main(int argc, char *argv[]) {
 	}
 
 	const char* nombreArchivo = argv[1];
-	ifstream archivo(nombreArchivo);
+	codigoFuente.open(nombreArchivo);
 
-	if (!archivo.is_open()) {
+	if (!codigoFuente.is_open()) {
 		throw runtime_error("No se ha podido abrir el codigo fuente.");
 	}
-	while (!archivo.eof()) {
-		cout << "\nNro de Token Reconocido: " << yylex(archivo) << endl;
-	}
-	archivo.close();
+
+	int nro;
+
+	do {
+		nro = yylex();
+		cout << "\nNro de Token Reconocido: " << nro << endl;
+	} while (nro != 0);
+
+	codigoFuente.close();
+
 	return 0;
 }

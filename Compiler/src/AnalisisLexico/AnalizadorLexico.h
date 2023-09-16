@@ -8,10 +8,10 @@
 #ifndef ANALISISLEXICO_ANALIZADORLEXICO_H_
 #define ANALISISLEXICO_ANALIZADORLEXICO_H_
 
-#include <fstream>
 using namespace std;
 
-int yylex(ifstream& codigoFuente);
+extern ifstream codigoFuente;
 
+int yylex();
 
 #endif /* ANALISISLEXICO_ANALIZADORLEXICO_H_ */

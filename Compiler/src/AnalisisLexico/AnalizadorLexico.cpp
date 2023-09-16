@@ -13,7 +13,7 @@
 using namespace std;
 
 
-int yylex(ifstream& codigoFuente){
+int yylex(){
 	char caracter;
 	while (!codigoFuente.eof()){
 		if (AccionesSemanticas::LeerCaracter()){
@@ -31,4 +31,5 @@ int yylex(ifstream& codigoFuente){
 		}
 	}
 	return 0;
+
 }
