@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <fstream>
-#include "./AnalisisSintactico/yTab.c"
+#include "./yTab.h"
 
 
 using namespace std;
@@ -29,7 +29,9 @@ int main(int argc, char *argv[]) {
 		throw runtime_error("No se ha podido abrir el codigo fuente.");
 	}
 
-	yyparse();
+	int anduvo;
+	anduvo = yyparse();
+	cout << anduvo << endl;
 
 	/*
 	int nro;

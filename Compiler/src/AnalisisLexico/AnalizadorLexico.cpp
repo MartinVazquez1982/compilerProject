@@ -27,6 +27,7 @@ int yylex(){
 		Dato estado = Automata::pasoAutomata(caracter);
 		if (estado.AS != nullptr) estado.AS(caracter);
 		if(AccionesSemanticas::tokenReconocido()){
+			cout << "\nNro de Token Reconocido: " << AccionesSemanticas::nroToken << endl;
 			return AccionesSemanticas::nroToken;
 		}
 	}
