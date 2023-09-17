@@ -1,3 +1,6 @@
+#ifndef _yy_defines_h_
+#define _yy_defines_h_
+
 #define IF 257
 #define ELSE 258
 #define ENDIF 259
@@ -20,3 +23,5 @@
 #define CTESTRING 276
 #define ID 277
 #define RETURN 278
+
+#endif /* _yy_defines_h_ */
