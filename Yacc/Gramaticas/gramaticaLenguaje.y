@@ -37,9 +37,19 @@ function: VOID ID'('formalParameter')''{'functionBody'}'
 formalParameter:  type ID 
                 ;
                 
-functionBody: sentenceList RETURN 
-            | RETURN
+functionBody: sentenceList RETURN','
+            | RETURN','
+            // | ifStatementFunction
+            // | whileStatementFunction
             ;
+
+// ifStatementFunction: IF'('condition')''{'functionBody'}' ENDIF
+//                    | IF'('condition')''{'functionBody'}'ELSE'{'sentenceList'}' ENDIF 
+//                    | IF'('condition')''{'sentenceList'}'ELSE'{'functionBody'}' ENDIF 
+//                    ;
+
+// whileStatementFunction: WHILE '(' condition ')' DO '{' functionBody '}'
+//                       ; 
 
 functionCall: ID '(' realParameter ')' | ID '('')'
 
@@ -49,14 +59,14 @@ realParameter: factor
 variableList: variableList ';' ID | ID 
             ;
 
-ifStatement: IF'('condition')''{'sentenceList'}'ELSE'{'sentenceList'}'
-           | IF'('condition')''{'sentenceList'}'
+ifStatement: IF'('condition')''{'sentenceList'}'ELSE'{'sentenceList'}' ENDIF
+           | IF'('condition')''{'sentenceList'}' ENDIF
             ;
 
-whileStatement: WHILE '(' condition ')' DO { sentenceList }
+whileStatement: WHILE '(' condition ')' DO '{' sentenceList '}'
               ;
 
-class: CLASS ID {sentenceList}
+class: CLASS ID '{' sentenceList '}'
     ;
 
 condition: factor operatorsLogics factor
