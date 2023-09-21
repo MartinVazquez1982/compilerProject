@@ -1,5 +1,6 @@
 %{
     #include <iostream>
+    #include "../AnalisisLexico/AnalizadorLexico.h"
 %}
 
 %token IF ELSE ENDIF PRINT CLASS VOID SHORT ULONG FLOAT WHILE DO LESSLESS EQUAL NOTEQUAL GREATEREQUAL LESSEQUAL CTESHORT CTEULONG CTEFLOAT CTESTRING ID RETURN
@@ -10,82 +11,80 @@
 program: '{'sentenceList'}'
        ;
 
-sentenceList: sentenceList sentence','
-            | sentence','
+sentenceList: sentenceList sentence
+            | sentence
             ;
 
-sentence: assignment 
-        | function
-        | declaration 
-        | ifStatement
-        | whileStatement 
-        | class 
-        | print 
-        | functionCall
+sentence: declarative','
+        | executable','
         ;
 
-declaration: type variableList
-            ;       
+declarative: function
+           | declaration
+           | class
+           ;
 
-assignment: ID '=' expression
+executableList: executableList executable','
+              | executable','
+              ;
+
+executable: ifStatement
+          | whileStatement 
+          | print 
+          | functionCall
+          | assignment
+          | RETURN
           ;
 
-function: VOID ID'('formalParameter')''{'functionBody'}'
-        | VOID ID'('')''{'functionBody'}'
+declaration: type variableList
+           ;       
+
+assignment: ID '=' expression {cout << "Asignacion Reconocida" << endl;}
+          ;
+
+function: VOID ID'('formalParameter')''{'sentenceList'}'
+        | VOID ID'('')''{'sentenceList'}'
         ;
 
-formalParameter:  type ID 
-                ;
-                
-functionBody: sentenceList RETURN','
-            | RETURN','
-            // | ifStatementFunction
-            // | whileStatementFunction
-            ;
+formalParameter: type ID 
+               ;
 
-// ifStatementFunction: IF'('condition')''{'functionBody'}' ENDIF
-//                    | IF'('condition')''{'functionBody'}'ELSE'{'sentenceList'}' ENDIF 
-//                    | IF'('condition')''{'sentenceList'}'ELSE'{'functionBody'}' ENDIF 
-//                    ;
-
-// whileStatementFunction: WHILE '(' condition ')' DO '{' functionBody '}'
-//                       ; 
 
 functionCall: ID '(' realParameter ')' | ID '('')'
 
 realParameter: factor
-            ;
+             ;
 
 variableList: variableList ';' ID | ID 
             ;
 
-ifStatement: IF'('condition')''{'sentenceList'}'ELSE'{'sentenceList'}' ENDIF
-           | IF'('condition')''{'sentenceList'}' ENDIF
+ifStatement: IF'('condition')''{'executableList'}'ELSE'{'executableList'}'ENDIF
+           | IF'('condition')''{'executableList'}'ENDIF
             ;
 
-whileStatement: WHILE '(' condition ')' DO '{' sentenceList '}'
+whileStatement: WHILE'(' condition ')'DO'{' executableList '}'
               ;
 
-class: CLASS ID '{' sentenceList '}'
+class: CLASS ID '{'sentenceList'}'
     ;
 
 condition: factor operatorsLogics factor
          ;
 
-expression:   expression'+'termino
-            | expression'-'termino
-            | termino
-            ;
+expression: expression'+'termino
+          | expression'-'termino
+          | termino
+          ;
 
 termino: termino'*'factor
        | termino'/'factor 
        | factor
        ;
 
-factor:   ID
-        | constant
-        | ID LESSLESS
-        ;
+factor: ID
+      | constant
+      | ID LESSLESS
+      ;
 
 operatorsLogics: EQUAL 
                | NOTEQUAL 
@@ -112,3 +111,9 @@ print: PRINT cadena
 
 cadena: CTESTRING
     ;
+
+%%
+
+void yyerror(string menssage){
+	cout << "Error Sintactico: " << menssage << endl;
+}

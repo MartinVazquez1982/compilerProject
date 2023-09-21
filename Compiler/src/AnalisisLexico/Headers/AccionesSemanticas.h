@@ -13,7 +13,6 @@ using namespace std;
 class AccionesSemanticas{
 	private:
 		static int nroLineas;
-		static string entrada;
 		static bool habilitarLectura;
 		static bool enviarWarning;
 		static bool tokenIdentificado;
@@ -22,6 +21,7 @@ class AccionesSemanticas{
 
 	public:
 		static int nroToken;
+		static string entrada;
 
 		static char caracterLeido();
 

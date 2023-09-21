@@ -1,5 +1,6 @@
-#ifndef _yy_defines_h_
-#define _yy_defines_h_
+#include <string>
+
+using namespace std;
 
 #define IF 257
 #define ELSE 258
@@ -25,5 +26,3 @@
 #define RETURN 278
 
 int yyparse();
-
-#endif /* _yy_defines_h_ */

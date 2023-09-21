@@ -24,6 +24,8 @@ class TablaDeSimbolos {
 
 		static unordered_map<string, Datos> table;
 
+		static string yylval;
+
 
 	public:
 		static void add(string lexema, string valor, string tipo);

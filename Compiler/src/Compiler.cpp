@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <fstream>
-#include "./yTab.h"
+#include "./AnalisisSintactico/yTab.h"
 
 
 using namespace std;

@@ -8,19 +8,13 @@
 #ifndef ANALIZADORLEXICO_H
 #define ANALIZADORLEXICO_H
 
-#ifdef __cplusplus
 #include <fstream>
-	using namespace std;
-	extern ifstream codigoFuente;
-#endif
+using namespace std;
 
-#ifdef __cplusplus
-extern "C" {
-	#endif
+extern ifstream codigoFuente;
+extern string yylval;
 
-	int yylex();
-#ifdef __cplusplus
-}
-#endif
+int yylex();
+
 
 #endif /* ANALISISLEXICO_ANALIZADORLEXICO_H_ */
