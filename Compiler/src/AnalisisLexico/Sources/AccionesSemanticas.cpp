@@ -100,7 +100,7 @@ void AccionesSemanticas::AS5(char caracter){
 
 void AccionesSemanticas::AS6(char caracter){
 	TablaDeSimbolos::add(entrada);
-	cout << TablaDeSimbolos::imprimir() << endl;
+	//cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 void AccionesSemanticas::AS7(char caracter){
@@ -242,7 +242,7 @@ void AccionesSemanticas::AS23(char caracter){
 			TablaDeSimbolos::add(entrada, valor ,"ULONG");
 		}
 	}
-	cout << TablaDeSimbolos::imprimir() << endl;
+	//cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 void AccionesSemanticas::AS24(char caracter){
@@ -260,7 +260,7 @@ void AccionesSemanticas::AS25(char caracter){
 	TablaDeSimbolos::add(entrada, entrada,"FLOAT");
 	tokenIdentificado = true;
 	nroToken = 275;
-	cout << TablaDeSimbolos::imprimir() << endl;
+	//cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 void AccionesSemanticas::AS26(char caracter){
