@@ -25,6 +25,10 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo){
 	TablaDeSimbolos::table[lexema]=info;
 }
 
+string TablaDeSimbolos::getValor(string lexema){
+	return table.at(lexema).valor;
+}
+
 string TablaDeSimbolos::imprimir() {
 	string salida = "\n			Tabla de Simbolos\n";
 	for (const auto& par : TablaDeSimbolos::table) {

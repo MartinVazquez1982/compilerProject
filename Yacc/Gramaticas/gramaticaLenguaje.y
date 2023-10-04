@@ -1,6 +1,14 @@
 %{
-    #include <iostream>
-    #include "../AnalisisLexico/AnalizadorLexico.h"
+
+#include <iostream>
+#include "../AnalisisLexico/AnalizadorLexico.h"
+#include "../AnalisisLexico/Headers/AccionesSemanticas.h"
+#include "../TablaDeSimbolos/TablaDeSimbolos.h"
+
+#define RESET   "\x1B[0m"
+#define YELLOW  "\x1B[33m"
+#define RED "\x1B[31m"
+
 %}
 
 %token IF ELSE ENDIF PRINT CLASS VOID SHORT ULONG FLOAT WHILE DO LESSLESS EQUAL NOTEQUAL GREATEREQUAL LESSEQUAL CTESHORT CTEULONG CTEFLOAT CTESTRING ID RETURN
@@ -125,11 +133,11 @@ operatorsLogics: EQUAL
                | '>'
                ;
 
-constant: CTESHORT
+constant: CTESHORT {crequearRangoSHORT($1);}
         | '-'CTESHORT
         | CTEFLOAT
         | '-'CTEFLOAT
-        | CTEULONG 
+        | CTEULONG
         ;
 
 type: SHORT
@@ -146,9 +154,16 @@ cadena: CTESTRING
 %%
 
 void yyerror(string menssage){
-	cout << "Error Sintactico: " << menssage << endl;
+	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET;
 }
 
 void yywarning(string menssage){
-    cout << "Warning: " << menssage << endl;
+    cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET;
+}
+
+void crequearRangoSHORT(string valor){
+    int chequear = stoi(TablaDeSimbolos::getValor(valor));
+    if (chequear >= 128){
+        yyerror("Constante SHORT fuera de rango");
+    }
 }

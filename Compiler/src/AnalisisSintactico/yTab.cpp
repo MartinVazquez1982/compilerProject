@@ -3,9 +3,17 @@ static char yysccsid[] = "@(#)yaccpar	1.8 (Berkeley) 01/20/90";
 #endif
 #define YYBYACC 1
 #line 2 ".\Gramaticas\gramaticaLenguaje.y"
-    #include <iostream>
-    #include "../AnalisisLexico/AnalizadorLexico.h"
-#line 9 "y.tab.c"
+
+#include <iostream>
+#include "../AnalisisLexico/AnalizadorLexico.h"
+#include "../AnalisisLexico/Headers/AccionesSemanticas.h"
+#include "../TablaDeSimbolos/TablaDeSimbolos.h"
+
+#define RESET   "\x1B[0m"
+#define YELLOW  "\x1B[33m"
+#define RED "\x1B[31m"
+
+#line 17 "y.tab.c"
 #define IF 257
 #define ELSE 258
 #define ENDIF 259
@@ -373,16 +381,23 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 147 ".\Gramaticas\gramaticaLenguaje.y"
+#line 155 ".\Gramaticas\gramaticaLenguaje.y"
 
 void yyerror(string menssage){
-	cout << "Error Sintactico: " << menssage << endl;
+	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET;
 }
 
 void yywarning(string menssage){
-    cout << "Warning: " << menssage << endl;
+    cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET;
 }
-#line 386 "y.tab.c"
+
+void crequearRangoSHORT(string valor){
+    int chequear = stoi(TablaDeSimbolos::getValor(valor));
+    if (chequear >= 128){
+        yyerror("Constante SHORT fuera de rango");
+    }
+}
+#line 401 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -523,66 +538,70 @@ yyreduce:
     switch (yyn)
     {
 case 2:
-#line 12 ".\Gramaticas\gramaticaLenguaje.y"
+#line 20 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Programa vacio");}
 break;
 case 3:
-#line 13 ".\Gramaticas\gramaticaLenguaje.y"
+#line 21 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Programa vacio"); yyerror("Sentencias fuera del rango del programa");}
 break;
 case 8:
-#line 22 ".\Gramaticas\gramaticaLenguaje.y"
+#line 30 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Sentencia vacia");}
 break;
 case 14:
-#line 32 ".\Gramaticas\gramaticaLenguaje.y"
+#line 40 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Sentencia declarativa en lugar de una ejecutable");}
 break;
 case 34:
-#line 68 ".\Gramaticas\gramaticaLenguaje.y"
+#line 76 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta palabra reservada void");}
 break;
 case 35:
-#line 69 ".\Gramaticas\gramaticaLenguaje.y"
+#line 77 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta palabra reservada void");}
 break;
 case 43:
-#line 85 ".\Gramaticas\gramaticaLenguaje.y"
+#line 93 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta segundo parentesis en la condicion");}
 break;
 case 44:
-#line 86 ".\Gramaticas\gramaticaLenguaje.y"
+#line 94 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta primer parentesis en la condicion");}
 break;
 case 45:
-#line 87 ".\Gramaticas\gramaticaLenguaje.y"
+#line 95 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Faltan  parentesis en la condicion");}
 break;
 case 46:
-#line 88 ".\Gramaticas\gramaticaLenguaje.y"
+#line 96 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("If vacio");}
 break;
 case 48:
-#line 92 ".\Gramaticas\gramaticaLenguaje.y"
+#line 100 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta segundo parentesis en la condicion");}
 break;
 case 49:
-#line 93 ".\Gramaticas\gramaticaLenguaje.y"
+#line 101 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta primer parentesis en la condicion");}
 break;
 case 50:
-#line 94 ".\Gramaticas\gramaticaLenguaje.y"
+#line 102 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta parentesis en la condicion");}
 break;
 case 51:
-#line 95 ".\Gramaticas\gramaticaLenguaje.y"
+#line 103 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("While vacio");}
 break;
 case 57:
-#line 107 ".\Gramaticas\gramaticaLenguaje.y"
+#line 115 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Expression no puede ir entre parentesis");}
 break;
-#line 586 "y.tab.c"
+case 70:
+#line 136 ".\Gramaticas\gramaticaLenguaje.y"
+{crequearRangoSHORT(yyvsp[0]);}
+break;
+#line 605 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

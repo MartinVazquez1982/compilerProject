@@ -31,7 +31,7 @@ class TablaDeSimbolos {
 		static void add(string lexema, string valor, string tipo);
 		static void add(string lexema);
 
-		static string getDato(string lexema, string atributo);
+		static string getValor(string lexema);
 		static void addAtributo(string lexema, string atributo, string valor);
 		static string imprimir();
 };
