@@ -1,0 +1,5 @@
+{
+	var = 123.,
+	*{
+	PRUEBA DE COMENTARIO SIN CERRAR
+}

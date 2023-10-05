@@ -78,6 +78,9 @@ void AccionesSemanticas::AS2(char caracter){
 		case 18:
 			cout << RED << "Linea " + to_string(lineaInicioToken) + ": cadena de texto mal definida" << RESET << endl;
 			break;
+		default:
+			cout << RED << "Linea " + to_string(lineaInicioToken) + ": error lexico" << RESET << endl;
+			break;
 	}
 }
 
@@ -242,7 +245,7 @@ void AccionesSemanticas::AS23(char caracter){
 			TablaDeSimbolos::add(entrada, valor ,"ULONG");
 		}
 	}
-	//cout << TablaDeSimbolos::imprimir() << endl;
+	cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 void AccionesSemanticas::AS24(char caracter){
@@ -260,7 +263,7 @@ void AccionesSemanticas::AS25(char caracter){
 	TablaDeSimbolos::add(entrada, entrada,"FLOAT");
 	tokenIdentificado = true;
 	nroToken = 275;
-	//cout << TablaDeSimbolos::imprimir() << endl;
+	cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 void AccionesSemanticas::AS26(char caracter){
