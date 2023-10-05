@@ -28,6 +28,7 @@ class TablaDeSimbolos {
 		static string yylval;
 
 		static void fueConsultado(string lexema);
+		static void addConsultado(string lexema, string atributo, string valor);
 
 
 	public:
