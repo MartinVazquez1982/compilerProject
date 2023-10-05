@@ -20,11 +20,14 @@ class TablaDeSimbolos {
 		struct Datos{
 			string tipo;
 			string valor;
+			bool consultado;
 		};
 
 		static unordered_map<string, Datos> table;
 
 		static string yylval;
+
+		static void fueConsultado(string lexema);
 
 
 	public:
@@ -33,6 +36,8 @@ class TablaDeSimbolos {
 
 		static string getValor(string lexema);
 		static void addAtributo(string lexema, string atributo, string valor);
+		static void chequearNegativos(string nro);
+		static void chequearPositivos(string nro);
 		static string imprimir();
 };
 

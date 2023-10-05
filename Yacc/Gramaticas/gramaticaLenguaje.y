@@ -19,7 +19,9 @@
 program: '{'sentenceList'}'
         | '{''}' {yywarning("Programa vacio");}
         | '{''}' error {yywarning("Programa vacio"); yyerror("Sentencias fuera del rango del programa");}
-       ;
+        | '{'sentenceList error {yyerror("No existe fin de programa");}
+        | sentenceList {yyerror("Falta llaves delimitadores de programa");}
+        ;
 
 sentenceList: sentenceList sentence
             | sentence
@@ -62,51 +64,48 @@ variableList: variableList ';' ID
             | ID 
             ;
 
-assignment: ID '=' expression 
-          | nesting '=' expression
-          | nesting '=' ID'.'ID
+assignment: nesting '=' expression  
           ;
 
 nesting: nesting'.'ID
-       | ID'.'ID
+       | ID
        ;
 
 function: VOID ID'('formalParameter')''{'sentenceList'}'
         | VOID ID'('')''{'sentenceList'}'
-        | ID'('formalParameter')''{'sentenceList'}' {yyerror("Falta palabra reservada void");}
-        | ID'('')''{'sentenceList'}' {yyerror("Falta palabra reservada void");}
         ;
 
 formalParameter: type ID 
                ;
 
-functionCall: ID'(' realParameter ')' 
-            | ID'('')'
-            | nesting'('')'  
+functionCall: nesting'('')'
+            | nesting'('realParameter')' 
             ;
 
 realParameter: expression
              ;
 
-ifStatement: IF'('condition')''{'executableList'}'ELSE'{'executableList'}'ENDIF
-           | IF'('condition')''{'executableList'}'ENDIF
-           | IF'('condition'{'executableList'}'ENDIF {yyerror("Falta segundo parentesis en la condicion");}
-           | IF condition')''{'executableList'}'ENDIF {yyerror("Falta primer parentesis en la condicion");}
-           | IF condition '{'executableList'}'ENDIF {yyerror("Faltan  parentesis en la condicion");}
-           | IF'('condition')' '{''}'ENDIF {yywarning("If vacio");}
-            ;
+ifStatement: IF condition '{'executableList'}'ELSE'{'executableList'}'ENDIF
+           | IF condition '{'executableList'}'ENDIF
+           | IF condition '{''}'ENDIF {yywarning("If vacio");}
+           | IF condition '{'executableList'}'ELSE'{''}'ENDIF {yywarning("Else vacio");}
+           | IF condition '{''}'ELSE'{'executableList'}'ENDIF {yywarning("If vacio");}
+           ;
 
-whileStatement: WHILE'(' condition ')'DO'{' executableList '}'
-              | WHILE'(' condition  DO'{' executableList '}' {yyerror("Falta segundo parentesis en la condicion");}
-              | WHILE condition ')'DO'{' executableList '}' {yyerror("Falta primer parentesis en la condicion");}
-              | WHILE condition DO'{' executableList '}' {yyerror("Falta parentesis en la condicion");}
-              | WHILE'(' condition ')' DO'{''}' {yywarning("While vacio");}
+whileStatement: WHILE condition DO'{' executableList '}'
+              | WHILE condition DO'{''}' {yywarning("While vacio");}
               ;
+
+condition: '('comparation')'
+         | '('comparation  {yyerror("Falta segundo parentesis en la condicion");}
+         | comparation')'  {yyerror("Falta primer parentesis en la condicion");}
+         | comparation     {yyerror("Faltan  parentesis en la condicion");}
+         ;
 
 class: CLASS ID '{'sentenceList'}'
     ;
 
-condition: factor operatorsLogics factor
+comparation: factor operatorsLogics factor
          ;
 
 expression: expression'+'termino
@@ -120,9 +119,9 @@ termino: termino'*'factor
        | factor
        ;
 
-factor: ID
+factor: nesting
       | constant
-      | ID LESSLESS
+      | nesting LESSLESS
       ;
 
 operatorsLogics: EQUAL 
@@ -133,10 +132,10 @@ operatorsLogics: EQUAL
                | '>'
                ;
 
-constant: CTESHORT {crequearRangoSHORT($1);}
-        | '-'CTESHORT
-        | CTEFLOAT
-        | '-'CTEFLOAT
+constant: CTESHORT {crequearRangoSHORT($1); TablaDeSimbolos::chequearPositivos($1);}
+        | '-'CTESHORT {TablaDeSimbolos::chequearNegativos($2);}
+        | CTEFLOAT {TablaDeSimbolos::chequearPositivos($1);}
+        | '-'CTEFLOAT {TablaDeSimbolos::chequearNegativos($2);}
         | CTEULONG
         ;
 
@@ -154,11 +153,11 @@ cadena: CTESTRING
 %%
 
 void yyerror(string menssage){
-	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET;
+	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
 }
 
 void yywarning(string menssage){
-    cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET;
+    cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
 }
 
 void crequearRangoSHORT(string valor){
