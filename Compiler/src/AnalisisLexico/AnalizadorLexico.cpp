@@ -1,10 +1,3 @@
-/*
- * AnalizadorLexico.cpp
- *
- *  Created on: Aug 30, 2023
- *      Author: Martin
- */
-
 #include <fstream>
 #include <iostream>
 #include "./AnalizadorLexico.h"
@@ -12,7 +5,11 @@
 #include "./Headers/AccionesSemanticas.h"
 using namespace std;
 
-
+/**
+ * Se busca el proximo token del archivo fuente
+ *
+ * @return numero de token reconocido, si es fin de archivo retorna 0
+ */
 int yylex(){
 	char caracter;
 	while (!codigoFuente.eof()){

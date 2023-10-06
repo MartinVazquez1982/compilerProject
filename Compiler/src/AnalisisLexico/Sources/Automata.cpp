@@ -1,10 +1,3 @@
-/*
- * Automata.cpp
- *
- *  Created on: Sep 3, 2023
- *      Author: Martin
- */
-
 #include "../Headers/Automata.h"
 #include<iostream>
 #include "../Headers/AccionesSemanticas.h"
@@ -40,6 +33,13 @@ const unordered_map<char, int> Automata::hashIndices = {
 		{')',15},{',',15},{'u',16},{'l',17},{'s',18},{'e',19},{'E',20},{'\0',22}
 };
 
+/**
+ * Busca el numero de fila correspondiente con el caracter
+ *
+ * @param caracter al cual buscar su numero de columna
+ *
+ * @return numero de columna del caracter
+ */
 int Automata::indiceCaracter(char caracter){
 	if(isalpha(caracter)){
 		if(isupper(caracter)){
@@ -73,6 +73,13 @@ int Automata::indiceCaracter(char caracter){
 	}
 }
 
+/**
+ * Realiza el paso entre estado y estado del automata
+ *
+ * @param caracter de entrada, el cual define a cual estado ir
+ *
+ * @return Celda de la matriz con el estado hacia donde ir y AS a ejecutar
+ */
 Dato Automata::pasoAutomata(char caracter){
 	Dato celda = AutomataMatriz[estadoActual][indiceCaracter(caracter)];
 	if (celda.estadoSiguiente == -2){
@@ -82,10 +89,16 @@ Dato Automata::pasoAutomata(char caracter){
 	return celda;
 }
 
+/**
+ * Vuelve el estado actual del automata al 0
+ */
 void Automata::reiniciarRecorrido(){
 	estadoActual=0;
 }
 
+/**
+ * @return numero de estado en el que se produjo un error
+ */
 int Automata::getEstadoError(){
 	return Automata::estadoError;
 }

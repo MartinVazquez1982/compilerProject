@@ -69,9 +69,14 @@ nesting: nesting'.'ID
        | ID
        ;
 
-function: VOID ID'('formalParameter')''{'sentenceList'}' {yymenssage("Funcion");}
-        | VOID ID'('')''{'sentenceList'}' {yymenssage("Funcion");}
+function: VOID ID'('formalParameter')''{'functionBody'}' {yymenssage("Funcion");}
+        | VOID ID'('')''{'functionBody'}' {yymenssage("Funcion");}
         ;
+
+functionBody: sentenceList RETURN
+            | RETURN {yywarning("Funcion vacia");} 
+            | sentenceList {yyerror("Falta RETURN obligatorio al final de la funcion");}
+            ;
 
 formalParameter: type ID 
                ;

@@ -1,20 +1,23 @@
 //============================================================================
-// Name        : Compiler.cpp
+// Name        : Compilador
 // Authors     : Burckhardt, David | Benecier, Joaquin | Vazquez Arispe, Martin
-// Version     :
 // Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Description : Compilador de lenguaje provisto por la catedra Diseño de Compiladores - FCEx - UNICEN
 //============================================================================
 
 #include <iostream>
 #include <fstream>
 #include "./AnalisisSintactico/yTab.h"
 
-
 using namespace std;
 
+//Archivo con el codigo fuente
 ifstream codigoFuente;
 
+/**
+ * Main del compilador se revisa si hubo un path recibido como
+ * parametro y si puede abrir dicho archivo. Luego realiza la compilacion
+ */
 int main(int argc, char *argv[]) {
 	if (argc > 2) {
 		throw runtime_error("Demasiados argumentos.");
@@ -29,18 +32,9 @@ int main(int argc, char *argv[]) {
 		throw runtime_error("No se ha podido abrir el codigo fuente.");
 	}
 
-	int anduvo;
-	anduvo = yyparse();
-	cout << anduvo << endl;
-
-	/*
-	int nro;
-
-	do {
-		nro = yylex();
-		cout << "\nNro de Token Reconocido: " << nro << endl;
-	} while (nro != 0);
-	*/
+	int finDeArchivo;
+	finDeArchivo = yyparse();
+	cout << finDeArchivo << endl;
 	codigoFuente.close();
 
 	return 0;

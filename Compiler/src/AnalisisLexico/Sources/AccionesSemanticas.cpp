@@ -20,8 +20,6 @@ char AccionesSemanticas::caracterAnterior;
 int AccionesSemanticas::lineaInicioToken;
 
 /**
- * Retorna el caracter leido la pasada anterior
- *
  * @return caracter almacenado en caracterAnterior
  */
 char AccionesSemanticas::caracterLeido(){

@@ -1,10 +1,3 @@
-/*
- * TablaDeSimbolos.cpp
- *
- *  Created on: Sep 7, 2023
- *      Author: Martin
- */
-
 #include "TablaDeSimbolos.h"
 #include <iostream>
 #include <string>
@@ -13,6 +6,11 @@ using namespace std;
 
 unordered_map<string, TablaDeSimbolos::Datos> TablaDeSimbolos::table;
 
+/**
+ * Agrega una entrada a la tabla de simbolos
+ *
+ * @param Clave de la entrada en la tabla de simbolos
+ */
 void TablaDeSimbolos::add(string lexema){
 	auto existe = TablaDeSimbolos::table.find(lexema);
 	if (existe == TablaDeSimbolos::table.end()){
@@ -22,6 +20,15 @@ void TablaDeSimbolos::add(string lexema){
 	}
 }
 
+/**
+ * Agrega entrada a la tabla de simbolo
+ *
+ * @param 1 Clave de la entrada en la tabla de simbolos
+ *
+ * @param 2 Valor de la entrada
+ *
+ * @param 3 Tipo de la entrada
+ */
 void TablaDeSimbolos::add(string lexema, string valor, string tipo){
 	auto existe = TablaDeSimbolos::table.find(lexema);
 	if (existe == TablaDeSimbolos::table.end()){
@@ -33,10 +40,16 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo){
 	}
 }
 
+/**
+ * @return Valor de esa entrada en la tabla de simbolos
+ */
 string TablaDeSimbolos::getValor(string lexema){
 	return table.at(lexema).valor;
 }
 
+/**
+ * @return String con lo que tiene almacenado la tabla de simbolos
+ */
 string TablaDeSimbolos::imprimir() {
 	string salida = "\n			Tabla de Simbolos\n";
 	for (const auto& par : TablaDeSimbolos::table) {
@@ -45,6 +58,13 @@ string TablaDeSimbolos::imprimir() {
 	return salida;
 }
 
+/**
+ * Chequea si hay una entrada en la tabla de simbolos con ese numero negativo, si
+ * no la hay revisa si el positivo de ese numero fue consultado. Si no lo fue, ocupa la
+ * entrada dicho numero, sino, crea una nueva
+ *
+ * @param numero negativo a revisar en la tabla
+ */
 void TablaDeSimbolos::chequearNegativos(string nro){
 	string nroConSigno = "-"+nro;
 	auto existe = TablaDeSimbolos::table.find(nroConSigno);
@@ -58,6 +78,12 @@ void TablaDeSimbolos::chequearNegativos(string nro){
 	cout << imprimir();
 }
 
+/**
+ * Revisa si un numero negativo ocupo su celda en la tabla de simbolo y crea una nueva, si no
+ * fue asi marca la celda como usada.
+ *
+ * @param numero positivo a revisar en la tabla
+ */
 void TablaDeSimbolos::chequearPositivos(string nro){
 	auto existe = TablaDeSimbolos::table.find(nro);
 	if (existe == TablaDeSimbolos::table.end()){
