@@ -1,10 +1,3 @@
-/*
- * AccionesSemanticas.cpp
- *
- *  Created on: Aug 29, 2023
- *      Author: Martin
- */
-
 #include "../Headers/AccionesSemanticas.h"
 #include "../Headers/Automata.h"
 #include "../Headers/TablaPalabrasReservadas.h"
@@ -26,10 +19,21 @@ int AccionesSemanticas::nroToken;
 char AccionesSemanticas::caracterAnterior;
 int AccionesSemanticas::lineaInicioToken;
 
+/**
+ * Retorna el caracter leido la pasada anterior
+ *
+ * @return caracter almacenado en caracterAnterior
+ */
 char AccionesSemanticas::caracterLeido(){
 	return caracterAnterior;
 }
 
+/**
+ * Retorna si es que se reconocio un token o no, en caso que si.
+ * Se prepara para una proxima lectura
+ *
+ * @return True si se reconocio un token y False si no lo hubo
+ */
 bool AccionesSemanticas::tokenReconocido(){
 	if (tokenIdentificado){
 		tokenIdentificado = false;
@@ -38,6 +42,12 @@ bool AccionesSemanticas::tokenReconocido(){
 	return false;
 }
 
+/**
+ * Funcionamiento similar al tokenReconocido(), retorna si es que
+ * hay que leer un caracter del archivo o volver a usar el anterior
+ *
+ * @return True si hay que leer el proximo caracter, False si no
+ */
 bool AccionesSemanticas::LeerCaracter(){
 	if(!habilitarLectura){
 		habilitarLectura = true;
@@ -46,10 +56,23 @@ bool AccionesSemanticas::LeerCaracter(){
 	return true;
 }
 
+/**
+ * Todas las acciones semanticas:
+ *
+ * @param caracter que fue recientemente leido en el archivo o el de la iteracion anterior
+ */
+
+/**
+ * LLeva la cuenta de la cantidad de lineas del archivo fuente
+ */
 void AccionesSemanticas::AS1(char caracter){
 	if (caracter == '\n') nroLineas++;
 }
 
+
+/**
+ * En caso de un error revisa de cual se trata
+ */
 void AccionesSemanticas::AS2(char caracter){
 	AS13(caracter);
 	switch(Automata::getEstadoError()){
@@ -84,10 +107,17 @@ void AccionesSemanticas::AS2(char caracter){
 	}
 }
 
+/**
+ * Inicializa string para almacenar la entrada
+ */
 void AccionesSemanticas::AS3(char caracter){
 	entrada.clear();
 }
 
+/**
+ * agrega caracter al string, mientras no sea un salto de linea.
+ * Si lo es, invoca AS1 para que realice en conteo
+ */
 void AccionesSemanticas::AS4(char caracter){
 	if (caracter != '\n'){
 		entrada+=caracter;
@@ -96,16 +126,27 @@ void AccionesSemanticas::AS4(char caracter){
 	}
 }
 
+/**
+ * Coloca en falso el habilitar lectura para asi poder leer el
+ * mismo caracter en la proxima vuelta
+ */
 void AccionesSemanticas::AS5(char caracter){
 	habilitarLectura = false;
 	caracterAnterior = caracter;
 }
 
+/**
+ * Agrega un identificador a la tabla de simbolos
+ */
 void AccionesSemanticas::AS6(char caracter){
 	TablaDeSimbolos::add(entrada);
 	//cout << TablaDeSimbolos::imprimir() << endl;
 }
 
+/**
+ * Chequea rango de las constantes de tipo FLOAT y si es correcto
+ * llama a la AS25
+ */
 void AccionesSemanticas::AS7(char caracter){
 	// 1.17549435E-38 < x 3.40282347E+38 U -3.40282347E+38 < x < -1.17549435E-38 U 0.0
 	try{
@@ -116,19 +157,26 @@ void AccionesSemanticas::AS7(char caracter){
 	}
 }
 
+/**
+ * Chequea rando de las constantes de tipo ULONG, si hay un overflow
+ * llama a la AS10
+ */
 void AccionesSemanticas::AS8(char caracter){
 	//0 < x < 2^32-1
 	try{
 		size_t pos = entrada.find('_');
 		string numeroStr = entrada.substr(0, pos);
 		unsigned long numero = stoul(numeroStr);
-
 	}catch(const out_of_range & exception){
 		AS10(caracter);
 		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante ULONG fuera del rango permitido" << RESET << endl;
 	}
 }
 
+/**
+ * Chequea rando de las constantes de tipo SHORT, si hay un overflow
+ * llama a la AS10 y sino a la AS15
+ */
 void AccionesSemanticas::AS9(char caracter){
 	//-2^7 < x < 2^7-1
 	try{
@@ -145,32 +193,57 @@ void AccionesSemanticas::AS9(char caracter){
 	}
 }
 
+/**
+ * Cuando se reconoce un token, que se llego al final del automata. Se
+ * Invoca al metodo que vuelve al estado actual a 0
+ */
 void AccionesSemanticas::AS10(char caracter){
 	Automata::reiniciarRecorrido();
 }
 
+/**
+ * Realiza el llamado de las acciones semanticas AS3 (incializa string)
+ * y AS4 (Carga caracter en el string), coloca el nro de linea que inicio
+ * el nuevo token
+ */
 void AccionesSemanticas::AS11(char caracter){
 	AS3(caracter);
 	AS4(caracter);
 	lineaInicioToken = nroLineas;
 }
 
+/**
+ * Vuelve al automata al estado 0, bloquea la lectura de otro caracter del
+ * archivo y chequea rango de constantes FLOAT
+ */
 void AccionesSemanticas::AS12(char caracter){
 	AS10(caracter);
 	AS5(caracter);
 	AS7(caracter);
 }
 
+/**
+ * Bloquea la lectura de otro caracter del
+ * archivo y vuelva al automata al estado 0
+ */
 void AccionesSemanticas::AS13(char caracter){
 	AS5(caracter);
 	AS10(caracter);
 }
 
+/**
+ * Agrega caracter al string y chequea rango ulong
+ */
 void AccionesSemanticas::AS14(char caracter){
 	AS4(caracter);
 	AS8(caracter);
 }
 
+/**
+ * Agrega caracter al string, agrega a la tabla de simbolos la
+ * constante correspondiente, manda al automata al estado 0 y
+ * devuelve el token correspodiente
+ */
 void AccionesSemanticas::AS15(char caracter){
 	AS4(caracter);
 	AS23(caracter);
@@ -178,21 +251,31 @@ void AccionesSemanticas::AS15(char caracter){
 	AS24(caracter);
 }
 
-void AccionesSemanticas::AS16(char caracter){
-}
-
+/**
+ * Bloquea la lectura de otro caracter del archivo,
+ * agrega un identificador a la tabla de simbolos y
+ * vuelva al automata al estado 0
+ */
 void AccionesSemanticas::AS17(char caracter){
 	AS5(caracter);
 	AS6(caracter);
 	AS10(caracter);
 }
 
+/**
+ * Retorna el nro de token identificado (es el ASCII del caracter)
+ * y manda al automata al estado 0
+ */
 void AccionesSemanticas::AS18(char caracter){
 	nroToken = int(caracter);
 	tokenIdentificado = true;
 	AS10(caracter);
 }
 
+/**
+ * Chequea si la palabra reservada reconocida existe y
+ * luego invoca a la AS13
+ */
 void AccionesSemanticas::AS19(char caracter){
 	nroToken = TablaPalabrasReservadas::buscar(entrada);
 	if(nroToken == -1){
@@ -203,6 +286,10 @@ void AccionesSemanticas::AS19(char caracter){
     AS13(caracter);
 }
 
+/**
+ * Devuelve el token correspondiente al '==' o al '=', si es
+ * el '==' llama a la AS10 y sino a la AS13
+ */
 void AccionesSemanticas::AS20(char caracter){
 	tokenIdentificado = true;
 	if (caracter=='='){
@@ -214,6 +301,10 @@ void AccionesSemanticas::AS20(char caracter){
 	}
 }
 
+/**
+ * Devuelve el token correspondiente al '--' o al '-', si es
+ * el '--' llama a la AS10 y sino a la AS13
+ */
 void AccionesSemanticas::AS21(char caracter){
 	tokenIdentificado = true;
 	if (caracter=='-'){
@@ -225,6 +316,10 @@ void AccionesSemanticas::AS21(char caracter){
 	}
 }
 
+/*
+ * Revisa que los identificadores tengan menos de
+ * 20 caracteres, si no lo es da un warning
+ */
 void AccionesSemanticas::AS22(char caracter){
 	if (entrada.length() < 20){
 		AS4(caracter);
@@ -235,6 +330,10 @@ void AccionesSemanticas::AS22(char caracter){
 	}
 }
 
+/**
+ * Agrega a la tabla de simbolos una constante cadena,
+ * una constante SHORT o una constante ULONG
+ */
 void AccionesSemanticas::AS23(char caracter){
 	if (caracter == '%'){
 		TablaDeSimbolos::add(entrada, entrada.substr(1,entrada.length()-2),"STRING");
@@ -250,6 +349,10 @@ void AccionesSemanticas::AS23(char caracter){
 	cout << TablaDeSimbolos::imprimir() << endl;
 }
 
+/**
+ * Retorna el nro de token de una constante cadena,
+ * una constante SHORT o una constante ULONG
+ */
 void AccionesSemanticas::AS24(char caracter){
 	tokenIdentificado = true;
 	if(caracter == '%'){
@@ -261,6 +364,10 @@ void AccionesSemanticas::AS24(char caracter){
 	}
 }
 
+/**
+ * Agrega a la tabla de simbolos y retorn nro de token
+ * de una constante FLOAT
+ */
 void AccionesSemanticas::AS25(char caracter){
 	TablaDeSimbolos::add(entrada, entrada,"FLOAT");
 	tokenIdentificado = true;
@@ -268,6 +375,9 @@ void AccionesSemanticas::AS25(char caracter){
 	cout << TablaDeSimbolos::imprimir() << endl;
 }
 
+/**
+ * Devuelve el token correspondiente al '=>', '=<', '<' o '>'
+ */
 void AccionesSemanticas::AS26(char caracter){
 	tokenIdentificado = true;
 	if (caracter == '='){
@@ -283,18 +393,29 @@ void AccionesSemanticas::AS26(char caracter){
 	}
 }
 
+/**
+ * Retorna el numero de token del !!
+ */
 void AccionesSemanticas::AS27(char caracter){
 	nroToken = 270;
 	tokenIdentificado = true;
 	AS10(caracter);
 }
 
+/**
+ * Retorna el nro de token del identificador e
+ * invoca a la AS17
+ */
 void AccionesSemanticas::AS28(char caracter){
 	AS17(caracter);
 	nroToken = 277;
 	tokenIdentificado = true;
 }
 
+/**
+ * Revisa si se trata de un punto o de una constante float y retorna
+ * lo correcto
+ */
 void AccionesSemanticas::AS29(char caracter){
 	if (isdigit(entrada[0])){
 		AS12(caracter);
@@ -304,8 +425,11 @@ void AccionesSemanticas::AS29(char caracter){
 	}
 }
 
+/**
+ * Bloquea lectura y llama a la accion semantica
+ * AS18
+ */
 void AccionesSemanticas::AS30(char caracter){
 	AS5(caracter);
 	AS18('*');
 }
-

@@ -94,16 +94,16 @@ whileStatement: WHILE condition DO'{' executableList '}' {yymenssage("While");}
               | WHILE condition DO'{''}' {yywarning("While vacio");yymenssage("While");}
               ;
 
-condition: '('comparation')'
-         | '('comparation  {yyerror("Falta segundo parentesis en la condicion");}
-         | comparation')'  {yyerror("Falta primer parentesis en la condicion");}
-         | comparation     {yyerror("Faltan  parentesis en la condicion");}
+condition: '('comparison')'
+         | '('comparison  {yyerror("Falta segundo parentesis en la condicion");}
+         | comparison')'  {yyerror("Falta primer parentesis en la condicion");}
+         | comparison     {yyerror("Faltan  parentesis en la condicion");}
          ;
 
 class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");}
     ;
 
-comparation: factor operatorsLogics factor
+comparison: factor operatorsLogics factor
          ;
 
 expression: expression'+'termino
