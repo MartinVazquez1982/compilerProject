@@ -18,7 +18,6 @@
 
 program: '{'sentenceList'}'
         | '{''}' {yywarning("Programa vacio");}
-        | '{''}' error {yywarning("Programa vacio"); yyerror("Sentencias fuera del rango del programa");}
         | sentenceList {yyerror("Falta llaves delimitadores de programa");}
         ;
 
@@ -136,6 +135,7 @@ constant: CTESHORT {crequearRangoSHORT($1); TablaDeSimbolos::chequearPositivos($
         | CTEFLOAT {TablaDeSimbolos::chequearPositivos($1);}
         | '-'CTEFLOAT {TablaDeSimbolos::chequearNegativos($2);}
         | CTEULONG
+        | '-'CTEULONG {yyerror("Una constante ULONG no puede ser negativa");}
         ;
 
 type: SHORT
