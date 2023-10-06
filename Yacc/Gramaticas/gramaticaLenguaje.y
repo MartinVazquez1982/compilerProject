@@ -19,7 +19,6 @@
 program: '{'sentenceList'}'
         | '{''}' {yywarning("Programa vacio");}
         | '{''}' error {yywarning("Programa vacio"); yyerror("Sentencias fuera del rango del programa");}
-        | '{'sentenceList error {yyerror("No existe fin de programa");}
         | sentenceList {yyerror("Falta llaves delimitadores de programa");}
         ;
 
@@ -71,8 +70,8 @@ nesting: nesting'.'ID
        | ID
        ;
 
-function: VOID ID'('formalParameter')''{'sentenceList'}'
-        | VOID ID'('')''{'sentenceList'}'
+function: VOID ID'('formalParameter')''{'sentenceList'}' {yymenssage("Funcion");}
+        | VOID ID'('')''{'sentenceList'}' {yymenssage("Funcion");}
         ;
 
 formalParameter: type ID 
@@ -85,15 +84,15 @@ functionCall: nesting'('')'
 realParameter: expression
              ;
 
-ifStatement: IF condition '{'executableList'}'ELSE'{'executableList'}'ENDIF
-           | IF condition '{'executableList'}'ENDIF
-           | IF condition '{''}'ENDIF {yywarning("If vacio");}
-           | IF condition '{'executableList'}'ELSE'{''}'ENDIF {yywarning("Else vacio");}
-           | IF condition '{''}'ELSE'{'executableList'}'ENDIF {yywarning("If vacio");}
+ifStatement: IF condition '{'executableList'}'ELSE'{'executableList'}'ENDIF {yymenssage("IF");}
+           | IF condition '{'executableList'}'ENDIF {yymenssage("IF");}
+           | IF condition '{''}'ENDIF {yywarning("If vacio");yymenssage("IF");} 
+           | IF condition '{'executableList'}'ELSE'{''}'ENDIF {yywarning("Else vacio");yymenssage("IF");}
+           | IF condition '{''}'ELSE'{'executableList'}'ENDIF {yywarning("If vacio");yymenssage("IF");}
            ;
 
-whileStatement: WHILE condition DO'{' executableList '}'
-              | WHILE condition DO'{''}' {yywarning("While vacio");}
+whileStatement: WHILE condition DO'{' executableList '}' {yymenssage("While");}
+              | WHILE condition DO'{''}' {yywarning("While vacio");yymenssage("While");}
               ;
 
 condition: '('comparation')'
@@ -102,7 +101,7 @@ condition: '('comparation')'
          | comparation     {yyerror("Faltan  parentesis en la condicion");}
          ;
 
-class: CLASS ID '{'sentenceList'}'
+class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");}
     ;
 
 comparation: factor operatorsLogics factor
@@ -151,6 +150,10 @@ cadena: CTESTRING
     ;
 
 %%
+
+void yymenssage(string menssage){
+    cout << menssage << "Reconocido" << endl;
+}
 
 void yyerror(string menssage){
 	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;

@@ -110,8 +110,9 @@ void AccionesSemanticas::AS7(char caracter){
 	// 1.17549435E-38 < x 3.40282347E+38 U -3.40282347E+38 < x < -1.17549435E-38 U 0.0
 	try{
 		float numero = stof(entrada);
+		AS25(caracter);
 	} catch(const out_of_range & exception){
-		throw runtime_error("Linea: " + to_string(nroLineas) + ": Constante FLOAT fuera del rango permitido");
+		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante FLOAT fuera del rango permitido" << RESET << endl;
 	}
 }
 
@@ -121,8 +122,10 @@ void AccionesSemanticas::AS8(char caracter){
 		size_t pos = entrada.find('_');
 		string numeroStr = entrada.substr(0, pos);
 		unsigned long numero = stoul(numeroStr);
+
 	}catch(const out_of_range & exception){
-		throw runtime_error("Linea: " + to_string(nroLineas) + ": Constante ULONG fuera del rango permitido");
+		AS10(caracter);
+		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante ULONG fuera del rango permitido" << RESET << endl;
 	}
 }
 
@@ -135,8 +138,10 @@ void AccionesSemanticas::AS9(char caracter){
 		if (numero > 128){
 			throw out_of_range("");
 		}
+		AS15(caracter);
 	}catch(const out_of_range & exception){
-		throw runtime_error("Linea: " + to_string(nroLineas) + ": Constante SHORT fuera del rango permitido");
+		AS10(caracter);
+		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante SHORT fuera del rango permitido" << RESET << endl;
 	}
 }
 
@@ -151,10 +156,9 @@ void AccionesSemanticas::AS11(char caracter){
 }
 
 void AccionesSemanticas::AS12(char caracter){
-	AS7(caracter);
 	AS10(caracter);
 	AS5(caracter);
-	AS25(caracter);
+	AS7(caracter);
 }
 
 void AccionesSemanticas::AS13(char caracter){
@@ -175,8 +179,6 @@ void AccionesSemanticas::AS15(char caracter){
 }
 
 void AccionesSemanticas::AS16(char caracter){
-	AS9(caracter);
-	AS15(caracter);
 }
 
 void AccionesSemanticas::AS17(char caracter){
@@ -294,8 +296,12 @@ void AccionesSemanticas::AS28(char caracter){
 }
 
 void AccionesSemanticas::AS29(char caracter){
-	AS5(caracter);
-	AS18('.');
+	if (isdigit(entrada[0])){
+		AS12(caracter);
+	} else {
+		AS5(caracter);
+		AS18('.');
+	}
 }
 
 void AccionesSemanticas::AS30(char caracter){

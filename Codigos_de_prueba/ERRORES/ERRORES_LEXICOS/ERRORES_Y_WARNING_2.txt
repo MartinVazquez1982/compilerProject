@@ -1,5 +1,15 @@
 {
-	var = 123.,
+	qwe.qwe = 123_s,
+	asd = 1_s,
+	var = 123_s,
 	*{
-	PRUEBA DE COMENTARIO SIN CERRAR
+	PRUEBA DE COMENTARIO SIN CERRAR}*
+	PRINT %123%,
+	IF (ass < sdd) {
+		
+		
+		
+		
+		ass = (3_s+3_s),
+	} END_IF,
 }
