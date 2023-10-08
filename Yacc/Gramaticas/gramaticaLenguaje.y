@@ -62,7 +62,7 @@ variableList: variableList ';' ID
             | ID 
             ;
 
-assignment: nesting '=' expression  
+assignment: nesting '=' expression 
           ;
 
 nesting: nesting'.'ID
@@ -100,7 +100,7 @@ whileStatement: WHILE condition DO iterativeBody {yymenssage("While");}
 
 iterativeBody: '{' executableList '}'
             | '{' executableList return '}'
-            | executable
+            | executable','
             | return
             | '{' '}' {yywarning("Bloque vacio");}
             ;

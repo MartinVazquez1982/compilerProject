@@ -73,6 +73,7 @@ void AccionesSemanticas::AS1(char caracter){
  */
 void AccionesSemanticas::AS2(char caracter){
 	AS13(caracter);
+	cout << endl;
 	switch(Automata::getEstadoError()){
 		case 0:
 			cout << RED << "Linea " + to_string(nroLineas) + ": caracter '" + caracter + "' invalido" << RESET << endl;
@@ -146,7 +147,7 @@ void AccionesSemanticas::AS6(char caracter){
  * llama a la AS25
  */
 void AccionesSemanticas::AS7(char caracter){
-	// 1.17549435E-38 < x 3.40282347E+38 U -3.40282347E+38 < x < -1.17549435E-38 U 0.0
+	// 1.17549435E-38 < x < 3.40282347E+38 U -3.40282347E+38 < x < -1.17549435E-38 U 0.0
 	try{
 		float numero = stof(entrada);
 		AS25(caracter);

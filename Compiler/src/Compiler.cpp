@@ -9,6 +9,10 @@
 #include <fstream>
 #include "./AnalisisSintactico/yTab.h"
 
+#define GREEN "\x1B[32m"
+#define MAGENTA "\x1B[35m"
+#define RESET "\x1B[37m"
+
 using namespace std;
 
 //Archivo con el codigo fuente
@@ -34,7 +38,11 @@ int main(int argc, char *argv[]) {
 
 	int finDeArchivo;
 	finDeArchivo = yyparse();
-	cout << finDeArchivo << endl;
+	if (finDeArchivo == 0){
+		cout << endl << GREEN << "El codigo fuente fue compilado con exito" << RESET;
+	} else {
+		cout << endl << MAGENTA << "El codigo fuente NO fue compilado con exito" << RESET;
+	}
 	codigoFuente.close();
 
 	return 0;
