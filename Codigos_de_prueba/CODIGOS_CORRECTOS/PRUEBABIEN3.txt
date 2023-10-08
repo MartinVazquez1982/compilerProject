@@ -1,0 +1,22 @@
+{
+	CLASS ca {
+		SHORT a;c,
+		VOID m(){
+			RETURN,
+		},
+	},
+	CLASS cb{
+		FLOAT b,
+		FLOAT a,
+		VOID n(){
+			RETURN,
+		},
+		ca,
+	},
+	ca a1;a2,
+	cb b1;b2,
+	a1.a=3_s,
+	b1.ca.a=5_s,
+	b1.ca.m(),
+	b1.n(),
+}
