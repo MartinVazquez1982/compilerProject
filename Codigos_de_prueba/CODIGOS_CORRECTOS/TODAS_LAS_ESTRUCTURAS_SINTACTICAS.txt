@@ -14,29 +14,39 @@ soy_una_clase obj2; obj3; obj4,
 otra_clase obj5,
 
 *{ SENTENCIA IF }*
-IF ( y >= z ){
+IF ( y >= z )
 	PRINT %RAMA_IF%, 	
-}
-ELSE {
-	PRINT %RAMA_ELSE% ,
-}END_IF,
 
-IF ( m !! n ) {
+ELSE
+	PRINT %RAMA_ELSE% ,
+END_IF,
+
+IF ( m !! n )
 	PRINT %RAMA_IF%, 
+END_IF,
+
+IF ( y >= z ){
+	PRINT %RAMA_IF%,
+	PRINT %RAMA_IF%, 	
+}ELSE {
+	PRINT %RAMA_ELSE%,
+	PRINT %RAMA_ELSE%,
 }END_IF,
 
 IF ( m-- == n-- ) {
-	PRINT %RAMA_IF%, 
+	PRINT %RAMA_IF%,
+	PRINT %RAMA_IF%,  
 }END_IF,
 
 
 *{ SENTENCIA WHILE }*
-WHILE ( m < n ) DO {
-	PRINT %PRUEBA_WHILE%, 	
-},
+WHILE ( m < n ) DO 
+	PRINT %PRUEBA_WHILE%,, 	
+
 
 WHILE ( i <= 0_s ) DO {
-	PRINT %PRUEBA_WHILE%, 	
+	PRINT %PRUEBA_WHILE%,
+	PRINT %PRUEBA_WHILE%, 	 	
 },
 
 *{ DECLARACION DE FUNCION }*
@@ -62,6 +72,7 @@ CLASS otra_clase {
 	ULONG a,
 	VOID otro_metodo(SHORT s){RETURN,},
 	VOID ultimo_metodo(){RETURN,},
+	soy_una_clase,
 },
 
 *{ ASIGNACIONES }*
@@ -92,11 +103,11 @@ con_parametros(m--),
 con_parametros(m*n),
 con_parametros(n-l),
 
-*{obj1.atributo3.otro_metodo(var_short),}*
+obj1.atributo3.otro_metodo(var_short),
 obj5.ultimo_metodo(),
 obj2.metodo(),
 obj2.atributo3.ultimo_metodo(),
-*{obj5.otro_metodo(y+z),
+obj5.otro_metodo(y+z),
 obj3.atributo3.otro_metodo(w/z),
-obj5.otro_metodo(z),}*
+obj5.otro_metodo(z),
 }

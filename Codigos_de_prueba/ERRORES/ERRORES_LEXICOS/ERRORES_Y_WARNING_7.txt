@@ -1,4 +1,0 @@
-{
-    WHILE ( m !! n ) DO
-        PRINT %PRUEBA_WHILE%,
-}
