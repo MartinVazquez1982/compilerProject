@@ -113,7 +113,11 @@ condition: '('comparison')'
          ;
 
 class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");}
+    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");}
     ;
+
+heredity: ID','
+        ;
 
 comparison: factor operatorsLogics factor
          ;

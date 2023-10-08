@@ -1,6 +1,6 @@
 {
-	qwertd^ = 123_s,
-	PRINT %qwertd^%,  		*{Dentro de un string o un comentario la sentencia "qwertd^" es valida}*
+	qwertd^ = 123_s,  *{ERROR: CARACTER INVALIDO}*
+	PRINT %qwertd^%,  *{Dentro de un string o un comentario la sentencia "qwertd^" es valida}*
 	*{qwertd^}*
-	_indentificador123largo = 123,
+	_indentificador123largo = 123, *{WARNING: IDENTIFICADOR DE MAS DE 20 CARACTERES y ERROR:  FALTA SUFIJO EN LA CONSTANTE ENTERA}*
 }
