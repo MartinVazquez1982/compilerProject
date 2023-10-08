@@ -2,5 +2,5 @@
 	IF (var == var2){
 		var2 = 1_s,
 	} END_IF,
-	PRITN impresion%
+	PRITN impresion% *{ERROR: NO EXISTE PALABRA RESERVADA Y CADENA DE TEXTO MAL DEFINIDA}*
 }

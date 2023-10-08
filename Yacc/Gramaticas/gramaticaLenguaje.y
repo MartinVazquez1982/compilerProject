@@ -87,21 +87,24 @@ functionCall: nesting'('')'
 realParameter: expression
              ;
 
-ifStatement: IF condition '{'iterativeBody'}'ELSE'{'iterativeBody'}'ENDIF {yymenssage("IF");}
-           | IF condition '{'iterativeBody'}'ENDIF {yymenssage("IF");}
-           | IF condition '{''}'ENDIF {yywarning("If vacio");yymenssage("IF");} 
-           | IF condition '{'iterativeBody'}'ELSE'{''}'ENDIF {yywarning("Else vacio");yymenssage("IF");}
-           | IF condition '{''}'ELSE'{'iterativeBody'}'ENDIF {yywarning("If vacio");yymenssage("IF");}
+ifStatement: IF condition iterativeBody ELSE iterativeBody ENDIF {yymenssage("IF");}
+           | IF condition iterativeBody ENDIF {yymenssage("IF");}
+           | IF condition ENDIF {yywarning("If vacio");yymenssage("IF");} 
+           | IF condition iterativeBody ELSE ENDIF {yywarning("Else vacio");yymenssage("IF");}
+           | IF condition ELSE iterativeBody ENDIF {yywarning("If vacio");yymenssage("IF");}
            ;
 
-whileStatement: WHILE condition DO'{' iterativeBody '}' {yymenssage("While");}
-              | WHILE condition DO'{''}' {yywarning("While vacio");yymenssage("While");}
+whileStatement: WHILE condition DO iterativeBody {yymenssage("While");}
+              | WHILE condition DO  {yywarning("While vacio");yymenssage("While");}
               ;
 
-iterativeBody: executableList
-            | executableList return
+iterativeBody: '{' executableList '}'
+            | '{' executableList return '}'
+            | executable
             | return
+            | '{' '}' {yywarning("Bloque vacio");}
             ;
+
 
 condition: '('comparison')'
          | '('comparison  {yyerror("Falta segundo parentesis en la condicion");}
