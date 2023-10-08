@@ -8,6 +8,7 @@
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
 #define RED "\x1B[31m"
+#define BLUE "\x1B[34m"
 
 %}
 
@@ -157,7 +158,7 @@ cadena: CTESTRING
 %%
 
 void yymenssage(string menssage){
-    cout << menssage << "Reconocido" << endl;
+    cout  << endl  << BLUE << "Estructura detectada: " << menssage  << RESET << endl;
 }
 
 void yyerror(string menssage){
