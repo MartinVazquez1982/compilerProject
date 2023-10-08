@@ -46,7 +46,6 @@ executable: ifStatement
           | print 
           | functionCall
           | assignment
-          | RETURN
           ;
 
 declaration: variableDeclaration
@@ -70,12 +69,12 @@ nesting: nesting'.'ID
        | ID
        ;
 
-function: VOID ID'('formalParameter')''{'functionBody'}' {yymenssage("Funcion");}
-        | VOID ID'('')''{'functionBody'}' {yymenssage("Funcion");}
+function: VOID ID'('formalParameter')''{'functionBody '}' {yymenssage("Funcion");}
+        | VOID ID'('')''{'functionBody '}' {yymenssage("Funcion");}
         ;
 
-functionBody: sentenceList RETURN
-            | RETURN {yywarning("Funcion vacia");} 
+functionBody: sentenceList return
+            | return {yywarning("Funcion vacia");} 
             ;
 
 formalParameter: type ID 
@@ -88,16 +87,21 @@ functionCall: nesting'('')'
 realParameter: expression
              ;
 
-ifStatement: IF condition '{'executableList'}'ELSE'{'executableList'}'ENDIF {yymenssage("IF");}
-           | IF condition '{'executableList'}'ENDIF {yymenssage("IF");}
+ifStatement: IF condition '{'iterativeBody'}'ELSE'{'iterativeBody'}'ENDIF {yymenssage("IF");}
+           | IF condition '{'iterativeBody'}'ENDIF {yymenssage("IF");}
            | IF condition '{''}'ENDIF {yywarning("If vacio");yymenssage("IF");} 
-           | IF condition '{'executableList'}'ELSE'{''}'ENDIF {yywarning("Else vacio");yymenssage("IF");}
-           | IF condition '{''}'ELSE'{'executableList'}'ENDIF {yywarning("If vacio");yymenssage("IF");}
+           | IF condition '{'iterativeBody'}'ELSE'{''}'ENDIF {yywarning("Else vacio");yymenssage("IF");}
+           | IF condition '{''}'ELSE'{'iterativeBody'}'ENDIF {yywarning("If vacio");yymenssage("IF");}
            ;
 
-whileStatement: WHILE condition DO'{' executableList '}' {yymenssage("While");}
+whileStatement: WHILE condition DO'{' iterativeBody '}' {yymenssage("While");}
               | WHILE condition DO'{''}' {yywarning("While vacio");yymenssage("While");}
               ;
+
+iterativeBody: executableList
+            | executableList return
+            | return
+            ;
 
 condition: '('comparison')'
          | '('comparison  {yyerror("Falta segundo parentesis en la condicion");}
@@ -152,6 +156,9 @@ print: PRINT cadena
     ;
 
 cadena: CTESTRING
+    ;
+
+return: RETURN ','
     ;
 
 %%
