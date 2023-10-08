@@ -1,0 +1,6 @@
+{
+	IF (var == var2){
+		var2 = 1_s,
+	} END_IF,
+	PRITN impresion%
+}

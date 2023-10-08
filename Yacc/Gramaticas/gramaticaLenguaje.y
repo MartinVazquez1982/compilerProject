@@ -76,7 +76,6 @@ function: VOID ID'('formalParameter')''{'functionBody'}' {yymenssage("Funcion");
 
 functionBody: sentenceList RETURN
             | RETURN {yywarning("Funcion vacia");} 
-            | sentenceList {yyerror("Falta RETURN obligatorio al final de la funcion");}
             ;
 
 formalParameter: type ID 

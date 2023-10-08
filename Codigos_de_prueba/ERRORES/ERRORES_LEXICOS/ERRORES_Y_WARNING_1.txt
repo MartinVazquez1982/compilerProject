@@ -3,11 +3,4 @@
 	PRINT %qwertd^%,  		*{Dentro de un string o un comentario la sentencia "qwertd^" es valida}*
 	*{qwertd^}*
 	_indentificador123largo = 123,
-	var = 123_,
-	var = 123_u,
-	var = 123_xx,
-	IFI (var ! var2){
-		var2 = 1_s,
-	} END_IF,
-	PRITN impresion%
 }
