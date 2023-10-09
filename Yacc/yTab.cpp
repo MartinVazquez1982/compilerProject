@@ -311,7 +311,7 @@ char *yyrule[] = {
 };
 #endif
 #ifndef YYSTYPE
-typedef string YYSTYPE;
+typedef int YYSTYPE;
 #endif
 #define yyclearin (yychar=(-1))
 #define yyerrok (yyerrflag=0)
@@ -356,11 +356,9 @@ void crequearRangoSHORT(string valor){
     int chequear = stoi(TablaDeSimbolos::getValor(valor));
     if (chequear >= 128){
         yyerror("Constante SHORT fuera de rango");
-        TablaDeSimbolos::del(valor);
     } else {
         TablaDeSimbolos::chequearPositivos(valor);
     }
-    cout << TablaDeSimbolos::imprimir();
 }
 #line 364 "y.tab.c"
 #define YYABORT goto yyabort

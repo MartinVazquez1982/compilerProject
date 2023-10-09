@@ -94,5 +94,9 @@ void TablaDeSimbolos::chequearPositivos(string nro){
 	cout << imprimir();
 }
 
+void TablaDeSimbolos::del(string valor){
+	TablaDeSimbolos::table.erase(valor);
+}
+
 
 

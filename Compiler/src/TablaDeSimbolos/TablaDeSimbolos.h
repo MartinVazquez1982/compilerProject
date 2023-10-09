@@ -45,6 +45,8 @@ class TablaDeSimbolos {
 		static void chequearPositivos(string nro);
 
 		static string imprimir();
+
+		static void del(string lexema);
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */

@@ -146,7 +146,7 @@ operatorsLogics: EQUAL
                | '>'
                ;
 
-constant: CTESHORT {crequearRangoSHORT($1); TablaDeSimbolos::chequearPositivos($1);}
+constant: CTESHORT {crequearRangoSHORT($1);}
         | '-'CTESHORT {TablaDeSimbolos::chequearNegativos($2);}
         | CTEFLOAT {TablaDeSimbolos::chequearPositivos($1);}
         | '-'CTEFLOAT {TablaDeSimbolos::chequearNegativos($2);}
@@ -186,5 +186,7 @@ void crequearRangoSHORT(string valor){
     int chequear = stoi(TablaDeSimbolos::getValor(valor));
     if (chequear >= 128){
         yyerror("Constante SHORT fuera de rango");
+    } else {
+        TablaDeSimbolos::chequearPositivos(valor);
     }
 }
