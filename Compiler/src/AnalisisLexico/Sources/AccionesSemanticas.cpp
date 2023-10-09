@@ -166,8 +166,9 @@ void AccionesSemanticas::AS8(char caracter){
 		size_t pos = entrada.find('_');
 		string numeroStr = entrada.substr(0, pos);
 		unsigned long numero = stoul(numeroStr);
+		AS23(caracter);
+		AS24(caracter);
 	}catch(const out_of_range & exception){
-		AS10(caracter);
 		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante ULONG fuera del rango permitido" << RESET << endl;
 	}
 }
@@ -230,13 +231,6 @@ void AccionesSemanticas::AS13(char caracter){
 	AS10(caracter);
 }
 
-/**
- * Agrega caracter al string y chequea rango ulong
- */
-void AccionesSemanticas::AS14(char caracter){
-	AS4(caracter);
-	AS8(caracter);
-}
 
 /**
  * Agrega caracter al string, agrega a la tabla de simbolos la
@@ -245,9 +239,8 @@ void AccionesSemanticas::AS14(char caracter){
  */
 void AccionesSemanticas::AS15(char caracter){
 	AS4(caracter);
-	AS23(caracter);
+	AS8(caracter);
 	AS10(caracter);
-	AS24(caracter);
 }
 
 /**
