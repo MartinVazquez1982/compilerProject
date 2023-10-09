@@ -146,7 +146,7 @@ operatorsLogics: EQUAL
                | '>'
                ;
 
-constant: CTESHORT {crequearRangoSHORT($1);}
+constant: CTESHORT {chequearRangoSHORT($1);}
         | '-'CTESHORT {TablaDeSimbolos::chequearNegativos($2);}
         | CTEFLOAT {TablaDeSimbolos::chequearPositivos($1);}
         | '-'CTEFLOAT {TablaDeSimbolos::chequearNegativos($2);}
@@ -182,7 +182,7 @@ void yywarning(string menssage){
     cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
 }
 
-void crequearRangoSHORT(string valor){
+void chequearRangoSHORT(string valor){
     int chequear = stoi(TablaDeSimbolos::getValor(valor));
     if (chequear >= 128){
         yyerror("Constante SHORT fuera de rango");

@@ -352,7 +352,7 @@ void yywarning(string menssage){
     cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
 }
 
-void crequearRangoSHORT(string valor){
+void chequearRangoSHORT(string valor){
     int chequear = stoi(TablaDeSimbolos::getValor(valor));
     if (chequear >= 128){
         yyerror("Constante SHORT fuera de rango");
@@ -588,7 +588,7 @@ case 60:
 break;
 case 73:
 #line 149 ".\Gramaticas\gramaticaLenguaje.y"
-{crequearRangoSHORT(yyvsp[0]);}
+{chequearRangoSHORT(yyvsp[0]);}
 break;
 case 74:
 #line 150 ".\Gramaticas\gramaticaLenguaje.y"
