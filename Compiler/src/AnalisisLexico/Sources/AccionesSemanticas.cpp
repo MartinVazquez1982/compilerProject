@@ -231,6 +231,15 @@ void AccionesSemanticas::AS13(char caracter){
 	AS10(caracter);
 }
 
+/**
+ *
+ */
+void AccionesSemanticas::AS14(char caracter){
+	AS4(caracter);
+	AS10(caracter);
+	AS23(caracter);
+	AS24(caracter);
+}
 
 /**
  * Agrega caracter al string, agrega a la tabla de simbolos la
