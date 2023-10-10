@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <fstream>
-#include "./AnalisisSintactico/yTab.h"
+#include "./AnalisisSintactico/Parse.h"
 
 #define GREEN "\x1B[32m"
 #define MAGENTA "\x1B[35m"
