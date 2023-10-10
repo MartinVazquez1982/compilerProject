@@ -157,8 +157,8 @@ void AccionesSemanticas::AS7(char caracter){
 }
 
 /**
- * Chequea rando de las constantes de tipo ULONG, si hay un overflow
- * llama a la AS10
+ * Chequea rando de las constantes de tipo ULONG, si no hay overflow
+ * llama a la AS23 y AS24
  */
 void AccionesSemanticas::AS8(char caracter){
 	//0 < x < 2^32-1
