@@ -1,0 +1,5 @@
+FLOAT x,  *{ERROR: SENTENCIAS FUERA DE RANGO}*
+ULONG y,
+CLASS clase_nueva{
+	VOID funcion(){RETURN,},
+},

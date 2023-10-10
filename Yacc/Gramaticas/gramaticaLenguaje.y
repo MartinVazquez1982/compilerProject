@@ -38,7 +38,7 @@ declarative: function
 
 executableList: executableList executable','
               | executable','
-              | declarative {yyerror("Sentencia declarativa en lugar de una ejecutable");}
+              | declarative',' {yyerror("Sentencia declarativa en lugar de una ejecutable");}
               ;
 
 executable: ifStatement
@@ -62,7 +62,7 @@ variableList: variableList ';' ID
             | ID 
             ;
 
-assignment: nesting '=' expression 
+assignment: nesting '=' expression {yymenssage("Asignacion");}  
           ;
 
 nesting: nesting'.'ID
@@ -125,7 +125,7 @@ comparison: factor operatorsLogics factor
 expression: expression'+'termino
           | expression'-'termino
           | termino
-          | '(' expression ')' {yyerror("Expression no puede ir entre parentesis");}
+          | '(' expression ')' {yyerror("Expresion no puede ir entre parentesis");}
           ;
 
 termino: termino'*'factor
@@ -166,7 +166,7 @@ cadena: CTESTRING
     ;
 
 return: RETURN ','
-    ;
+      ;
 
 %%
 
@@ -186,7 +186,9 @@ void chequearRangoSHORT(string valor){
     int chequear = stoi(TablaDeSimbolos::getValor(valor));
     if (chequear >= 128){
         yyerror("Constante SHORT fuera de rango");
+        TablaDeSimbolos::del(valor);
     } else {
         TablaDeSimbolos::chequearPositivos(valor);
     }
+    cout << TablaDeSimbolos::imprimir();
 }

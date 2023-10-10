@@ -139,7 +139,7 @@ void AccionesSemanticas::AS5(char caracter){
  */
 void AccionesSemanticas::AS6(char caracter){
 	TablaDeSimbolos::add(entrada);
-	//cout << TablaDeSimbolos::imprimir() << endl;
+	cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 /**
@@ -232,7 +232,8 @@ void AccionesSemanticas::AS13(char caracter){
 }
 
 /**
- *
+ * Agrega el caracter al string, agrega a la tabla de simbolos,
+ * devuelve el token de la cadena y manda al automata al estado 0
  */
 void AccionesSemanticas::AS14(char caracter){
 	AS4(caracter);
@@ -242,9 +243,8 @@ void AccionesSemanticas::AS14(char caracter){
 }
 
 /**
- * Agrega caracter al string, agrega a la tabla de simbolos la
- * constante correspondiente, manda al automata al estado 0 y
- * devuelve el token correspodiente
+ * Agrega caracter al string, chequea el rango y
+ * devuelve al automata al estado 0
  */
 void AccionesSemanticas::AS15(char caracter){
 	AS4(caracter);
@@ -338,6 +338,7 @@ void AccionesSemanticas::AS22(char caracter){
 void AccionesSemanticas::AS23(char caracter){
 	if (caracter == '%'){
 		TablaDeSimbolos::add(entrada, entrada.substr(1,entrada.length()-2),"STRING");
+		cout << TablaDeSimbolos::imprimir() << endl;
 	} else {
 		size_t pos = entrada.find('_');
 		string valor = entrada.substr(0, pos);
@@ -345,9 +346,9 @@ void AccionesSemanticas::AS23(char caracter){
 			TablaDeSimbolos::add(entrada, valor ,"SHORT");
 		} else {
 			TablaDeSimbolos::add(entrada, valor ,"ULONG");
+			cout << TablaDeSimbolos::imprimir() << endl;
 		}
 	}
-	cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 /**

@@ -36,13 +36,8 @@ int main(int argc, char *argv[]) {
 		throw runtime_error("No se ha podido abrir el codigo fuente.");
 	}
 
-	int finDeArchivo;
-	finDeArchivo = yyparse();
-	if (finDeArchivo == 0){
-		cout << endl << GREEN << "El codigo fuente fue compilado con exito" << RESET;
-	} else {
-		cout << endl << MAGENTA << "El codigo fuente NO fue compilado con exito" << RESET;
-	}
+	int fin = yyparse();
+	cout << endl << endl << fin << endl;
 	codigoFuente.close();
 
 	return 0;

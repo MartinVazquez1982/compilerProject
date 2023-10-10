@@ -74,6 +74,8 @@ void TablaDeSimbolos::chequearNegativos(string nro){
 			TablaDeSimbolos::table.erase(nro);
 		}
 		add(nroConSigno, "-"+info.valor, info.tipo);
+	} else {
+		TablaDeSimbolos::table.erase(nro);
 	}
 	cout << imprimir();
 }
@@ -94,8 +96,13 @@ void TablaDeSimbolos::chequearPositivos(string nro){
 	cout << imprimir();
 }
 
-void TablaDeSimbolos::del(string valor){
-	TablaDeSimbolos::table.erase(valor);
+/**
+ * Elimina una entrada de la tabla de simbolo
+ *
+ * @param clave de la entrada a eliminar
+ */
+void TablaDeSimbolos::del(string lexema){
+	TablaDeSimbolos::table.erase(lexema);
 }
 
 
