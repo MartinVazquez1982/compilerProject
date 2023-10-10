@@ -2,5 +2,5 @@
 	*{Funcionamiento de la tabla de simbolos ante un numero negativo}*
 	var1 = -100_s,
 	var1 = -100_s,
-	*{RESULTADO: se encuentra en la tabla de simbolos}*
+	*{RESULTADO: se encuentra una vez en la tabla de simbolos}*
 }
