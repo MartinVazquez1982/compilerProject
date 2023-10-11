@@ -186,7 +186,7 @@ void AccionesSemanticas::AS9(char caracter){
 		if (numero > 128){
 			throw out_of_range("");
 		}
-		AS15(caracter);
+		AS14(caracter);
 	}catch(const out_of_range & exception){
 		AS10(caracter);
 		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante SHORT fuera del rango permitido" << RESET << endl;
