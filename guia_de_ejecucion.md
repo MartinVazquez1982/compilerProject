@@ -32,7 +32,11 @@ chmod +x cambiar_formato_txt.sh
 ```bash
 ./cambiar_formato_txt.sh
 ```
-4. Luego se puede ejecutar el compilador:
+4. Luego se habilita la ejecución del compilador:
+```bash
+chmod +x Compiler.exe
+```
+5. Finalmente se ejecuta:
 ```bash
 ./Compiler.exe {path_archivo_a_compilar}
 ```
