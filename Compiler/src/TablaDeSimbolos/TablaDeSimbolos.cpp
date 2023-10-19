@@ -77,7 +77,7 @@ void TablaDeSimbolos::chequearNegativos(string nro){
 	} else {
 		TablaDeSimbolos::table.erase(nro);
 	}
-	cout << imprimir();
+	//cout << imprimir();
 }
 
 /**
@@ -93,7 +93,7 @@ void TablaDeSimbolos::chequearPositivos(string nro){
 		add(nro, valor, TablaDeSimbolos::table["-"+nro].tipo);
 	}
 	TablaDeSimbolos::table[nro].consultado = true;
-	cout << imprimir();
+	//cout << imprimir();
 }
 
 /**

@@ -4,6 +4,7 @@
 #include "../AnalisisLexico/AnalizadorLexico.h"
 #include "../AnalisisLexico/Headers/AccionesSemanticas.h"
 #include "../TablaDeSimbolos/TablaDeSimbolos.h"
+#include "../AnalisisSemantico/EstructuraTercetos.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -62,11 +63,11 @@ variableList: variableList ';' ID
             | ID 
             ;
 
-assignment: nesting '=' expression {yymenssage("Asignacion");}  
+assignment: nesting '=' expression {yymenssage("Asignacion"); EstructuraTercetos::addTerceto("=",$1,$3);}
           ;
 
-nesting: nesting'.'ID
-       | ID
+nesting: nesting'.'ID {$$ = $1 + "." + $3;}
+       | ID {$$ = $1;}
        ;
 
 function: VOID ID'('formalParameter')''{'functionBody '}' {yymenssage("Funcion");}
@@ -80,7 +81,7 @@ functionBody: sentenceList return
 formalParameter: type ID 
                ;
 
-functionCall: nesting'('')'
+functionCall: nesting'('')' 
             | nesting'('realParameter')' 
             ;
 
@@ -119,38 +120,38 @@ class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");}
 heredity: ID','
         ;
 
-comparison: factor operatorsLogics factor
+comparison: factor operatorsLogics factor {EstructuraTercetos::addTerceto($2,$1,$3);}
          ;
 
-expression: expression'+'termino
-          | expression'-'termino
-          | termino
+expression: expression'+'termino {$$ = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("+",$1,$3);}
+          | expression'-'termino {$$ = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("-",$1,$3);}
+          | termino {$$ = $1;}
           | '(' expression ')' {yyerror("Expresion no puede ir entre parentesis");}
           ;
 
-termino: termino'*'factor
-       | termino'/'factor 
-       | factor
+termino: termino'*'factor {$$ = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("*",$1,$3);}
+       | termino'/'factor {$$ = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("/",$1,$3);}
+       | factor {$$ = $1;}
        ;
 
-factor: nesting
-      | constant
-      | nesting LESSLESS
+factor: nesting          {$$ = $1;}
+      | constant         {$$ = $1;}
+      | nesting LESSLESS {$$ = $1;}
       ;
 
-operatorsLogics: EQUAL 
-               | NOTEQUAL 
-               | GREATEREQUAL 
-               | LESSEQUAL 
-               | '<' 
-               | '>'
+operatorsLogics: EQUAL {$$ = "==";}
+               | NOTEQUAL {$$ = "!!";}
+               | GREATEREQUAL {$$ = ">=";}
+               | LESSEQUAL {$$ = "<=";}
+               | '<' {$$ = "<";}
+               | '>' {$$ = ">";}
                ;
 
-constant: CTESHORT {chequearRangoSHORT($1);}
-        | '-'CTESHORT {TablaDeSimbolos::chequearNegativos($2);}
-        | CTEFLOAT {TablaDeSimbolos::chequearPositivos($1);}
-        | '-'CTEFLOAT {TablaDeSimbolos::chequearNegativos($2);}
-        | CTEULONG
+constant: CTESHORT {chequearRangoSHORT($1); $$ = $1;}
+        | '-'CTESHORT {TablaDeSimbolos::chequearNegativos($2);$$ = $2;}
+        | CTEFLOAT {TablaDeSimbolos::chequearPositivos($1); $$ = $1;}
+        | '-'CTEFLOAT {TablaDeSimbolos::chequearNegativos($2);$$ = $2;}
+        | CTEULONG {$$ = $1;}
         | '-'CTEULONG {yyerror("Una constante ULONG no puede ser negativa");}
         ;
 

@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <stack>
+#include <iostream>
 
 using namespace std;
 
@@ -24,9 +25,11 @@ class EstructuraTercetos {
 
 	public:
 
-		static void add(string operador,string operando1,string operando2);
+		static void addTerceto(string operador,string operando1,string operando2);
 
 		static void addJump(string operador);
+
+		static string nroSigTerceto();
 
 };
 
