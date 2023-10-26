@@ -25,4 +25,7 @@ using namespace std;
 #define ID 277
 #define RETURN 278
 
+int contadorErrores=0;
+int contadorWarnings=0;
+
 int yyparse();

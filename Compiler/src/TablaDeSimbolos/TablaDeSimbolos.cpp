@@ -1,6 +1,7 @@
 #include "TablaDeSimbolos.h"
 #include <iostream>
 #include <string>
+#include "../AnalisisSemantico/Headers/Ambito.h"
 
 using namespace std;
 
@@ -106,4 +107,9 @@ void TablaDeSimbolos::del(string lexema){
 }
 
 
-
+void TablaDeSimbolos::changeKey(string lexema){
+	TablaDeSimbolos::Datos data = TablaDeSimbolos::table.at(lexema);
+	TablaDeSimbolos::table.erase(lexema);
+	TablaDeSimbolos::table[lexema+Ambito::get()] = data;
+	cout << imprimir();
+}

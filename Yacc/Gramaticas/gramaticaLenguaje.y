@@ -5,6 +5,7 @@
 #include "../AnalisisLexico/Headers/AccionesSemanticas.h"
 #include "../TablaDeSimbolos/TablaDeSimbolos.h"
 #include "../AnalisisSemantico/EstructuraTercetos.h"
+#include "../AnalisisSemantico/Headers/Ambito.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -59,8 +60,8 @@ variableDeclaration: type variableList
 objectDeclaration: ID variableList
                  ;
 
-variableList: variableList ';' ID 
-            | ID 
+variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);} 
+            | ID {TablaDeSimbolos::changeKey($1);}
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion"); EstructuraTercetos::addTerceto("=",$1,$3);}
@@ -70,9 +71,12 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
        | ID {$$ = $1;}
        ;
 
-function: VOID ID'('formalParameter')''{'functionBody '}' {yymenssage("Funcion");}
-        | VOID ID'('')''{'functionBody '}' {yymenssage("Funcion");}
+function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();}
         ;
+
+functionHeader: VOID ID'('formalParameter')' {TablaDeSimbolos::changeKey($2);Ambito::add($2);}
+              | VOID ID'('')' {TablaDeSimbolos::changeKey($2);Ambito::add($2);}
+              ;
 
 functionBody: sentenceList return
             | return {yywarning("Funcion vacia");} 
@@ -113,8 +117,8 @@ condition: '('comparison')'
          | comparison     {yyerror("Faltan  parentesis en la condicion");}
          ;
 
-class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");}
-    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");}
+class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);}
+    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);}
     ;
 
 heredity: ID','
@@ -171,16 +175,21 @@ return: RETURN ','
 
 %%
 
+int contadorErrores = 0;
+int contadorWarnings = 0;
+
 void yymenssage(string menssage){
     cout  << endl  << BLUE << "Estructura detectada: " << menssage  << RESET << endl;
 }
 
 void yyerror(string menssage){
 	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
+    contadorErrores++;
 }
 
 void yywarning(string menssage){
     cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
+    contadorWarnings++;
 }
 
 void chequearRangoSHORT(string valor){

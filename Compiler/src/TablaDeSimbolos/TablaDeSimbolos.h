@@ -47,6 +47,8 @@ class TablaDeSimbolos {
 		static string imprimir();
 
 		static void del(string lexema);
+
+		static void changeKey(string lexema);
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */

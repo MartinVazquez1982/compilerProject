@@ -2,6 +2,7 @@
 #include "../Headers/Automata.h"
 #include "../Headers/TablaPalabrasReservadas.h"
 #include "../../TablaDeSimbolos/TablaDeSimbolos.h"
+#include "../../AnalisisSintactico/Parse.h"
 #include <iostream>
 #include <cfloat>
 using namespace std;
@@ -104,6 +105,7 @@ void AccionesSemanticas::AS2(char caracter){
 			cout << RED << "Linea " + to_string(lineaInicioToken) + ": error lexico" << RESET << endl;
 			break;
 	}
+	contadorErrores++;
 }
 
 /**
@@ -153,6 +155,7 @@ void AccionesSemanticas::AS7(char caracter){
 		AS25(caracter);
 	} catch(const out_of_range & exception){
 		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante FLOAT fuera del rango permitido" << RESET << endl;
+		contadorErrores++;
 	}
 }
 
@@ -170,6 +173,7 @@ void AccionesSemanticas::AS8(char caracter){
 		AS24(caracter);
 	}catch(const out_of_range & exception){
 		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante ULONG fuera del rango permitido" << RESET << endl;
+		contadorErrores++;
 	}
 }
 
@@ -190,6 +194,7 @@ void AccionesSemanticas::AS9(char caracter){
 	}catch(const out_of_range & exception){
 		AS10(caracter);
 		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante SHORT fuera del rango permitido" << RESET << endl;
+		contadorErrores++;
 	}
 }
 
@@ -281,6 +286,7 @@ void AccionesSemanticas::AS19(char caracter){
 	nroToken = TablaPalabrasReservadas::buscar(entrada);
 	if(nroToken == -1){
         cout << RED << "Linea: " + to_string(nroLineas) + ": NO existe la palabra reservada " + entrada << RESET << endl;
+        contadorErrores++;
 	} else {
 		tokenIdentificado = true;
 	}
@@ -328,6 +334,7 @@ void AccionesSemanticas::AS22(char caracter){
 	} else if (enviarWarning){
 		enviarWarning = false;
 		cout << YELLOW <<"Warning - Linea " + to_string(nroLineas) + ": El Identificador contiene mas de 20 caracteres" << RESET << endl;
+		contadorWarnings++;
 	}
 }
 

@@ -9,9 +9,9 @@
 #include <fstream>
 #include "./AnalisisSintactico/Parse.h"
 
-#define GREEN "\x1B[32m"
-#define MAGENTA "\x1B[35m"
-#define RESET "\x1B[37m"
+#define RESET   "\x1B[0m"
+#define YELLOW  "\x1B[33m"
+#define RED "\x1B[31m"
 
 using namespace std;
 
@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
 	int fin = yyparse();
 	cout << endl << endl << fin << endl;
 	codigoFuente.close();
+	cout << YELLOW << "Warnings -" << contadorWarnings << "		" << RED << "Errores - " << contadorErrores << RESET;
 
 	return 0;
 }
