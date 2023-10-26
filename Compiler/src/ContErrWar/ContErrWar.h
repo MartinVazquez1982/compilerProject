@@ -20,6 +20,10 @@ class ContErrWar {
 		static void sumWar();
 
 		static bool generarCodigo();
+
+		static int getError();
+
+		static int getWarning();
 };
 
 

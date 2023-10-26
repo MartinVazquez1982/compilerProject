@@ -10,13 +10,14 @@ static char yysccsid[] = "@(#)yaccpar	1.8 (Berkeley) 01/20/90";
 #include "../TablaDeSimbolos/TablaDeSimbolos.h"
 #include "../AnalisisSemantico/EstructuraTercetos.h"
 #include "../AnalisisSemantico/Headers/Ambito.h"
+#include "../ContErrWar/ContErrWar.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
 #define RED "\x1B[31m"
 #define BLUE "\x1B[34m"
 
-#line 20 "y.tab.c"
+#line 21 "y.tab.c"
 #define IF 257
 #define ELSE 258
 #define ENDIF 259
@@ -337,7 +338,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 177 ".\Gramaticas\gramaticaLenguaje.y"
+#line 178 ".\Gramaticas\gramaticaLenguaje.y"
 
 void yymenssage(string menssage){
     cout  << endl  << BLUE << "Estructura detectada: " << menssage  << RESET << endl;
@@ -345,12 +346,12 @@ void yymenssage(string menssage){
 
 void yyerror(string menssage){
 	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
-    contadorErrores++;
+    ContErrWar::sumErr();
 }
 
 void yywarning(string menssage){
     cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
-    contadorWarnings++;
+    ContErrWar::sumWar();
 }
 
 void chequearRangoSHORT(string valor){
@@ -363,7 +364,7 @@ void chequearRangoSHORT(string valor){
     }
     cout << TablaDeSimbolos::imprimir();
 }
-#line 370 "y.tab.c"
+#line 368 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -504,202 +505,202 @@ yyreduce:
     switch (yyn)
     {
 case 2:
-#line 23 ".\Gramaticas\gramaticaLenguaje.y"
+#line 24 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Programa vacio");}
 break;
 case 3:
-#line 24 ".\Gramaticas\gramaticaLenguaje.y"
+#line 25 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta llaves delimitadores de programa");}
 break;
 case 8:
-#line 33 ".\Gramaticas\gramaticaLenguaje.y"
+#line 34 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Sentencia vacia");}
 break;
 case 14:
-#line 43 ".\Gramaticas\gramaticaLenguaje.y"
+#line 44 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Sentencia declarativa en lugar de una ejecutable");}
 break;
 case 24:
-#line 63 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::changeKey(yyvsp[0]);}
-break;
-case 25:
 #line 64 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::changeKey(yyvsp[0]);}
 break;
+case 25:
+#line 65 ".\Gramaticas\gramaticaLenguaje.y"
+{TablaDeSimbolos::changeKey(yyvsp[0]);}
+break;
 case 26:
-#line 67 ".\Gramaticas\gramaticaLenguaje.y"
+#line 68 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("Asignacion"); EstructuraTercetos::addTerceto("=",yyvsp[-2],yyvsp[0]);}
 break;
 case 27:
-#line 70 ".\Gramaticas\gramaticaLenguaje.y"
+#line 71 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[-2] + "." + yyvsp[0];}
 break;
 case 28:
-#line 71 ".\Gramaticas\gramaticaLenguaje.y"
+#line 72 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 29:
-#line 74 ".\Gramaticas\gramaticaLenguaje.y"
+#line 75 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("Funcion");Ambito::del();}
 break;
 case 30:
-#line 77 ".\Gramaticas\gramaticaLenguaje.y"
+#line 78 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::changeKey(yyvsp[-3]);Ambito::add(yyvsp[-3]);}
 break;
 case 31:
-#line 78 ".\Gramaticas\gramaticaLenguaje.y"
+#line 79 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::changeKey(yyvsp[-2]);Ambito::add(yyvsp[-2]);}
 break;
 case 33:
-#line 82 ".\Gramaticas\gramaticaLenguaje.y"
+#line 83 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Funcion vacia");}
 break;
 case 38:
-#line 95 ".\Gramaticas\gramaticaLenguaje.y"
-{yymenssage("IF");}
-break;
-case 39:
 #line 96 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("IF");}
 break;
-case 40:
+case 39:
 #line 97 ".\Gramaticas\gramaticaLenguaje.y"
+{yymenssage("IF");}
+break;
+case 40:
+#line 98 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("If vacio");yymenssage("IF");}
 break;
 case 41:
-#line 98 ".\Gramaticas\gramaticaLenguaje.y"
+#line 99 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Else vacio");yymenssage("IF");}
 break;
 case 42:
-#line 99 ".\Gramaticas\gramaticaLenguaje.y"
+#line 100 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("If vacio");yymenssage("IF");}
 break;
 case 43:
-#line 102 ".\Gramaticas\gramaticaLenguaje.y"
+#line 103 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("While");}
 break;
 case 44:
-#line 103 ".\Gramaticas\gramaticaLenguaje.y"
+#line 104 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("While vacio");yymenssage("While");}
 break;
 case 49:
-#line 110 ".\Gramaticas\gramaticaLenguaje.y"
+#line 111 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Bloque vacio");}
 break;
 case 51:
-#line 115 ".\Gramaticas\gramaticaLenguaje.y"
+#line 116 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta segundo parentesis en la condicion");}
 break;
 case 52:
-#line 116 ".\Gramaticas\gramaticaLenguaje.y"
+#line 117 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta primer parentesis en la condicion");}
 break;
 case 53:
-#line 117 ".\Gramaticas\gramaticaLenguaje.y"
+#line 118 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Faltan  parentesis en la condicion");}
 break;
 case 54:
-#line 120 ".\Gramaticas\gramaticaLenguaje.y"
+#line 121 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("Clase");TablaDeSimbolos::changeKey(yyvsp[-3]);}
 break;
 case 55:
-#line 121 ".\Gramaticas\gramaticaLenguaje.y"
+#line 122 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("Clase");TablaDeSimbolos::changeKey(yyvsp[-4]);}
 break;
 case 57:
-#line 127 ".\Gramaticas\gramaticaLenguaje.y"
+#line 128 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto(yyvsp[-1],yyvsp[-2],yyvsp[0]);}
 break;
 case 58:
-#line 130 ".\Gramaticas\gramaticaLenguaje.y"
+#line 131 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("+",yyvsp[-2],yyvsp[0]);}
 break;
 case 59:
-#line 131 ".\Gramaticas\gramaticaLenguaje.y"
+#line 132 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("-",yyvsp[-2],yyvsp[0]);}
 break;
 case 60:
-#line 132 ".\Gramaticas\gramaticaLenguaje.y"
+#line 133 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 61:
-#line 133 ".\Gramaticas\gramaticaLenguaje.y"
+#line 134 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Expresion no puede ir entre parentesis");}
 break;
 case 62:
-#line 136 ".\Gramaticas\gramaticaLenguaje.y"
+#line 137 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("*",yyvsp[-2],yyvsp[0]);}
 break;
 case 63:
-#line 137 ".\Gramaticas\gramaticaLenguaje.y"
+#line 138 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("/",yyvsp[-2],yyvsp[0]);}
 break;
 case 64:
-#line 138 ".\Gramaticas\gramaticaLenguaje.y"
+#line 139 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 65:
-#line 141 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = yyvsp[0];}
-break;
-case 66:
 #line 142 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
-case 67:
+case 66:
 #line 143 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = yyvsp[0];}
+break;
+case 67:
+#line 144 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[-1];}
 break;
 case 68:
-#line 146 ".\Gramaticas\gramaticaLenguaje.y"
+#line 147 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "==";}
 break;
 case 69:
-#line 147 ".\Gramaticas\gramaticaLenguaje.y"
+#line 148 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "!!";}
 break;
 case 70:
-#line 148 ".\Gramaticas\gramaticaLenguaje.y"
+#line 149 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">=";}
 break;
 case 71:
-#line 149 ".\Gramaticas\gramaticaLenguaje.y"
+#line 150 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<=";}
 break;
 case 72:
-#line 150 ".\Gramaticas\gramaticaLenguaje.y"
+#line 151 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<";}
 break;
 case 73:
-#line 151 ".\Gramaticas\gramaticaLenguaje.y"
+#line 152 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">";}
 break;
 case 74:
-#line 154 ".\Gramaticas\gramaticaLenguaje.y"
+#line 155 ".\Gramaticas\gramaticaLenguaje.y"
 {chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 75:
-#line 155 ".\Gramaticas\gramaticaLenguaje.y"
+#line 156 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
 break;
 case 76:
-#line 156 ".\Gramaticas\gramaticaLenguaje.y"
+#line 157 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 77:
-#line 157 ".\Gramaticas\gramaticaLenguaje.y"
+#line 158 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
 break;
 case 78:
-#line 158 ".\Gramaticas\gramaticaLenguaje.y"
+#line 159 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 79:
-#line 159 ".\Gramaticas\gramaticaLenguaje.y"
+#line 160 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Una constante ULONG no puede ser negativa");}
 break;
-#line 706 "y.tab.c"
+#line 704 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

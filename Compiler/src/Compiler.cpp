@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include "./AnalisisSintactico/Parse.h"
+#include "./ContErrWar/ContErrWar.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -36,10 +37,9 @@ int main(int argc, char *argv[]) {
 		throw runtime_error("No se ha podido abrir el codigo fuente.");
 	}
 
-	int fin = yyparse();
-	cout << endl << endl << fin << endl;
+	yyparse();
 	codigoFuente.close();
-	cout << YELLOW << "Warnings -" << contadorWarnings << "		" << RED << "Errores - " << contadorErrores << RESET;
+	cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
 
 	return 0;
 }

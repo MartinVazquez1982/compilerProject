@@ -6,6 +6,7 @@
 #include "../TablaDeSimbolos/TablaDeSimbolos.h"
 #include "../AnalisisSemantico/EstructuraTercetos.h"
 #include "../AnalisisSemantico/Headers/Ambito.h"
+#include "../ContErrWar/ContErrWar.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -175,21 +176,18 @@ return: RETURN ','
 
 %%
 
-int contadorErrores = 0;
-int contadorWarnings = 0;
-
 void yymenssage(string menssage){
     cout  << endl  << BLUE << "Estructura detectada: " << menssage  << RESET << endl;
 }
 
 void yyerror(string menssage){
 	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
-    contadorErrores++;
+    ContErrWar::sumErr();
 }
 
 void yywarning(string menssage){
     cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
-    contadorWarnings++;
+    ContErrWar::sumWar();
 }
 
 void chequearRangoSHORT(string valor){
