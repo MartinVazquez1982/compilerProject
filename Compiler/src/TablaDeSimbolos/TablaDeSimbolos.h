@@ -22,6 +22,8 @@ class TablaDeSimbolos {
 			string tipo;
 			string valor;
 			bool consultado;
+
+			string uso;
 		};
 
 		// Tabla de Simbolos
@@ -49,6 +51,10 @@ class TablaDeSimbolos {
 		static void del(string lexema);
 
 		static void changeKey(string lexema);
+
+		// Setters
+
+		static void setUso(string lexema, string uso);
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */

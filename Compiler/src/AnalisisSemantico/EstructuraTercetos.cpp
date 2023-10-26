@@ -16,7 +16,6 @@ void EstructuraTercetos::addTerceto(string operador, string operando1, string op
 	nuevoTerceto.operando1 = operando1;
 	nuevoTerceto.operando2 = operando2;
 	listaTercetos.push_back(nuevoTerceto);
-	cout << endl << operador << endl;
 }
 
 void EstructuraTercetos::addLabel(){

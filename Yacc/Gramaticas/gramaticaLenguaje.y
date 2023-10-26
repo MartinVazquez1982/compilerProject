@@ -61,8 +61,8 @@ variableDeclaration: type variableList
 objectDeclaration: ID variableList
                  ;
 
-variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);} 
-            | ID {TablaDeSimbolos::changeKey($1);}
+variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolos::setUso($3, "Var");} 
+            | ID {TablaDeSimbolos::changeKey($1);TablaDeSimbolos::setUso($1, "Var");}
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion"); EstructuraTercetos::addTerceto("=",$1,$3);}
@@ -75,8 +75,8 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
 function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();}
         ;
 
-functionHeader: VOID ID'('formalParameter')' {TablaDeSimbolos::changeKey($2);Ambito::add($2);}
-              | VOID ID'('')' {TablaDeSimbolos::changeKey($2);Ambito::add($2);}
+functionHeader: VOID ID'('formalParameter')' {TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2, "Funcion");Ambito::add($2);}
+              | VOID ID'('')' {TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2, "Funcion");Ambito::add($2);}
               ;
 
 functionBody: sentenceList return
@@ -93,12 +93,15 @@ functionCall: nesting'('')'
 realParameter: expression
              ;
 
-ifStatement: IF condition iterativeBody ELSE iterativeBody ENDIF {yymenssage("IF");}
-           | IF condition iterativeBody ENDIF {yymenssage("IF");}
-           | IF condition ENDIF {yywarning("If vacio");yymenssage("IF");} 
-           | IF condition iterativeBody ELSE ENDIF {yywarning("Else vacio");yymenssage("IF");}
-           | IF condition ELSE iterativeBody ENDIF {yywarning("If vacio");yymenssage("IF");}
+ifStatement: IF condition iterativeBody else iterativeBody ENDIF {yymenssage("IF");jumpEndIf();}
+           | IF condition iterativeBody ENDIF {yymenssage("IF");jumpEndIf();}
+           | IF condition ENDIF {yywarning("If vacio");yymenssage("IF");jumpEndIf();} 
+           | IF condition iterativeBody else ENDIF {yywarning("Else vacio");yymenssage("IF");jumpEndIf();}
+           | IF condition else iterativeBody ENDIF {yywarning("If vacio");yymenssage("IF");jumpEndIf();}
            ;
+
+else: ELSE {jumpEndThen();}
+    ;
 
 whileStatement: while condition DO iterativeBody {yymenssage("While");jumpEndWhile();} 
               | while condition DO  {yywarning("While vacio");yymenssage("While");jumpEndWhile();}
@@ -120,8 +123,8 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
          | comparison     {yyerror("Faltan  parentesis en la condicion");}
          ;
 
-class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);}
-    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);}
+class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2,"Clase")}
+    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2,"Clase")}
     ;
 
 heredity: ID','
@@ -207,5 +210,18 @@ void jumpEndWhile(){
     int tercetoFalse = EstructuraTercetos::desapilar();
     EstructuraTercetos::addTerceto("BI","["+to_string(EstructuraTercetos::desapilar())+"]","");
     EstructuraTercetos::updateTerceto(tercetoFalse,EstructuraTercetos::nroSigTerceto());
+    EstructuraTercetos::addLabel();
+}
+
+void jumpEndThen(){
+    int tercetoFalse = EstructuraTercetos::desapilar();
+    EstructuraTercetos::apilar();
+    EstructuraTercetos::addTerceto("BI","","");
+    EstructuraTercetos::updateTerceto(tercetoFalse,EstructuraTercetos::nroSigTerceto());
+    EstructuraTercetos::addLabel();
+}
+
+void jumpEndIf(){
+    EstructuraTercetos::updateTerceto(EstructuraTercetos::desapilar(),EstructuraTercetos::nroSigTerceto());
     EstructuraTercetos::addLabel();
 }

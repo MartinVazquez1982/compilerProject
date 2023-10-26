@@ -54,7 +54,7 @@ string TablaDeSimbolos::getValor(string lexema){
 string TablaDeSimbolos::imprimir() {
 	string salida = "\n			Tabla de Simbolos\n";
 	for (const auto& par : TablaDeSimbolos::table) {
-		salida = salida + "Clave: " + par.first + " | Valor: " + par.second.valor + " | Tipo: " + par.second.tipo + "\n";
+		salida = salida + "Clave: " + par.first + " | Uso: " + par.second.uso + "\n";
 	}
 	return salida;
 }
@@ -111,5 +111,12 @@ void TablaDeSimbolos::changeKey(string lexema){
 	TablaDeSimbolos::Datos data = TablaDeSimbolos::table.at(lexema);
 	TablaDeSimbolos::table.erase(lexema);
 	TablaDeSimbolos::table[lexema+Ambito::get()] = data;
+	cout << imprimir();
+}
+
+// Setters
+
+void TablaDeSimbolos::setUso(string lexema, string uso){
+	TablaDeSimbolos::table[lexema+Ambito::get()].uso = uso;
 	cout << imprimir();
 }
