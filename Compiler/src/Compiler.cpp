@@ -9,6 +9,7 @@
 #include <fstream>
 #include "./AnalisisSintactico/Parse.h"
 #include "./ContErrWar/ContErrWar.h"
+#include "./AnalisisSemantico/EstructuraTercetos.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -40,6 +41,8 @@ int main(int argc, char *argv[]) {
 	yyparse();
 	codigoFuente.close();
 	cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
-
+	if(ContErrWar::generarCodigo()){
+		EstructuraTercetos::mostrarTercetos();
+	}
 	return 0;
 }

@@ -100,19 +100,21 @@ ifStatement: IF condition iterativeBody ELSE iterativeBody ENDIF {yymenssage("IF
            | IF condition ELSE iterativeBody ENDIF {yywarning("If vacio");yymenssage("IF");}
            ;
 
-whileStatement: WHILE condition DO iterativeBody {yymenssage("While");}
-              | WHILE condition DO  {yywarning("While vacio");yymenssage("While");}
+whileStatement: while condition DO iterativeBody {yymenssage("While");jumpEndWhile();} 
+              | while condition DO  {yywarning("While vacio");yymenssage("While");jumpEndWhile();}
               ;
 
-iterativeBody: '{' executableList '}'
+while: WHILE {EstructuraTercetos::apilar();EstructuraTercetos::addLabel();}
+     ;
+
+iterativeBody: '{' executableList '}' 
             | '{' executableList return '}'
             | executable','
             | return
             | '{' '}' {yywarning("Bloque vacio");}
             ;
 
-
-condition: '('comparison')'
+condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",$2,"");}
          | '('comparison  {yyerror("Falta segundo parentesis en la condicion");}
          | comparison')'  {yyerror("Falta primer parentesis en la condicion");}
          | comparison     {yyerror("Faltan  parentesis en la condicion");}
@@ -125,7 +127,7 @@ class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::changeK
 heredity: ID','
         ;
 
-comparison: factor operatorsLogics factor {EstructuraTercetos::addTerceto($2,$1,$3);}
+comparison: expression operatorsLogics expression {$$ = EstructuraTercetos::nroSigTerceto();EstructuraTercetos::addTerceto($2,$1,$3);}
          ;
 
 expression: expression'+'termino {$$ = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("+",$1,$3);}
@@ -199,4 +201,11 @@ void chequearRangoSHORT(string valor){
         TablaDeSimbolos::chequearPositivos(valor);
     }
     cout << TablaDeSimbolos::imprimir();
+}
+
+void jumpEndWhile(){
+    int tercetoFalse = EstructuraTercetos::desapilar();
+    EstructuraTercetos::addTerceto("BI","["+to_string(EstructuraTercetos::desapilar())+"]","");
+    EstructuraTercetos::updateTerceto(tercetoFalse,EstructuraTercetos::nroSigTerceto());
+    EstructuraTercetos::addLabel();
 }
