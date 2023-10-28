@@ -75,7 +75,7 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
 function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();}
         ;
 
-functionHeader: VOID ID'('formalParameter')' {TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2, "Funcion");Ambito::add($2);}
+functionHeader: VOID ID'('formalParameter')' {TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2, "Funcion");TablaDeSimbolos::setParametroFormal($2,$4);Ambito::add($2);TablaDeSimbolos::changeKey($4);}
               | VOID ID'('')' {TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2, "Funcion");Ambito::add($2);}
               ;
 
@@ -83,11 +83,11 @@ functionBody: sentenceList return
             | return {yywarning("Funcion vacia");} 
             ;
 
-formalParameter: type ID 
+formalParameter: type ID {$$ = $2;}
                ;
 
 functionCall: nesting'('')' 
-            | nesting'('realParameter')' 
+            | nesting'('realParameter')' {EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(partEndID($1)),$3);EstructuraTercetos::addTerceto("Call",$1,"");}
             ;
 
 realParameter: expression
@@ -106,7 +106,7 @@ else: ELSE {jumpEndThen();}
 whileStatement: while condition DO iterativeBody {yymenssage("While");jumpEndWhile();} 
               | while condition DO  {yywarning("While vacio");yymenssage("While");jumpEndWhile();}
               ;
-
+              
 while: WHILE {EstructuraTercetos::apilar();EstructuraTercetos::addLabel();}
      ;
 
@@ -123,8 +123,8 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
          | comparison     {yyerror("Faltan  parentesis en la condicion");}
          ;
 
-class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2,"Clase")}
-    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2,"Clase")}
+class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2,"Clase");}
+    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2,"Clase");}
     ;
 
 heredity: ID','
@@ -224,4 +224,17 @@ void jumpEndThen(){
 void jumpEndIf(){
     EstructuraTercetos::updateTerceto(EstructuraTercetos::desapilar(),EstructuraTercetos::nroSigTerceto());
     EstructuraTercetos::addLabel();
+}
+
+string partEndID(string nesting){
+
+    // Encuentra la posición del último punto
+    size_t dot_index = nesting.find_last_of('.');
+
+    // Si no hay punto, devuelve cadena vacía
+    if (dot_index == string::npos)
+        return nesting;
+
+    // Devuelve la cadena desde el punto hasta el final
+    return nesting.substr(dot_index + 1);
 }

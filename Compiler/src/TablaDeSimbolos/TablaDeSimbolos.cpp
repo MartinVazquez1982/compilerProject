@@ -120,3 +120,15 @@ void TablaDeSimbolos::setUso(string lexema, string uso){
 	TablaDeSimbolos::table[lexema+Ambito::get()].uso = uso;
 	cout << imprimir();
 }
+
+void TablaDeSimbolos::setParametroFormal(string lexema, string parametro){
+	TablaDeSimbolos::table[lexema+Ambito::get()].parametro_formal = parametro;
+	cout << imprimir();
+}
+
+// Getters
+
+string TablaDeSimbolos::getParametroFormal(string lexema){
+	// Falta ver caso cuando no tiene parametro formal
+	return TablaDeSimbolos::table[lexema+Ambito::get()].parametro_formal;
+}

@@ -24,6 +24,8 @@ class TablaDeSimbolos {
 			bool consultado;
 
 			string uso;
+
+			string parametro_formal;
 		};
 
 		// Tabla de Simbolos
@@ -55,6 +57,12 @@ class TablaDeSimbolos {
 		// Setters
 
 		static void setUso(string lexema, string uso);
+
+		static void setParametroFormal(string lexema, string parametro);
+
+		// Getters
+
+		static string getParametroFormal(string lexema);
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */

@@ -400,7 +400,19 @@ void jumpEndIf(){
     EstructuraTercetos::updateTerceto(EstructuraTercetos::desapilar(),EstructuraTercetos::nroSigTerceto());
     EstructuraTercetos::addLabel();
 }
-#line 404 "y.tab.c"
+
+string partEndID(string nesting){
+
+    // Encuentra la posición del último punto
+    size_t dot_index = nesting.find_last_of('.');
+
+    // Si no hay punto, devuelve cadena vacía
+    if (dot_index == string::npos)return nesting;
+
+    // Devuelve la cadena desde el punto hasta el final
+    return nesting.substr(dot_index + 1);
+}
+#line 417 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -582,7 +594,7 @@ case 29:
 break;
 case 30:
 #line 78 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::changeKey(yyvsp[-3]);TablaDeSimbolos::setUso(yyvsp[-3], "Funcion");Ambito::add(yyvsp[-3]);}
+{TablaDeSimbolos::changeKey(yyvsp[-3]);TablaDeSimbolos::setUso(yyvsp[-3], "Funcion");TablaDeSimbolos::setParametroFormal(yyvsp[-3],yyvsp[-1]);Ambito::add(yyvsp[-3]);TablaDeSimbolos::changeKey(yyvsp[-1]);}
 break;
 case 31:
 #line 79 ".\Gramaticas\gramaticaLenguaje.y"
@@ -591,6 +603,14 @@ break;
 case 33:
 #line 83 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Funcion vacia");}
+break;
+case 34:
+#line 86 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = yyvsp[0];}
+break;
+case 36:
+#line 90 ".\Gramaticas\gramaticaLenguaje.y"
+{EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(partEndID(yyvsp[-3])),yyvsp[-1]);EstructuraTercetos::addTerceto("Call",yyvsp[-3],"");}
 break;
 case 38:
 #line 96 ".\Gramaticas\gramaticaLenguaje.y"
@@ -654,7 +674,7 @@ case 56:
 break;
 case 57:
 #line 127 ".\Gramaticas\gramaticaLenguaje.y"
-{yymenssage("Clase");TablaDeSimbolos::changeKey(yyvsp[-4]);TablaDeSimbolos::setUso(yyvsp[-4], "Clase");}
+{yymenssage("Clase");TablaDeSimbolos::changeKey(yyvsp[-4]);TablaDeSimbolos::setUso(yyvsp[-4],"Clase");}
 break;
 case 59:
 #line 133 ".\Gramaticas\gramaticaLenguaje.y"
@@ -748,7 +768,7 @@ case 81:
 #line 165 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Una constante ULONG no puede ser negativa");}
 break;
-#line 752 "y.tab.c"
+#line 773 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
