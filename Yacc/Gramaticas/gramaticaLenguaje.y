@@ -7,6 +7,7 @@
 #include "../AnalisisSemantico/EstructuraTercetos.h"
 #include "../AnalisisSemantico/Headers/Ambito.h"
 #include "../ContErrWar/ContErrWar.h"
+#include "../AnalisisSemantico/Headers/Conversion.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -65,7 +66,11 @@ variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolo
             | ID {TablaDeSimbolos::changeKey($1);TablaDeSimbolos::setUso($1, "Var");}
             ;
 
-assignment: nesting '=' expression {yymenssage("Asignacion"); EstructuraTercetos::addTerceto("=",$1,$3);}
+assignment: nesting '=' expression {yymenssage("Asignacion");
+                                    yymenssage("DAVO");
+                                    asignar($1,$3);
+                                    //EstructuraTercetos::addTerceto("=",$1,$3);
+                                    }
           ;
 
 nesting: nesting'.'ID {$$ = $1 + "." + $3;}
@@ -237,4 +242,19 @@ string partEndID(string nesting){
 
     // Devuelve la cadena desde el punto hasta el final
     return nesting.substr(dot_index + 1);
+}
+
+void asignar(string izq, string der){
+    cout << "Hola";
+    string tipoIzq = TablaDeSimbolos::getTipo(izq);
+    cout << tipoIzq;
+    string tipoDer = TablaDeSimbolos::getTipo(der);
+    cout << tipoIzq << "  " << tipoDer;
+    string valido = Conversion::asignacion(tipoIzq,tipoDer);
+    if (valido == "ERROR"){
+        yyerror("No es posible asginarle un "+tipoDer+" a un "+tipoIzq);
+    }else if (tipoIzq != tipoDer){
+            EstructuraTercetos::addTerceto(tipoDer+"to"+tipoIzq,der,"");
+    }
+    EstructuraTercetos::addTerceto("=",izq,der);
 }

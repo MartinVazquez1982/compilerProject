@@ -132,3 +132,7 @@ string TablaDeSimbolos::getParametroFormal(string lexema){
 	// Falta ver caso cuando no tiene parametro formal
 	return TablaDeSimbolos::table[lexema+Ambito::get()].parametro_formal;
 }
+
+string TablaDeSimbolos::getTipo(string lexema){
+	return TablaDeSimbolos::table[lexema+Ambito::get()].tipo;
+}

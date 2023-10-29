@@ -63,6 +63,8 @@ class TablaDeSimbolos {
 		// Getters
 
 		static string getParametroFormal(string lexema);
+
+		static string getTipo(string lexema);
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */
