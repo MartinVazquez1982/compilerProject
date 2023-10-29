@@ -5,23 +5,24 @@ using namespace std;
 #define MAGENTA "\x1B[35m"
 #define RESET "\x1B[37m"
 
-vector<EstructuraTercetos::terceto> EstructuraTercetos::listaTercetos;
+unordered_map<string,vector<EstructuraTercetos::terceto>> EstructuraTercetos::listaTercetos = {{"main", vector<EstructuraTercetos::terceto>()}};
 
 stack<int> EstructuraTercetos::pilaTercetos;
 
+string EstructuraTercetos::ambito = "main";
 
 void EstructuraTercetos::addTerceto(string operador, string operando1, string operando2){
 	EstructuraTercetos::terceto nuevoTerceto;
 	nuevoTerceto.operador = operador;
 	nuevoTerceto.operando1 = operando1;
 	nuevoTerceto.operando2 = operando2;
-	listaTercetos.push_back(nuevoTerceto);
+	listaTercetos[ambito].push_back(nuevoTerceto);
 }
 
 void EstructuraTercetos::addLabel(){
 	EstructuraTercetos::terceto nuevoTerceto;
-	nuevoTerceto.operador = "label"+to_string(listaTercetos.size());
-	listaTercetos.push_back(nuevoTerceto);
+	nuevoTerceto.operador = "label"+to_string(listaTercetos[ambito].size());
+	listaTercetos[ambito].push_back(nuevoTerceto);
 }
 
 void EstructuraTercetos::addJump(string operador){
@@ -29,15 +30,15 @@ void EstructuraTercetos::addJump(string operador){
 	nuevoTerceto.operador = operador;
 	int nro = listaTercetos.size();
 	pilaTercetos.push(nro);
-	listaTercetos.push_back(nuevoTerceto);
+	listaTercetos[ambito].push_back(nuevoTerceto);
 }
 
 string EstructuraTercetos::nroSigTerceto(){
-	return "["+to_string(listaTercetos.size())+"]";
+	return "["+to_string(listaTercetos[ambito].size())+"]";
 }
 
 void EstructuraTercetos::apilar(){
-	pilaTercetos.push(listaTercetos.size());
+	pilaTercetos.push(listaTercetos[ambito].size());
 }
 
 int EstructuraTercetos::desapilar(){
@@ -47,18 +48,35 @@ int EstructuraTercetos::desapilar(){
 }
 
 void EstructuraTercetos::updateTerceto(int nro, string nroLabel){
-	EstructuraTercetos::terceto info = listaTercetos[nro];
+	EstructuraTercetos::terceto info = listaTercetos[ambito][nro];
 	if (info.operando1.length() == 0){
 		info.operando1 = nroLabel;
 	} else {
 		info.operando2 = nroLabel;
 	}
-	listaTercetos[nro] = info;
+	listaTercetos[ambito][nro] = info;
 }
 
 void EstructuraTercetos::mostrarTercetos(){
-	cout << endl;
-	for (int i=0; i<listaTercetos.size();i++){
-		cout << MAGENTA << i << "	( " << listaTercetos[i].operador << " , " << listaTercetos[i].operando1 << " , " << listaTercetos[i].operando2 << " )" << RESET << endl;
+	cout << MAGENTA << endl << "=========== TERCETOS ===========" << endl << endl;
+	for (const auto& entry : listaTercetos) {
+		cout << "	" << entry.first << endl << endl;
+		for (int i=0; i < entry.second.size(); i++) {
+			cout << i << "	( " << entry.second[i].operador << " , " << entry.second[i].operando1 << " , " << entry.second[i].operando2 << " )"  << endl;
+		}
+		cout << endl;
+	}
+	cout << RESET;
+}
+
+void EstructuraTercetos::setAmbito(string ambito){
+	EstructuraTercetos::ambito = ambito;
+	auto it = listaTercetos.find(EstructuraTercetos::ambito);
+	if (it == listaTercetos.end()){
+		if (ambito == ""){
+			EstructuraTercetos::ambito = "main";
+		} else {
+			listaTercetos[ambito] = vector<EstructuraTercetos::terceto>();
+		}
 	}
 }

@@ -56,14 +56,14 @@ declaration: variableDeclaration
            | objectDeclaration
            ;
 
-variableDeclaration: type variableList
+variableDeclaration: type variableList {setearTipos($1,$2);}
                    ;
 
 objectDeclaration: ID variableList
                  ;
 
-variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolos::setUso($3, "Var");} 
-            | ID {TablaDeSimbolos::changeKey($1);TablaDeSimbolos::setUso($1, "Var");}
+variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolos::setUso($3, "Var");$$=$1+"&"+$3;} 
+            | ID {TablaDeSimbolos::changeKey($1);TablaDeSimbolos::setUso($1, "Var");$$=$1;}
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
@@ -77,11 +77,21 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
        | ID {$$ = $1;}
        ;
 
-function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();}
+function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();EstructuraTercetos::setAmbito(Ambito::get());}
         ;
 
-functionHeader: VOID ID'('formalParameter')' {TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2, "Funcion");TablaDeSimbolos::setParametroFormal($2,$4);Ambito::add($2);TablaDeSimbolos::changeKey($4);}
-              | VOID ID'('')' {TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2, "Funcion");Ambito::add($2);}
+functionHeader: VOID ID'('formalParameter')'{   TablaDeSimbolos::changeKey($2);
+                                                TablaDeSimbolos::setUso($2, "Funcion");
+                                                TablaDeSimbolos::setParametroFormal($2,$4);
+                                                Ambito::add($2);
+                                                TablaDeSimbolos::changeKey($4);
+                                                EstructuraTercetos::setAmbito(Ambito::get());
+                                            }
+              | VOID ID'('')'   {   TablaDeSimbolos::changeKey($2);
+                                    TablaDeSimbolos::setUso($2, "Funcion");
+                                    Ambito::add($2);
+                                    EstructuraTercetos::setAmbito(Ambito::get());
+                                }
               ;
 
 functionBody: sentenceList return
@@ -91,8 +101,8 @@ functionBody: sentenceList return
 formalParameter: type ID {$$ = $2;}
                ;
 
-functionCall: nesting'('')' 
-            | nesting'('realParameter')' {EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(partEndID($1)),$3);EstructuraTercetos::addTerceto("Call",$1,"");}
+functionCall: nesting'('')' {EstructuraTercetos::addTerceto("Call",partEndID($1),"");}
+            | nesting'('realParameter')' {EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(partEndID($1)),$3);EstructuraTercetos::addTerceto("Call",partEndID($1),"");}
             ;
 
 realParameter: expression
@@ -170,9 +180,9 @@ constant: CTESHORT {chequearRangoSHORT($1); $$ = $1;}
         | '-'CTEULONG {yyerror("Una constante ULONG no puede ser negativa");}
         ;
 
-type: SHORT
-    | ULONG
-    | FLOAT
+type: SHORT {$$="SHORT";}
+    | ULONG {$$="ULONG";}
+    | FLOAT {$$="FLOAT";}
     ;
 
 print: PRINT cadena
@@ -257,4 +267,12 @@ void asignar(string izq, string der){
             EstructuraTercetos::addTerceto(tipoDer+"to"+tipoIzq,der,"");
     }
     EstructuraTercetos::addTerceto("=",izq,der);
+}
+
+void setearTipos(string tipo, string listVariable){
+    stringstream list(listVariable);
+    string var;
+    while (getline(list, var, '&')) {
+        TablaDeSimbolos::setTipo(var, tipo);
+    }
 }

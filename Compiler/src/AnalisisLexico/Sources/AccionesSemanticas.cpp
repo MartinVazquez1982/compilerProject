@@ -141,7 +141,7 @@ void AccionesSemanticas::AS5(char caracter){
  */
 void AccionesSemanticas::AS6(char caracter){
 	TablaDeSimbolos::add(entrada);
-	cout << TablaDeSimbolos::imprimir() << endl;
+	//cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 /**
@@ -345,7 +345,7 @@ void AccionesSemanticas::AS22(char caracter){
 void AccionesSemanticas::AS23(char caracter){
 	if (caracter == '%'){
 		TablaDeSimbolos::add(entrada, entrada.substr(1,entrada.length()-2),"STRING");
-		cout << TablaDeSimbolos::imprimir() << endl;
+		//cout << TablaDeSimbolos::imprimir() << endl;
 	} else {
 		size_t pos = entrada.find('_');
 		string valor = entrada.substr(0, pos);
@@ -353,7 +353,7 @@ void AccionesSemanticas::AS23(char caracter){
 			TablaDeSimbolos::add(entrada, valor ,"SHORT");
 		} else {
 			TablaDeSimbolos::add(entrada, valor ,"ULONG");
-			cout << TablaDeSimbolos::imprimir() << endl;
+			//cout << TablaDeSimbolos::imprimir() << endl;
 		}
 	}
 }
@@ -381,7 +381,7 @@ void AccionesSemanticas::AS25(char caracter){
 	TablaDeSimbolos::add(entrada, entrada,"FLOAT");
 	tokenIdentificado = true;
 	nroToken = 275;
-	cout << TablaDeSimbolos::imprimir() << endl;
+	//cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 /**

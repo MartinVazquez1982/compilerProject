@@ -111,19 +111,21 @@ void TablaDeSimbolos::changeKey(string lexema){
 	TablaDeSimbolos::Datos data = TablaDeSimbolos::table.at(lexema);
 	TablaDeSimbolos::table.erase(lexema);
 	TablaDeSimbolos::table[lexema+Ambito::get()] = data;
-	cout << imprimir();
+	//cout << imprimir();
 }
 
 // Setters
 
 void TablaDeSimbolos::setUso(string lexema, string uso){
 	TablaDeSimbolos::table[lexema+Ambito::get()].uso = uso;
-	cout << imprimir();
 }
 
 void TablaDeSimbolos::setParametroFormal(string lexema, string parametro){
 	TablaDeSimbolos::table[lexema+Ambito::get()].parametro_formal = parametro;
-	cout << imprimir();
+}
+
+void TablaDeSimbolos::setTipo(string lexema, string tipo){
+	TablaDeSimbolos::table[lexema+Ambito::get()].tipo = tipo;
 }
 
 // Getters
@@ -134,5 +136,9 @@ string TablaDeSimbolos::getParametroFormal(string lexema){
 }
 
 string TablaDeSimbolos::getTipo(string lexema){
-	return TablaDeSimbolos::table[lexema+Ambito::get()].tipo;
+	string dato =  TablaDeSimbolos::table[lexema+Ambito::get()].tipo;
+	if (dato.empty()){
+		return " ";
+	}
+	return dato;
 }

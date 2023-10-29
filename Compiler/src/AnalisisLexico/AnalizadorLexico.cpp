@@ -24,7 +24,7 @@ int yylex(){
 		Dato estado = Automata::pasoAutomata(caracter);
 		if (estado.AS != nullptr) estado.AS(caracter);
 		if(AccionesSemanticas::tokenReconocido()){
-			cout << "\nNro de Token Reconocido: " << AccionesSemanticas::nroToken << endl;
+			//cout << "\nNro de Token Reconocido: " << AccionesSemanticas::nroToken << endl;
 			int salida = AccionesSemanticas::nroToken;
 			if(salida == 277 || salida == 276 || salida == 275 || salida == 274 || salida == 273) yylval=AccionesSemanticas::entrada;
 			return salida;

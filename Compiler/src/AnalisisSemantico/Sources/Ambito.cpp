@@ -10,7 +10,7 @@ void Ambito::del(){
 	int i = Ambito::ambito.length()-1;
 	while(Ambito::ambito[i] != ':'){i--;}
 	if(i > 0){
-		Ambito::ambito = Ambito::ambito.substr(0,i-1);
+		Ambito::ambito = Ambito::ambito.substr(0,i);
 	} else {
 		Ambito::ambito="";
 	}
