@@ -72,11 +72,21 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
        | ID {$$ = $1;}
        ;
 
-function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();}
+function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();EstructuraTercetos::setAmbito(Ambito::get());}
         ;
 
-functionHeader: VOID ID'('formalParameter')' {TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2, "Funcion");TablaDeSimbolos::setParametroFormal($2,$4);Ambito::add($2);TablaDeSimbolos::changeKey($4);}
-              | VOID ID'('')' {TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2, "Funcion");Ambito::add($2);}
+functionHeader: VOID ID'('formalParameter')'{   TablaDeSimbolos::changeKey($2);
+                                                TablaDeSimbolos::setUso($2, "Funcion");
+                                                TablaDeSimbolos::setParametroFormal($2,$4);
+                                                Ambito::add($2);
+                                                TablaDeSimbolos::changeKey($4);
+                                                EstructuraTercetos::setAmbito(Ambito::get());
+                                            }
+              | VOID ID'('')'   {   TablaDeSimbolos::changeKey($2);
+                                    TablaDeSimbolos::setUso($2, "Funcion");
+                                    Ambito::add($2);
+                                    EstructuraTercetos::setAmbito(Ambito::get());
+                                }
               ;
 
 functionBody: sentenceList return
@@ -86,8 +96,8 @@ functionBody: sentenceList return
 formalParameter: type ID {$$ = $2;}
                ;
 
-functionCall: nesting'('')' 
-            | nesting'('realParameter')' {EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(partEndID($1)),$3);EstructuraTercetos::addTerceto("Call",$1,"");}
+functionCall: nesting'('')' {EstructuraTercetos::addTerceto("Call",partEndID($1),"");}
+            | nesting'('realParameter')' {EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(partEndID($1)),$3);EstructuraTercetos::addTerceto("Call",partEndID($1),"");}
             ;
 
 realParameter: expression

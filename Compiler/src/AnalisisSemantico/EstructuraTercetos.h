@@ -1,8 +1,8 @@
 #ifndef ANALISISSEMANTICO_ESTRUCTURATERCETOS_H_
 #define ANALISISSEMANTICO_ESTRUCTURATERCETOS_H_
 
+#include <unordered_map>
 #include <vector>
-#include <string>
 #include <stack>
 #include <iostream>
 
@@ -19,10 +19,11 @@ class EstructuraTercetos {
 			string operando2;
 		};
 
-		static vector<terceto> listaTercetos;
+		static unordered_map<string,vector<terceto>> listaTercetos;
 
 		static stack<int> pilaTercetos;
 
+		static string ambito;
 
 	public:
 
@@ -41,6 +42,8 @@ class EstructuraTercetos {
 		static void updateTerceto(int nro, string nroLabel);
 
 		static void mostrarTercetos();
+
+		static void setAmbito(string ambito);
 };
 
 #endif /* ANALISISSEMANTICO_ESTRUCTURATERCETOS_H_ */
