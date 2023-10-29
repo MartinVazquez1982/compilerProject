@@ -18,7 +18,6 @@ const unordered_map<string, tuple<string, string, string>> Conversion::operacion
 };
 
 string Conversion::asignacion(string tipoIzq, string tipoDer){
-	cout << tipoIzq << "  " << tipoDer;
 	if (tipoDer == "SHORT" ){
 		return get<0>(Conversion::asignaciones.at(tipoIzq));
 	}else if (tipoDer == "ULONG" ){

@@ -41,8 +41,9 @@ int main(int argc, char *argv[]) {
 	yyparse();
 	codigoFuente.close();
 	cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
-	if(ContErrWar::generarCodigo()){
+	/*if(ContErrWar::generarCodigo()){
 		EstructuraTercetos::mostrarTercetos();
-	}
+	}*/
+	EstructuraTercetos::mostrarTercetos();
 	return 0;
 }

@@ -1,6 +1,7 @@
 %{
 
 #include <iostream>
+#include <sstream>
 #include "../AnalisisLexico/AnalizadorLexico.h"
 #include "../AnalisisLexico/Headers/AccionesSemanticas.h"
 #include "../TablaDeSimbolos/TablaDeSimbolos.h"
@@ -67,9 +68,7 @@ variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolo
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
-                                    yymenssage("DAVO");
                                     asignar($1,$3);
-                                    //EstructuraTercetos::addTerceto("=",$1,$3);
                                     }
           ;
 
@@ -255,11 +254,8 @@ string partEndID(string nesting){
 }
 
 void asignar(string izq, string der){
-    cout << "Hola";
     string tipoIzq = TablaDeSimbolos::getTipo(izq);
-    cout << tipoIzq;
     string tipoDer = TablaDeSimbolos::getTipo(der);
-    cout << tipoIzq << "  " << tipoDer;
     string valido = Conversion::asignacion(tipoIzq,tipoDer);
     if (valido == "ERROR"){
         yyerror("No es posible asginarle un "+tipoDer+" a un "+tipoIzq);
@@ -270,9 +266,9 @@ void asignar(string izq, string der){
 }
 
 void setearTipos(string tipo, string listVariable){
-    stringstream list(listVariable);
     string var;
-    while (getline(list, var, '&')) {
+    std::istringstream variableStream(listVariable);  // Asegúrate de inicializar el istringstream
+    while (getline(variableStream, var, '&')) {
         TablaDeSimbolos::setTipo(var, tipo);
     }
 }
