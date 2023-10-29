@@ -42,8 +42,6 @@ class TablaDeSimbolos {
 
 		static string getValor(string lexema);
 
-		static void addAtributo(string lexema, string atributo, string valor);
-
 		static void chequearNegativos(string nro);
 
 		static void chequearPositivos(string nro);
@@ -60,9 +58,13 @@ class TablaDeSimbolos {
 
 		static void setParametroFormal(string lexema, string parametro);
 
+		static void setTipo(string lexema, string tipo);
+
 		// Getters
 
 		static string getParametroFormal(string lexema);
+
+		static string getTipo(string lexema);
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */

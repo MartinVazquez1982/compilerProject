@@ -55,14 +55,14 @@ declaration: variableDeclaration
            | objectDeclaration
            ;
 
-variableDeclaration: type variableList
+variableDeclaration: type variableList {setearTipos($1,$2);}
                    ;
 
 objectDeclaration: ID variableList
                  ;
 
-variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolos::setUso($3, "Var");} 
-            | ID {TablaDeSimbolos::changeKey($1);TablaDeSimbolos::setUso($1, "Var");}
+variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolos::setUso($3, "Var");$$=$1+"&"+$3;} 
+            | ID {TablaDeSimbolos::changeKey($1);TablaDeSimbolos::setUso($1, "Var");$$=$1;}
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion"); EstructuraTercetos::addTerceto("=",$1,$3);}
@@ -175,9 +175,9 @@ constant: CTESHORT {chequearRangoSHORT($1); $$ = $1;}
         | '-'CTEULONG {yyerror("Una constante ULONG no puede ser negativa");}
         ;
 
-type: SHORT
-    | ULONG
-    | FLOAT
+type: SHORT {$$="SHORT";}
+    | ULONG {$$="ULONG";}
+    | FLOAT {$$="FLOAT";}
     ;
 
 print: PRINT cadena
@@ -247,4 +247,11 @@ string partEndID(string nesting){
 
     // Devuelve la cadena desde el punto hasta el final
     return nesting.substr(dot_index + 1);
+}
+void setearTipos(string tipo, string listVariable){
+    stringstream list(listVariable);
+    string var;
+    while (getline(list, var, '&')) {
+        TablaDeSimbolos::setTipo(var, tipo);
+    }
 }

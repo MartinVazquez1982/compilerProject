@@ -118,12 +118,14 @@ void TablaDeSimbolos::changeKey(string lexema){
 
 void TablaDeSimbolos::setUso(string lexema, string uso){
 	TablaDeSimbolos::table[lexema+Ambito::get()].uso = uso;
-	//cout << imprimir();
 }
 
 void TablaDeSimbolos::setParametroFormal(string lexema, string parametro){
 	TablaDeSimbolos::table[lexema+Ambito::get()].parametro_formal = parametro;
-	//cout << imprimir();
+}
+
+void TablaDeSimbolos::setTipo(string lexema, string tipo){
+	TablaDeSimbolos::table[lexema+Ambito::get()].tipo = tipo;
 }
 
 // Getters
@@ -131,4 +133,12 @@ void TablaDeSimbolos::setParametroFormal(string lexema, string parametro){
 string TablaDeSimbolos::getParametroFormal(string lexema){
 	// Falta ver caso cuando no tiene parametro formal
 	return TablaDeSimbolos::table[lexema+Ambito::get()].parametro_formal;
+}
+
+string TablaDeSimbolos::getTipo(string lexema){
+	string dato =  TablaDeSimbolos::table[lexema+Ambito::get()].tipo;
+	if (dato.empty()){
+		return " ";
+	}
+	return dato;
 }
