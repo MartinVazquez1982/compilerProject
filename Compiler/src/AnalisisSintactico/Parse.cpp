@@ -421,7 +421,7 @@ void asignar(string izq, string der){
     string tipoDer = TablaDeSimbolos::getTipo(der);
     string valido = Conversion::asignacion(tipoIzq,tipoDer);
     if (valido == "ERROR"){
-        yyerror("No es posible asginarle un "+tipoDer+" a un "+tipoIzq);
+        yyerror("No es posible asignarle un "+tipoDer+" a un "+tipoIzq);
     }else if (tipoIzq != tipoDer){
             EstructuraTercetos::addTerceto(tipoDer+"to"+tipoIzq,der,"");
     }
@@ -435,7 +435,28 @@ void setearTipos(string tipo, string listVariable){
         TablaDeSimbolos::setTipo(var, tipo);
     }
 }
-#line 439 "y.tab.c"
+
+bool ChequearDeclaracion(string var){
+    string ambito=Ambito::get();
+    bool final = false;
+    bool encontrada = false;
+    while(! final && ! encontrada){
+        if (TablaDeSimbolos::tipoAsignado(var+ambito)){
+            encontrada = true;
+        }else{
+            if (ambito.empty()){
+                final = true;
+                yyerror("Variable " + var + " NO declarada");
+            }
+            size_t pos = ambito.find_last_of(":");
+            if (pos != string::npos) {
+                ambito = ambito.substr(0, pos);
+            }
+        }
+    }
+    return encontrada;
+}
+#line 460 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -606,7 +627,7 @@ break;
 case 26:
 #line 70 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("Asignacion");
-                                    asignar(yyvsp[-2],yyvsp[0]);
+                                    if (ChequearDeclaracion(partEndID(yyvsp[-2]))) asignar(yyvsp[-2],yyvsp[0]);
                                     }
 break;
 case 27:
@@ -645,7 +666,7 @@ case 33:
 break;
 case 34:
 #line 100 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = yyvsp[0];}
+{yyval = yyvsp[0]; TablaDeSimbolos::setUso(yyvsp[0], "Parametro Formal"); setearTipos(yyvsp[-1],yyvsp[0]);}
 break;
 case 35:
 #line 103 ".\Gramaticas\gramaticaLenguaje.y"
@@ -823,7 +844,7 @@ case 84:
 #line 184 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="FLOAT";}
 break;
-#line 827 "y.tab.c"
+#line 848 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

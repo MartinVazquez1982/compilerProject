@@ -68,7 +68,7 @@ variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolo
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
-                                    asignar($1,$3);
+                                    if (ChequearDeclaracion(partEndID($1))) asignar($1,$3);
                                     }
           ;
 
@@ -97,7 +97,7 @@ functionBody: sentenceList return
             | return {yywarning("Funcion vacia");} 
             ;
 
-formalParameter: type ID {$$ = $2;}
+formalParameter: type ID {$$ = $2; TablaDeSimbolos::setUso($2, "Parametro Formal"); setearTipos($1,$2);}
                ;
 
 functionCall: nesting'('')' {EstructuraTercetos::addTerceto("Call",partEndID($1),"");}
@@ -258,7 +258,7 @@ void asignar(string izq, string der){
     string tipoDer = TablaDeSimbolos::getTipo(der);
     string valido = Conversion::asignacion(tipoIzq,tipoDer);
     if (valido == "ERROR"){
-        yyerror("No es posible asginarle un "+tipoDer+" a un "+tipoIzq);
+        yyerror("No es posible asignarle un "+tipoDer+" a un "+tipoIzq);
     }else if (tipoIzq != tipoDer){
             EstructuraTercetos::addTerceto(tipoDer+"to"+tipoIzq,der,"");
     }
@@ -271,4 +271,25 @@ void setearTipos(string tipo, string listVariable){
     while (getline(variableStream, var, '&')) {
         TablaDeSimbolos::setTipo(var, tipo);
     }
+}
+
+bool ChequearDeclaracion(string var){
+    string ambito=Ambito::get();
+    bool final = false;
+    bool encontrada = false;
+    while(! final && ! encontrada){
+        if (TablaDeSimbolos::tipoAsignado(var+ambito)){
+            encontrada = true;
+        }else{
+            if (ambito.empty()){
+                final = true;
+                yyerror("Variable " + var + " NO declarada");
+            }
+            size_t pos = ambito.find_last_of(":");
+            if (pos != string::npos) {
+                ambito = ambito.substr(0, pos);
+            }
+        }
+    }
+    return encontrada;
 }

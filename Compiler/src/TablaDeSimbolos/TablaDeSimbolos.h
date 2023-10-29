@@ -62,6 +62,8 @@ class TablaDeSimbolos {
 
 		// Getters
 
+		static bool tipoAsignado(string lexemaMasAmbito);
+
 		static string getParametroFormal(string lexema);
 
 		static string getTipo(string lexema);
