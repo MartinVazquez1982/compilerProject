@@ -63,20 +63,21 @@ variableDeclaration: type variableList {setearTipos($1,$2);}
 objectDeclaration: ID variableList
                  ;
 
-variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolos::setUso($3, "Var");$$=$1+"&"+$3;} 
-            | ID {TablaDeSimbolos::changeKey($1);TablaDeSimbolos::setUso($1, "Var");$$=$1;}
+variableList: variableList ';' ID {string key = TablaDeSimbolos::changeKey($3);TablaDeSimbolos::setUso(key, "Var");$$=$1+"&"+key;} 
+            | ID {string key = TablaDeSimbolos::changeKey($1);TablaDeSimbolos::setUso(key, "Var");$$=key;}
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
-                                    if (ChequearDeclaracion(partEndID($1))){
+                                    string nomEncontrada;
+                                    if (ChequearDeclaracion(partEndID($1), nomEncontrada)){
                                         string tipo;
-                                        bool conversion = asignar($1,$3,tipo);
+                                        bool conversion = asignar(nomEncontrada,$3,tipo);
                                         if (!conversion){
                                             $$ = EstructuraTercetos::nroActualTerceto();
-                                            EstructuraTercetos::addTerceto("=",$1,$$);
+                                            EstructuraTercetos::addTerceto("=",nomEncontrada,$$);
                                         }else{
                                             $$ = EstructuraTercetos::nroActualTerceto();
-                                            EstructuraTercetos::addTerceto("=",$1,$$,tipo);
+                                            EstructuraTercetos::addTerceto("=",nomEncontrada,$$,tipo);
                                         }
                                     } 
                                     }
@@ -309,7 +310,7 @@ string partEndID(string nesting){
 }
 
 bool asignar(string izq, string der, string & tipo){
-    string tipoIzq = TablaDeSimbolos::getTipo(partEndID(izq));
+    string tipoIzq = TablaDeSimbolos::getTipo(izq);
     string tipoDer;
     string tercetoDer = der; //Se hace una copia para el caso de tener que sacarle los corchetes
     if (der[0] != '['){
@@ -386,12 +387,13 @@ void setearTipos(string tipo, string listVariable){
     }
 }
 
-bool ChequearDeclaracion(string var){
+bool ChequearDeclaracion(string var, string & nomEncontrada){
     string ambito=Ambito::get();
     bool final = false;
     bool encontrada = false;
     while(! final && ! encontrada){
         if (TablaDeSimbolos::tipoAsignado(var+ambito)){
+            nomEncontrada = var+ambito;
             encontrada = true;
         }else{
             if (ambito.empty()){

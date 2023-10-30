@@ -50,7 +50,7 @@ class TablaDeSimbolos {
 
 		static void del(string lexema);
 
-		static void changeKey(string lexema);
+		static string changeKey(string lexema);
 
 		// Setters
 

@@ -107,25 +107,26 @@ void TablaDeSimbolos::del(string lexema){
 }
 
 
-void TablaDeSimbolos::changeKey(string lexema){
+string TablaDeSimbolos::changeKey(string lexema){
 	TablaDeSimbolos::Datos data = TablaDeSimbolos::table.at(lexema);
 	TablaDeSimbolos::table.erase(lexema);
 	TablaDeSimbolos::table[lexema+Ambito::get()] = data;
-	//cout << imprimir();
+	return lexema+Ambito::get();
 }
 
 // Setters
 
 void TablaDeSimbolos::setUso(string lexema, string uso){
-	TablaDeSimbolos::table[lexema+Ambito::get()].uso = uso;
+	TablaDeSimbolos::table[lexema].uso = uso;
 }
 
 void TablaDeSimbolos::setParametroFormal(string lexema, string parametro){
-	TablaDeSimbolos::table[lexema+Ambito::get()].parametro_formal = parametro;
+	TablaDeSimbolos::table[lexema].parametro_formal = parametro;
 }
 
 void TablaDeSimbolos::setTipo(string lexema, string tipo){
-	TablaDeSimbolos::table[lexema+Ambito::get()].tipo = tipo;
+	cout << imprimir();
+	TablaDeSimbolos::table[lexema].tipo = tipo;
 }
 
 // Getters
@@ -137,11 +138,11 @@ bool TablaDeSimbolos::tipoAsignado(string lexemaMasAmbito){
 
 string TablaDeSimbolos::getParametroFormal(string lexema){
 	// Falta ver caso cuando no tiene parametro formal
-	return TablaDeSimbolos::table[lexema+Ambito::get()].parametro_formal;
+	return TablaDeSimbolos::table[lexema].parametro_formal;
 }
 
 string TablaDeSimbolos::getTipo(string lexema){
-	string dato =  TablaDeSimbolos::table[lexema+Ambito::get()].tipo;
+	string dato =  TablaDeSimbolos::table[lexema].tipo;
 	if (dato.empty()){
 		return " ";
 	}
