@@ -216,7 +216,9 @@ termino: termino'*'factor {
 
 factor: nesting          {$$ = $1;}
       | constant         {$$ = $1;}
-      | nesting LESSLESS {$$ = $1;}
+      | nesting LESSLESS {$$ = EstructuraTercetos::nroSigTerceto();
+                          EstructuraTercetos::addTerceto("-",$1,TablaDeSimbolos::getUno($1),TablaDeSimbolos::getTipo($1));
+                         }
       ;
 
 operatorsLogics: EQUAL {$$ = "==";}

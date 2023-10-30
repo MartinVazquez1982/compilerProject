@@ -356,7 +356,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 253 ".\Gramaticas\gramaticaLenguaje.y"
+#line 255 ".\Gramaticas\gramaticaLenguaje.y"
 
 void yymenssage(string menssage){
     cout  << endl  << BLUE << "Estructura detectada: " << menssage  << RESET << endl;
@@ -677,11 +677,11 @@ case 22:
 break;
 case 24:
 #line 66 ".\Gramaticas\gramaticaLenguaje.y"
-{string key = TablaDeSimbolos::changeKey(yyvsp[0]);TablaDeSimbolos::setUso(yyvsp[0], "Var");yyval=yyvsp[-2]+"&"+key;}
+{string key = TablaDeSimbolos::changeKey(yyvsp[0]);TablaDeSimbolos::setUso(key, "Var");yyval=yyvsp[-2]+"&"+key;}
 break;
 case 25:
 #line 67 ".\Gramaticas\gramaticaLenguaje.y"
-{string key = TablaDeSimbolos::changeKey(yyvsp[0]);TablaDeSimbolos::setUso(yyvsp[0], "Var");yyval=key;}
+{string key = TablaDeSimbolos::changeKey(yyvsp[0]);TablaDeSimbolos::setUso(key, "Var");yyval=key;}
 break;
 case 26:
 #line 70 ".\Gramaticas\gramaticaLenguaje.y"
@@ -897,77 +897,79 @@ case 68:
 break;
 case 69:
 #line 219 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = yyvsp[-1];}
+{yyval = EstructuraTercetos::nroSigTerceto();
+                          EstructuraTercetos::addTerceto("-",yyvsp[-1],TablaDeSimbolos::getUno(yyvsp[-1]),TablaDeSimbolos::getTipo(yyvsp[-1]));
+                         }
 break;
 case 70:
-#line 222 ".\Gramaticas\gramaticaLenguaje.y"
+#line 224 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "==";}
 break;
 case 71:
-#line 223 ".\Gramaticas\gramaticaLenguaje.y"
+#line 225 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "!!";}
 break;
 case 72:
-#line 224 ".\Gramaticas\gramaticaLenguaje.y"
+#line 226 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">=";}
 break;
 case 73:
-#line 225 ".\Gramaticas\gramaticaLenguaje.y"
+#line 227 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<=";}
 break;
 case 74:
-#line 226 ".\Gramaticas\gramaticaLenguaje.y"
+#line 228 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<";}
 break;
 case 75:
-#line 227 ".\Gramaticas\gramaticaLenguaje.y"
+#line 229 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">";}
 break;
 case 76:
-#line 230 ".\Gramaticas\gramaticaLenguaje.y"
+#line 232 ".\Gramaticas\gramaticaLenguaje.y"
 {chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 77:
-#line 231 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
-break;
-case 78:
-#line 232 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
-break;
-case 79:
 #line 233 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
 break;
-case 80:
+case 78:
 #line 234 ".\Gramaticas\gramaticaLenguaje.y"
+{TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
+break;
+case 79:
+#line 235 ".\Gramaticas\gramaticaLenguaje.y"
+{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
+break;
+case 80:
+#line 236 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 81:
-#line 235 ".\Gramaticas\gramaticaLenguaje.y"
+#line 237 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Una constante ULONG no puede ser negativa");}
 break;
 case 82:
-#line 238 ".\Gramaticas\gramaticaLenguaje.y"
+#line 240 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="SHORT";}
 break;
 case 83:
-#line 239 ".\Gramaticas\gramaticaLenguaje.y"
+#line 241 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="ULONG";}
 break;
 case 84:
-#line 240 ".\Gramaticas\gramaticaLenguaje.y"
+#line 242 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="FLOAT";}
 break;
 case 85:
-#line 243 ".\Gramaticas\gramaticaLenguaje.y"
+#line 245 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Print",yyvsp[0],"");}
 break;
 case 87:
-#line 249 ".\Gramaticas\gramaticaLenguaje.y"
+#line 251 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 971 "y.tab.c"
+#line 973 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
