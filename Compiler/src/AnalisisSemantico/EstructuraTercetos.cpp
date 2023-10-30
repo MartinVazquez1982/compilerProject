@@ -47,6 +47,10 @@ string EstructuraTercetos::nroSigTerceto(){
 	return "["+to_string(listaTercetos[ambito].size())+"]";
 }
 
+string EstructuraTercetos::nroActualTerceto(){
+	return "["+to_string(listaTercetos[ambito].size()-1)+"]";
+}
+
 void EstructuraTercetos::apilar(){
 	pilaTercetos.push(listaTercetos[ambito].size());
 }

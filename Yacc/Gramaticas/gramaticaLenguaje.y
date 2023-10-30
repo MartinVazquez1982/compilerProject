@@ -68,7 +68,17 @@ variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolo
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
-                                    if (ChequearDeclaracion(partEndID($1))) asignar($1,$3);
+                                    if (ChequearDeclaracion(partEndID($1))){
+                                        string tipo;
+                                        bool conversion = asignar($1,$3,tipo);
+                                        if (!conversion){
+                                            $$ = EstructuraTercetos::nroActualTerceto();
+                                            EstructuraTercetos::addTerceto("=",$1,$$);
+                                        }else{
+                                            $$ = EstructuraTercetos::nroActualTerceto();
+                                            EstructuraTercetos::addTerceto("=",$1,$$,tipo);
+                                        }
+                                    } 
                                     }
           ;
 
@@ -148,28 +158,65 @@ comparison: expression operatorsLogics expression {$$ = EstructuraTercetos::nroS
          ;
 
 expression: expression'+'termino {
-                                  string tipo = operar($1,$3,"+");
-                                  $$ = EstructuraTercetos::nroSigTerceto(); 
-                                  EstructuraTercetos::addTerceto("+",$1,$3,tipo);
+                                    string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
+                                    bool conversion = operar($1,$3,"+",op,tipo);
+                                    if (!conversion){
+                                        $$ = EstructuraTercetos::nroSigTerceto();
+                                        EstructuraTercetos::addTerceto("+",$1,$3,tipo);
+                                    } else if (op == "op1") {
+                                        $$ = EstructuraTercetos::nroActualTerceto();
+                                        EstructuraTercetos::addTerceto("+",$$,$3,tipo);
+                                    } else {
+                                        $$ = EstructuraTercetos::nroActualTerceto();
+                                        EstructuraTercetos::addTerceto("+",$1,$$,tipo);
+                                    }
                                   }
           | expression'-'termino {
-                                  string tipo = operar($1,$3,"-");
-                                  $$ = EstructuraTercetos::nroSigTerceto(); 
-                                  EstructuraTercetos::addTerceto("-",$1,$3,tipo);
+                                    string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
+                                    bool conversion = operar($1,$3,"-",op,tipo);
+                                    if (!conversion){
+                                        $$ = EstructuraTercetos::nroSigTerceto();
+                                        EstructuraTercetos::addTerceto("-",$1,$3,tipo);
+                                    } else if (op == "op1") {
+                                        $$ = EstructuraTercetos::nroActualTerceto();
+                                        EstructuraTercetos::addTerceto("-",$$,$3,tipo);
+                                    } else {
+                                        $$ = EstructuraTercetos::nroActualTerceto();
+                                        EstructuraTercetos::addTerceto("-",$1,$$,tipo);
+                                    }
                                   }
           | termino {$$ = $1;}
           | '(' expression ')' {yyerror("Expresion no puede ir entre parentesis");}
           ;
 
 termino: termino'*'factor {
-                           string tipo = operar($1,$3,"*");
-                           $$ = EstructuraTercetos::nroSigTerceto(); 
-                           EstructuraTercetos::addTerceto("*",$1,$3,tipo);
+                            string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
+                            bool conversion = operar($1,$3,"*",op,tipo);
+                            if (!conversion){
+                                $$ = EstructuraTercetos::nroSigTerceto();
+                                EstructuraTercetos::addTerceto("*",$1,$3,tipo);
+                            } else if (op == "op1") {
+                                $$ = EstructuraTercetos::nroActualTerceto();
+                                EstructuraTercetos::addTerceto("*",$$,$3,tipo);
+                            } else {
+                                $$ = EstructuraTercetos::nroActualTerceto();
+                                EstructuraTercetos::addTerceto("*",$1,$$,tipo);
+                            }
                            }
        | termino'/'factor { 
-                           string tipo = operar($1,$3,"/");
-                           $$ = EstructuraTercetos::nroSigTerceto(); 
-                           EstructuraTercetos::addTerceto("/",$1,$3,tipo);
+                            string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
+                            bool conversion = operar($1,$3,"/",op,tipo);
+                            if (!conversion){
+                                $$ = EstructuraTercetos::nroSigTerceto();
+                                EstructuraTercetos::addTerceto("/",$1,$3,tipo);
+                            } else if (op == "op1") {
+                                $$ = EstructuraTercetos::nroActualTerceto();
+                                EstructuraTercetos::addTerceto("/",$$,$3,tipo);
+                            } else {
+                                $$ = EstructuraTercetos::nroActualTerceto();
+                                EstructuraTercetos::addTerceto("/",$1,$$,tipo);
+                            }
+                            
                            }
        | factor {$$ = $1;}
        ;
@@ -269,21 +316,39 @@ string partEndID(string nesting){
     return nesting.substr(dot_index + 1);
 }
 
-void asignar(string izq, string der){
+bool asignar(string izq, string der, string & tipo){
     string tipoIzq = TablaDeSimbolos::getTipo(partEndID(izq));
-    string tipoDer = TablaDeSimbolos::getTipo(partEndID(der));
+    string tipoDer;
+    string tercetoDer = der; //Se hace una copia para el caso de tener que sacarle los corchetes
+    if (der[0] != '['){
+        tipoDer = TablaDeSimbolos::getTipo(partEndID(der));
+    } else {
+        der.erase(0, 1);
+	    der.erase(der.size() - 1, 1);
+        tipoDer = EstructuraTercetos::getTipo(der);
+    }
     string valido = Conversion::asignacion(tipoIzq,tipoDer);
+    tipo = tipoIzq;
     if (valido == "ERROR"){
         yyerror("No es posible asignarle un "+tipoDer+" a un "+tipoIzq);
     }else if (tipoIzq != tipoDer){
     		string conversion = string(1,tipoDer[0])+"to"+string(1,tipoIzq[0]);
-            EstructuraTercetos::addTerceto(conversion,der,"");
+            EstructuraTercetos::addTerceto(conversion,tercetoDer,"",tipoIzq);
+            return true;
     }
-    EstructuraTercetos::addTerceto("=",izq,der);
+    return false;
+}
+
+bool cambiarTipoOp1(string op1, string op2){
+    if ((op1 == "SHORT") || (op2 == "FLOAT")) {
+        return true;
+    } else if ((op2 == "SHORT") || (op1 == "FLOAT")) {
+        return false;
+    }
 }
 
 
-string operar(string op1, string op2, string operador){
+bool operar(string op1, string op2, string operador, string & opAConvertir, string & tipo){
     string tipoOp1, tipoOp2;
     int terceto;
     if (op1[0] != '['){
@@ -304,10 +369,21 @@ string operar(string op1, string op2, string operador){
     if (valido == "ERROR"){
         yyerror("No es posible operar entre un "+tipoOp1+" y un "+tipoOp2);
     }else if (tipoOp1 != tipoOp2){
-            string conversion = string(1,tipoOp1[0])+"to"+string(1,tipoOp2[0]);
-            EstructuraTercetos::addTerceto(conversion,op1,""); //FALTA LA LOGIA PARA VER SI VA OP1 O OP2
+            if (cambiarTipoOp1(tipoOp1, tipoOp2)){
+                opAConvertir = "op1";
+                tipo = tipoOp2;
+                string conversion = string(1,tipoOp1[0])+"to"+string(1,tipoOp2[0]);
+                EstructuraTercetos::addTerceto(conversion,op1,"",tipoOp2);
+            }else{
+                opAConvertir = "op2";
+                tipo = tipoOp1;
+                string conversion = string(1,tipoOp2[0])+"to"+string(1,tipoOp1[0]);
+                EstructuraTercetos::addTerceto(conversion,op2,"",tipoOp1);
+            }
+            return true;
     }
-    return valido;
+    tipo = tipoOp1;
+    return false;
 }
 
 void setearTipos(string tipo, string listVariable){

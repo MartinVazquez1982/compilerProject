@@ -6,15 +6,15 @@
 using namespace std;
 
 const unordered_map<string, tuple<string, string, string>> Conversion::asignaciones = {
-    {"SHORT", make_tuple("SHORT", "ERROR", "ERROR")},
-    {"ULONG", make_tuple("ERROR", "ULONG", "ERROR")},
-    {"FLOAT", make_tuple("FLOAT", "FLOAT", "FLOAT")}
+    {"SHORT", make_tuple("IGUAL", "ERROR", "ERROR")},
+    {"ULONG", make_tuple("ERROR", "IGUAL", "ERROR")},
+    {"FLOAT", make_tuple("FLOAT", "FLOAT", "IGUAL")}
 };
 
 const unordered_map<string, tuple<string, string, string>> Conversion::operaciones = {
-    {"SHORT", make_tuple("SHORT", "ERROR", "FLOAT")},
-    {"ULONG", make_tuple("ERROR", "ULONG", "FLOAT")},
-    {"FLOAT", make_tuple("FLOAT", "FLOAT", "FLOAT")}
+    {"SHORT", make_tuple("IGUAL", "ERROR", "FLOAT")},
+    {"ULONG", make_tuple("ERROR", "IGUAL", "FLOAT")},
+    {"FLOAT", make_tuple("FLOAT", "FLOAT", "IGUAL")}
 };
 
 string Conversion::asignacion(string tipoIzq, string tipoDer){

@@ -37,6 +37,8 @@ class EstructuraTercetos {
 
 		static string nroSigTerceto();
 
+		static string nroActualTerceto();
+
 		static void apilar();
 
 		static int desapilar();
