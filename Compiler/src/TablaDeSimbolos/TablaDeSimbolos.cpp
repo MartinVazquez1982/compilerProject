@@ -130,6 +130,11 @@ void TablaDeSimbolos::setTipo(string lexema, string tipo){
 
 // Getters
 
+bool TablaDeSimbolos::tipoAsignado(string lexemaMasAmbito){
+	auto it = TablaDeSimbolos::table.find(lexemaMasAmbito);
+	return !it->second.tipo.empty();
+}
+
 string TablaDeSimbolos::getParametroFormal(string lexema){
 	// Falta ver caso cuando no tiene parametro formal
 	return TablaDeSimbolos::table[lexema+Ambito::get()].parametro_formal;

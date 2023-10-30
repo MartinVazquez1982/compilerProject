@@ -68,7 +68,7 @@ variableList: variableList ';' ID {TablaDeSimbolos::changeKey($3);TablaDeSimbolo
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
-                                    asignar($1,$3);
+                                    if (ChequearDeclaracion(partEndID($1))) asignar($1,$3);
                                     }
           ;
 
@@ -97,7 +97,7 @@ functionBody: sentenceList return
             | return {yywarning("Funcion vacia");} 
             ;
 
-formalParameter: type ID {$$ = $2;}
+formalParameter: type ID {$$ = $2; TablaDeSimbolos::setUso($2, "Parametro Formal"); setearTipos($1,$2);}
                ;
 
 functionCall: nesting'('')' {EstructuraTercetos::addTerceto("Call",partEndID($1),"");}
@@ -147,14 +147,30 @@ heredity: ID','
 comparison: expression operatorsLogics expression {$$ = EstructuraTercetos::nroSigTerceto();EstructuraTercetos::addTerceto($2,$1,$3);}
          ;
 
-expression: expression'+'termino {$$ = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("+",$1,$3);}
-          | expression'-'termino {$$ = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("-",$1,$3);}
+expression: expression'+'termino {
+                                  string tipo = operar($1,$3,"+");
+                                  $$ = EstructuraTercetos::nroSigTerceto(); 
+                                  EstructuraTercetos::addTerceto("+",$1,$3,tipo);
+                                  }
+          | expression'-'termino {
+                                  string tipo = operar($1,$3,"-");
+                                  $$ = EstructuraTercetos::nroSigTerceto(); 
+                                  EstructuraTercetos::addTerceto("-",$1,$3,tipo);
+                                  }
           | termino {$$ = $1;}
           | '(' expression ')' {yyerror("Expresion no puede ir entre parentesis");}
           ;
 
-termino: termino'*'factor {$$ = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("*",$1,$3);}
-       | termino'/'factor {$$ = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("/",$1,$3);}
+termino: termino'*'factor {
+                           string tipo = operar($1,$3,"*");
+                           $$ = EstructuraTercetos::nroSigTerceto(); 
+                           EstructuraTercetos::addTerceto("*",$1,$3,tipo);
+                           }
+       | termino'/'factor { 
+                           string tipo = operar($1,$3,"/");
+                           $$ = EstructuraTercetos::nroSigTerceto(); 
+                           EstructuraTercetos::addTerceto("/",$1,$3,tipo);
+                           }
        | factor {$$ = $1;}
        ;
 
@@ -254,15 +270,44 @@ string partEndID(string nesting){
 }
 
 void asignar(string izq, string der){
-    string tipoIzq = TablaDeSimbolos::getTipo(izq);
-    string tipoDer = TablaDeSimbolos::getTipo(der);
+    string tipoIzq = TablaDeSimbolos::getTipo(partEndID(izq));
+    string tipoDer = TablaDeSimbolos::getTipo(partEndID(der));
     string valido = Conversion::asignacion(tipoIzq,tipoDer);
     if (valido == "ERROR"){
-        yyerror("No es posible asginarle un "+tipoDer+" a un "+tipoIzq);
+        yyerror("No es posible asignarle un "+tipoDer+" a un "+tipoIzq);
     }else if (tipoIzq != tipoDer){
-            EstructuraTercetos::addTerceto(tipoDer+"to"+tipoIzq,der,"");
+    		string conversion = string(1,tipoDer[0])+"to"+string(1,tipoIzq[0]);
+            EstructuraTercetos::addTerceto(conversion,der,"");
     }
     EstructuraTercetos::addTerceto("=",izq,der);
+}
+
+
+string operar(string op1, string op2, string operador){
+    string tipoOp1, tipoOp2;
+    int terceto;
+    if (op1[0] != '['){
+        tipoOp1 = TablaDeSimbolos::getTipo(partEndID(op1));
+    } else {
+        op1.erase(0, 1);
+	    op1.erase(op1.size() - 1, 1);
+        tipoOp1 = EstructuraTercetos::getTipo(op1);
+    }
+    if (op2[0] != '['){
+        tipoOp2 = TablaDeSimbolos::getTipo(partEndID(op2));
+    } else {
+        op2.erase(0, 1);
+	    op2.erase(op2.size() - 1, 1);
+        tipoOp2 = EstructuraTercetos::getTipo(op2);
+    }
+    string valido = Conversion::operacion(tipoOp1,tipoOp2);
+    if (valido == "ERROR"){
+        yyerror("No es posible operar entre un "+tipoOp1+" y un "+tipoOp2);
+    }else if (tipoOp1 != tipoOp2){
+            string conversion = string(1,tipoOp1[0])+"to"+string(1,tipoOp2[0]);
+            EstructuraTercetos::addTerceto(conversion,op1,""); //FALTA LA LOGIA PARA VER SI VA OP1 O OP2
+    }
+    return valido;
 }
 
 void setearTipos(string tipo, string listVariable){
@@ -271,4 +316,25 @@ void setearTipos(string tipo, string listVariable){
     while (getline(variableStream, var, '&')) {
         TablaDeSimbolos::setTipo(var, tipo);
     }
+}
+
+bool ChequearDeclaracion(string var){
+    string ambito=Ambito::get();
+    bool final = false;
+    bool encontrada = false;
+    while(! final && ! encontrada){
+        if (TablaDeSimbolos::tipoAsignado(var+ambito)){
+            encontrada = true;
+        }else{
+            if (ambito.empty()){
+                final = true;
+                yyerror("Variable " + var + " NO declarada");
+            }
+            size_t pos = ambito.find_last_of(":");
+            if (pos != string::npos) {
+                ambito = ambito.substr(0, pos);
+            }
+        }
+    }
+    return encontrada;
 }

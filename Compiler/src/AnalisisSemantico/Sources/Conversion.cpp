@@ -18,12 +18,16 @@ const unordered_map<string, tuple<string, string, string>> Conversion::operacion
 };
 
 string Conversion::asignacion(string tipoIzq, string tipoDer){
-	if (tipoDer == "SHORT" ){
-		return get<0>(Conversion::asignaciones.at(tipoIzq));
-	}else if (tipoDer == "ULONG" ){
-		return get<1>(Conversion::asignaciones.at(tipoIzq));
-	}else{
-		return get<2>(Conversion::asignaciones.at(tipoIzq));
+	try {
+		if (tipoDer == "SHORT" ){
+			return get<0>(Conversion::asignaciones.at(tipoIzq));
+		}else if (tipoDer == "ULONG" ){
+			return get<1>(Conversion::asignaciones.at(tipoIzq));
+		}else{
+			return get<2>(Conversion::asignaciones.at(tipoIzq));
+		}
+	} catch (out_of_range & tipoNoEncontrado){
+		return "ERROR";
 	}
 }
 
