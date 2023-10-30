@@ -356,7 +356,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 197 ".\Gramaticas\gramaticaLenguaje.y"
+#line 213 ".\Gramaticas\gramaticaLenguaje.y"
 
 void yymenssage(string menssage){
     cout  << endl  << BLUE << "Estructura detectada: " << menssage  << RESET << endl;
@@ -417,15 +417,44 @@ string partEndID(string nesting){
 }
 
 void asignar(string izq, string der){
-    string tipoIzq = TablaDeSimbolos::getTipo(izq);
-    string tipoDer = TablaDeSimbolos::getTipo(der);
+    string tipoIzq = TablaDeSimbolos::getTipo(partEndID(izq));
+    string tipoDer = TablaDeSimbolos::getTipo(partEndID(der));
     string valido = Conversion::asignacion(tipoIzq,tipoDer);
     if (valido == "ERROR"){
-        yyerror("No es posible asginarle un "+tipoDer+" a un "+tipoIzq);
+        yyerror("No es posible asignarle un "+tipoDer+" a un "+tipoIzq);
     }else if (tipoIzq != tipoDer){
-            EstructuraTercetos::addTerceto(tipoDer+"to"+tipoIzq,der,"");
+    		string conversion = string(1,tipoDer[0])+"to"+string(1,tipoIzq[0]);
+            EstructuraTercetos::addTerceto(conversion,der,"");
     }
     EstructuraTercetos::addTerceto("=",izq,der);
+}
+
+
+string operar(string op1, string op2, string operador){
+    string tipoOp1, tipoOp2;
+    int terceto;
+    if (op1[0] != '['){
+        tipoOp1 = TablaDeSimbolos::getTipo(partEndID(op1));
+    } else {
+        op1.erase(0, 1);
+	    op1.erase(op1.size() - 1, 1);
+        tipoOp1 = EstructuraTercetos::getTipo(op1);
+    }
+    if (op2[0] != '['){
+        tipoOp2 = TablaDeSimbolos::getTipo(partEndID(op2));
+    } else {
+        op2.erase(0, 1);
+	    op2.erase(op2.size() - 1, 1);
+        tipoOp2 = EstructuraTercetos::getTipo(op2);
+    }
+    string valido = Conversion::operacion(tipoOp1,tipoOp2);
+    if (valido == "ERROR"){
+        yyerror("No es posible operar entre un "+tipoOp1+" y un "+tipoOp2);
+    }else if (tipoOp1 != tipoOp2){
+            string conversion = string(1,tipoOp1[0])+"to"+string(1,tipoOp2[0]);
+            EstructuraTercetos::addTerceto(conversion,op1,"");
+    }
+    return valido;
 }
 
 void setearTipos(string tipo, string listVariable){
@@ -435,7 +464,7 @@ void setearTipos(string tipo, string listVariable){
         TablaDeSimbolos::setTipo(var, tipo);
     }
 }
-#line 439 "y.tab.c"
+#line 468 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -725,105 +754,121 @@ case 59:
 break;
 case 60:
 #line 150 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("+",yyvsp[-2],yyvsp[0]);}
+{
+                                  string tipo = operar(yyvsp[-2],yyvsp[0],"+");
+                                  yyval = EstructuraTercetos::nroSigTerceto(); 
+                                  EstructuraTercetos::addTerceto("+",yyvsp[-2],yyvsp[0],tipo);
+                                  }
 break;
 case 61:
-#line 151 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("-",yyvsp[-2],yyvsp[0]);}
+#line 155 ".\Gramaticas\gramaticaLenguaje.y"
+{
+                                  string tipo = operar(yyvsp[-2],yyvsp[0],"-");
+                                  yyval = EstructuraTercetos::nroSigTerceto(); 
+                                  EstructuraTercetos::addTerceto("-",yyvsp[-2],yyvsp[0],tipo);
+                                  }
 break;
 case 62:
-#line 152 ".\Gramaticas\gramaticaLenguaje.y"
+#line 160 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 63:
-#line 153 ".\Gramaticas\gramaticaLenguaje.y"
+#line 161 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Expresion no puede ir entre parentesis");}
 break;
 case 64:
-#line 156 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("*",yyvsp[-2],yyvsp[0]);}
+#line 164 ".\Gramaticas\gramaticaLenguaje.y"
+{
+                           string tipo = operar(yyvsp[-2],yyvsp[0],"*");
+                           yyval = EstructuraTercetos::nroSigTerceto(); 
+                           EstructuraTercetos::addTerceto("*",yyvsp[-2],yyvsp[0],tipo);
+                           }
 break;
 case 65:
-#line 157 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = EstructuraTercetos::nroSigTerceto(); EstructuraTercetos::addTerceto("/",yyvsp[-2],yyvsp[0]);}
+#line 169 ".\Gramaticas\gramaticaLenguaje.y"
+{ 
+                           string tipo = operar(yyvsp[-2],yyvsp[0],"/");
+                           yyval = EstructuraTercetos::nroSigTerceto(); 
+                           EstructuraTercetos::addTerceto("/",yyvsp[-2],yyvsp[0],tipo);
+                           }
 break;
 case 66:
-#line 158 ".\Gramaticas\gramaticaLenguaje.y"
+#line 174 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 67:
-#line 161 ".\Gramaticas\gramaticaLenguaje.y"
+#line 177 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 68:
-#line 162 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = yyvsp[0];}
-break;
-case 69:
-#line 163 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = yyvsp[-1];}
-break;
-case 70:
-#line 166 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = "==";}
-break;
-case 71:
-#line 167 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = "!!";}
-break;
-case 72:
-#line 168 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = ">=";}
-break;
-case 73:
-#line 169 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = "<=";}
-break;
-case 74:
-#line 170 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = "<";}
-break;
-case 75:
-#line 171 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = ">";}
-break;
-case 76:
-#line 174 ".\Gramaticas\gramaticaLenguaje.y"
-{chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
-break;
-case 77:
-#line 175 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
-break;
-case 78:
-#line 176 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
-break;
-case 79:
-#line 177 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
-break;
-case 80:
 #line 178 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
-case 81:
+case 69:
 #line 179 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = yyvsp[-1];}
+break;
+case 70:
+#line 182 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = "==";}
+break;
+case 71:
+#line 183 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = "!!";}
+break;
+case 72:
+#line 184 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = ">=";}
+break;
+case 73:
+#line 185 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = "<=";}
+break;
+case 74:
+#line 186 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = "<";}
+break;
+case 75:
+#line 187 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = ">";}
+break;
+case 76:
+#line 190 ".\Gramaticas\gramaticaLenguaje.y"
+{chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
+break;
+case 77:
+#line 191 ".\Gramaticas\gramaticaLenguaje.y"
+{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
+break;
+case 78:
+#line 192 ".\Gramaticas\gramaticaLenguaje.y"
+{TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
+break;
+case 79:
+#line 193 ".\Gramaticas\gramaticaLenguaje.y"
+{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
+break;
+case 80:
+#line 194 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = yyvsp[0];}
+break;
+case 81:
+#line 195 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Una constante ULONG no puede ser negativa");}
 break;
 case 82:
-#line 182 ".\Gramaticas\gramaticaLenguaje.y"
+#line 198 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="SHORT";}
 break;
 case 83:
-#line 183 ".\Gramaticas\gramaticaLenguaje.y"
+#line 199 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="ULONG";}
 break;
 case 84:
-#line 184 ".\Gramaticas\gramaticaLenguaje.y"
+#line 200 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="FLOAT";}
 break;
-#line 827 "y.tab.c"
+#line 872 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

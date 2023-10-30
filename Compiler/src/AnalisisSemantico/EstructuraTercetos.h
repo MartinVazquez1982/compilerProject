@@ -12,11 +12,11 @@ class EstructuraTercetos {
 
 	private:
 
-
 		struct terceto{
 			string operador;
 			string operando1;
 			string operando2;
+			string tipo="";
 		};
 
 		static unordered_map<string,vector<terceto>> listaTercetos;
@@ -28,6 +28,8 @@ class EstructuraTercetos {
 	public:
 
 		static void addTerceto(string operador,string operando1,string operando2);
+
+		static void addTerceto(string operador,string operando1,string operando2, string tipoTerceto);
 
 		static void addLabel();
 
@@ -44,6 +46,8 @@ class EstructuraTercetos {
 		static void mostrarTercetos();
 
 		static void setAmbito(string ambito);
+
+		static string getTipo(string terceto);
 };
 
 #endif /* ANALISISSEMANTICO_ESTRUCTURATERCETOS_H_ */

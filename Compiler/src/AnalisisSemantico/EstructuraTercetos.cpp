@@ -16,6 +16,16 @@ void EstructuraTercetos::addTerceto(string operador, string operando1, string op
 	nuevoTerceto.operador = operador;
 	nuevoTerceto.operando1 = operando1;
 	nuevoTerceto.operando2 = operando2;
+	nuevoTerceto.tipo ="";
+	listaTercetos[ambito].push_back(nuevoTerceto);
+}
+
+void EstructuraTercetos::addTerceto(string operador, string operando1, string operando2, string tipoTerceto){
+	EstructuraTercetos::terceto nuevoTerceto;
+	nuevoTerceto.operador = operador;
+	nuevoTerceto.operando1 = operando1;
+	nuevoTerceto.operando2 = operando2;
+	nuevoTerceto.tipo = tipoTerceto;
 	listaTercetos[ambito].push_back(nuevoTerceto);
 }
 
@@ -62,7 +72,7 @@ void EstructuraTercetos::mostrarTercetos(){
 	for (const auto& entry : listaTercetos) {
 		cout << "	" << entry.first << endl << endl;
 		for (int i=0; i < entry.second.size(); i++) {
-			cout << i << "	( " << entry.second[i].operador << " , " << entry.second[i].operando1 << " , " << entry.second[i].operando2 << " )"  << endl;
+			cout << i << "	( " << entry.second[i].operador << " , " << entry.second[i].operando1 << " , " << entry.second[i].operando2 << " )   " << entry.second[i].tipo  << endl;
 		}
 		cout << endl;
 	}
@@ -80,3 +90,9 @@ void EstructuraTercetos::setAmbito(string ambito){
 		}
 	}
 }
+
+string EstructuraTercetos::getTipo(string terceto){
+	EstructuraTercetos::terceto info = listaTercetos[ambito][stoi(terceto)];
+	return info.tipo;
+}
+

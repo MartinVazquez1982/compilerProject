@@ -12,7 +12,7 @@ const unordered_map<string, tuple<string, string, string>> Conversion::asignacio
 };
 
 const unordered_map<string, tuple<string, string, string>> Conversion::operaciones = {
-    {"SHORT", make_tuple("SHORT", "ERROR", "SHORT")},
+    {"SHORT", make_tuple("SHORT", "ERROR", "FLOAT")},
     {"ULONG", make_tuple("ERROR", "ULONG", "FLOAT")},
     {"FLOAT", make_tuple("FLOAT", "FLOAT", "FLOAT")}
 };
