@@ -160,29 +160,25 @@ comparison: expression operatorsLogics expression {$$ = EstructuraTercetos::nroS
 expression: expression'+'termino {
                                     string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
                                     bool conversion = operar($1,$3,"+",op,tipo);
+                                    $$ = EstructuraTercetos::nroSigTerceto();
                                     if (!conversion){
-                                        $$ = EstructuraTercetos::nroSigTerceto();
                                         EstructuraTercetos::addTerceto("+",$1,$3,tipo);
                                     } else if (op == "op1") {
-                                        $$ = EstructuraTercetos::nroActualTerceto();
-                                        EstructuraTercetos::addTerceto("+",$$,$3,tipo);
+                                        EstructuraTercetos::addTerceto("+",EstructuraTercetos::nroActualTerceto(),$3,tipo);
                                     } else {
-                                        $$ = EstructuraTercetos::nroActualTerceto();
-                                        EstructuraTercetos::addTerceto("+",$1,$$,tipo);
+                                        EstructuraTercetos::addTerceto("+",$1,EstructuraTercetos::nroActualTerceto(),tipo);
                                     }
                                   }
           | expression'-'termino {
                                     string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
                                     bool conversion = operar($1,$3,"-",op,tipo);
+                                    $$ = EstructuraTercetos::nroSigTerceto();
                                     if (!conversion){
-                                        $$ = EstructuraTercetos::nroSigTerceto();
                                         EstructuraTercetos::addTerceto("-",$1,$3,tipo);
                                     } else if (op == "op1") {
-                                        $$ = EstructuraTercetos::nroActualTerceto();
-                                        EstructuraTercetos::addTerceto("-",$$,$3,tipo);
+                                        EstructuraTercetos::addTerceto("-",EstructuraTercetos::nroActualTerceto(),$3,tipo);
                                     } else {
-                                        $$ = EstructuraTercetos::nroActualTerceto();
-                                        EstructuraTercetos::addTerceto("-",$1,$$,tipo);
+                                        EstructuraTercetos::addTerceto("-",$1,EstructuraTercetos::nroActualTerceto(),tipo);
                                     }
                                   }
           | termino {$$ = $1;}
@@ -192,29 +188,25 @@ expression: expression'+'termino {
 termino: termino'*'factor {
                             string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
                             bool conversion = operar($1,$3,"*",op,tipo);
+                            $$ = EstructuraTercetos::nroSigTerceto();
                             if (!conversion){
-                                $$ = EstructuraTercetos::nroSigTerceto();
                                 EstructuraTercetos::addTerceto("*",$1,$3,tipo);
                             } else if (op == "op1") {
-                                $$ = EstructuraTercetos::nroActualTerceto();
-                                EstructuraTercetos::addTerceto("*",$$,$3,tipo);
+                                EstructuraTercetos::addTerceto("*",EstructuraTercetos::nroActualTerceto(),$3,tipo);
                             } else {
-                                $$ = EstructuraTercetos::nroActualTerceto();
-                                EstructuraTercetos::addTerceto("*",$1,$$,tipo);
+                                EstructuraTercetos::addTerceto("*",$1,EstructuraTercetos::nroActualTerceto(),tipo);
                             }
                            }
        | termino'/'factor { 
                             string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
                             bool conversion = operar($1,$3,"/",op,tipo);
+                            $$ = EstructuraTercetos::nroSigTerceto();
                             if (!conversion){
-                                $$ = EstructuraTercetos::nroSigTerceto();
                                 EstructuraTercetos::addTerceto("/",$1,$3,tipo);
                             } else if (op == "op1") {
-                                $$ = EstructuraTercetos::nroActualTerceto();
-                                EstructuraTercetos::addTerceto("/",$$,$3,tipo);
+                                EstructuraTercetos::addTerceto("/",EstructuraTercetos::nroActualTerceto(),$3,tipo);
                             } else {
-                                $$ = EstructuraTercetos::nroActualTerceto();
-                                EstructuraTercetos::addTerceto("/",$1,$$,tipo);
+                                EstructuraTercetos::addTerceto("/",$1,EstructuraTercetos::nroActualTerceto(),tipo);
                             }
                             
                            }
@@ -340,9 +332,9 @@ bool asignar(string izq, string der, string & tipo){
 }
 
 bool cambiarTipoOp1(string op1, string op2){
-    if ((op1 == "SHORT") || (op2 == "FLOAT")) {
+    if ((op1 == "SHORT") || (op1 == "ULONG")) {
         return true;
-    } else if ((op2 == "SHORT") || (op1 == "FLOAT")) {
+    } else {
         return false;
     }
 }
@@ -381,7 +373,7 @@ bool operar(string op1, string op2, string operador, string & opAConvertir, stri
                 EstructuraTercetos::addTerceto(conversion,op2,"",tipoOp1);
             }
             return true;
-    }
+    } 
     tipo = tipoOp1;
     return false;
 }
