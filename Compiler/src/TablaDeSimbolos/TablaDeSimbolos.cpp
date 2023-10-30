@@ -147,3 +147,16 @@ string TablaDeSimbolos::getTipo(string lexema){
 	}
 	return dato;
 }
+
+string TablaDeSimbolos::getUno(string lexema){
+	string dato =  TablaDeSimbolos::table[lexema+Ambito::get()].tipo;
+	if (dato == "SHORT"){
+		return "1_s";
+	}else if (dato == "ULONG"){
+		return "1_ul";
+	}else if (dato == "FLOAT"){
+		return "1.0";
+	}
+	return "otro tipo";
+}
+
