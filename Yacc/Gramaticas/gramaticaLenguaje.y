@@ -200,13 +200,13 @@ type: SHORT {$$="SHORT";}
     | FLOAT {$$="FLOAT";}
     ;
 
-print: PRINT cadena
+print: PRINT cadena {EstructuraTercetos::addTerceto("Print",$2,"");}
     ;
 
 cadena: CTESTRING
     ;
 
-return: RETURN ','
+return: RETURN ',' {EstructuraTercetos::addTerceto("Return","","");}
       ;
 
 %%
