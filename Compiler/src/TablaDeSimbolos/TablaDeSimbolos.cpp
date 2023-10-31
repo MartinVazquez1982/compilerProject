@@ -38,7 +38,6 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo){
 		info.tipo = tipo;
 		info.valor = valor;
 		info.consultado = false;
-		info.tipo = "";
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -132,12 +131,12 @@ void TablaDeSimbolos::setTipo(string lexema, string tipo){
 
 // Getters
 
-bool TablaDeSimbolos::tipoAsignado(string lexema){
+string TablaDeSimbolos::usoAsignado(string lexema){
 	auto it = TablaDeSimbolos::table.find(lexema);
 	if (it == TablaDeSimbolos::table.end()){
-		return false;
+		return "&";
 	}
-	return !it->second.tipo.empty();
+	return it->second.uso;
 }
 
 string TablaDeSimbolos::getParametroFormal(string lexema){

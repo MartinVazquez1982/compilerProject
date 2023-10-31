@@ -63,13 +63,13 @@ variableDeclaration: type variableList {setearTipos($1,$2);}
 objectDeclaration: ID variableList
                  ;
 
-variableList: variableList ';' ID { if (chequearVarReDec($3)) {
+variableList: variableList ';' ID { if (chequearReDec($3, "Variable")) {
                                         string key = TablaDeSimbolos::changeKey($3);
                                         TablaDeSimbolos::setUso(key, "Var");
                                         $$=$1+"&"+key;
                                     }
                                   } 
-            | ID {if (chequearVarReDec($1)){
+            | ID {if (chequearReDec($1, "Variable")){
                     string key = TablaDeSimbolos::changeKey($1);
                     TablaDeSimbolos::setUso(key, "Var");
                     $$=key;
@@ -103,17 +103,21 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
 function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();EstructuraTercetos::setAmbito(Ambito::get());}
         ;
 
-functionHeader: VOID ID'('formalParameter')'{   string key = TablaDeSimbolos::changeKey($2);
-                                                TablaDeSimbolos::setUso(key, "Funcion");
-                                                Ambito::add($2);
-                                                string keyFormal = TablaDeSimbolos::changeKey($4);
-                                                TablaDeSimbolos::setParametroFormal(key,keyFormal);
-                                                EstructuraTercetos::setAmbito(Ambito::get());
+functionHeader: VOID ID'('formalParameter')'{   if (chequearReDec($2, "Funcion")) {
+                                                    string key = TablaDeSimbolos::changeKey($2);
+                                                    TablaDeSimbolos::setUso(key, "Funcion");
+                                                    Ambito::add($2);
+                                                    string keyFormal = TablaDeSimbolos::changeKey($4);
+                                                    TablaDeSimbolos::setParametroFormal(key,keyFormal);
+                                                    EstructuraTercetos::setAmbito(Ambito::get());
+                                                }
                                             }
-              | VOID ID'('')'   {   string key = TablaDeSimbolos::changeKey($2);
-                                    TablaDeSimbolos::setUso(key, "Funcion");
-                                    Ambito::add($2);
-                                    EstructuraTercetos::setAmbito(Ambito::get());
+              | VOID ID'('')'   {   if (chequearReDec($2, "Funcion")) {
+                                        string key = TablaDeSimbolos::changeKey($2);
+                                        TablaDeSimbolos::setUso(key, "Funcion");
+                                        Ambito::add($2);
+                                        EstructuraTercetos::setAmbito(Ambito::get());
+                                    }
                                 }
               ;
 
@@ -161,8 +165,14 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
          | comparison     {yyerror("Faltan  parentesis en la condicion");}
          ;
 
-class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2,"Clase");}
-    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");TablaDeSimbolos::changeKey($2);TablaDeSimbolos::setUso($2,"Clase");}
+class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");
+                                    if (chequearReDec($2, "Clase")){
+                                        TablaDeSimbolos::setUso(TablaDeSimbolos::changeKey($2),"Clase");
+                                    }}
+    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");
+                                            if (chequearReDec($2, "Clase")){
+                                                TablaDeSimbolos::setUso(TablaDeSimbolos::changeKey($2),"Clase");
+                                            }}
     ;
 
 heredity: ID','
@@ -430,7 +440,7 @@ bool ChequearDeclaracion(string var, string & nomEncontrada){
     bool final = false;
     bool encontrada = false;
     while(! final && ! encontrada){
-        if (TablaDeSimbolos::tipoAsignado(var+ambito)){
+        if (TablaDeSimbolos::usoAsignado(var+ambito) == "Var"){
             nomEncontrada = var+ambito;
             encontrada = true;
         }else{
@@ -447,11 +457,12 @@ bool ChequearDeclaracion(string var, string & nomEncontrada){
     return encontrada;
 }
 
-bool chequearVarReDec(string var){
+bool chequearReDec(string decl, string usoOriginal){
     string ambito=Ambito::get();
-    if (TablaDeSimbolos::tipoAsignado(var+ambito)){
-        yyerror("Variable " + var + " Re-declarada");
-        return false;
+    string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
+    if (uso == "Var" || uso == "Funcion" || uso == "Clase"){
+    	yyerror(uso + " " + decl + " se encuentra Re-declarada como " + usoOriginal);
+    	return false;
     }
     return true;
 }

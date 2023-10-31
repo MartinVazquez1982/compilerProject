@@ -22,9 +22,9 @@ class TablaDeSimbolos {
 			string tipo;
 			string valor;
 			bool consultado;
-
 			string uso;
 
+			//Funciones
 			string parametro_formal;
 		};
 
@@ -62,7 +62,7 @@ class TablaDeSimbolos {
 
 		// Getters
 
-		static bool tipoAsignado(string lexemaMasAmbito);
+		static string usoAsignado(string lexema);
 
 		static string getParametroFormal(string lexema);
 
