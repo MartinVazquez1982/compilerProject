@@ -61,7 +61,10 @@ declaration: variableDeclaration
 variableDeclaration: type variableList {setearTipos($1,$2);}
                    ;
 
-objectDeclaration: ID variableList
+objectDeclaration: ID variableList { 
+                                    string name;
+                                    ChequearDeclaracion(partEndID($1), name, "Clase");
+                                   }
                  ;
 
 variableList: variableList ';' ID { if (chequearReDec($3, "Variable")) {
@@ -141,8 +144,19 @@ functionBody: sentenceList return
 formalParameter: type ID {$$ = $2; TablaDeSimbolos::setUso($2, "Parametro Formal"); setearTipos($1,$2);}
                ;
 
-functionCall: nesting'('')' {EstructuraTercetos::addTerceto("Call",partEndID($1),"");}
-            | nesting'('realParameter')' {EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(partEndID($1)),$3);EstructuraTercetos::addTerceto("Call",partEndID($1),"");}
+functionCall: nesting'('')' {
+                            string name;
+                            if (ChequearDeclaracion(partEndID($1),name,"Funcion")){
+                                EstructuraTercetos::addTerceto("Call",partEndID($1),"");
+                            }
+                            }
+            | nesting'('realParameter')' {
+                                            string name;
+                                            if (ChequearDeclaracion(partEndID($1),name,"Funcion")){
+                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(partEndID($1)),$3);
+                                                EstructuraTercetos::addTerceto("Call",partEndID($1),"");
+                                            }
+                                         }
             ;
 
 realParameter: expression
