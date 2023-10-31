@@ -32,12 +32,16 @@ string Conversion::asignacion(string tipoIzq, string tipoDer){
 }
 
 string Conversion::operacion(string tipoIzq, string tipoDer){
+	try {
 	if (tipoDer == "SHORT" ){
 		return get<0>(Conversion::operaciones.at(tipoIzq));
 	}else if (tipoDer == "ULONG" ){
 		return get<1>(Conversion::operaciones.at(tipoIzq));
 	}else{
 		return get<2>(Conversion::operaciones.at(tipoIzq));
+	}
+	} catch (out_of_range & err){
+		return "ERROR";
 	}
 }
 

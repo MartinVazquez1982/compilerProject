@@ -10,6 +10,7 @@
 #include "./AnalisisSintactico/Parse.h"
 #include "./ContErrWar/ContErrWar.h"
 #include "./AnalisisSemantico/EstructuraTercetos.h"
+#include "./TablaDeSimbolos/TablaDeSimbolos.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -44,6 +45,7 @@ int main(int argc, char *argv[]) {
 	/*if(ContErrWar::generarCodigo()){
 		EstructuraTercetos::mostrarTercetos();
 	}*/
+	cout << TablaDeSimbolos::imprimir();
 	EstructuraTercetos::mostrarTercetos();
 	return 0;
 }

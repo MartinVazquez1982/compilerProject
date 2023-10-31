@@ -5,7 +5,7 @@ using namespace std;
 #define MAGENTA "\x1B[35m"
 #define RESET "\x1B[37m"
 
-unordered_map<string,vector<EstructuraTercetos::terceto>> EstructuraTercetos::listaTercetos = {{"main", vector<EstructuraTercetos::terceto>()}};
+unordered_map<string,vector<EstructuraTercetos::terceto>> EstructuraTercetos::listaTercetos;
 
 stack<int> EstructuraTercetos::pilaTercetos;
 

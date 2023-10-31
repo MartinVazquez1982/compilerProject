@@ -63,20 +63,33 @@ variableDeclaration: type variableList {setearTipos($1,$2);}
 objectDeclaration: ID variableList
                  ;
 
-variableList: variableList ';' ID {string key = TablaDeSimbolos::changeKey($3);TablaDeSimbolos::setUso(key, "Var");$$=$1+"&"+key;} 
-            | ID {string key = TablaDeSimbolos::changeKey($1);TablaDeSimbolos::setUso(key, "Var");$$=key;}
+variableList: variableList ';' ID { if (chequearVarReDec($3)) {
+                                        string key = TablaDeSimbolos::changeKey($3);
+                                        TablaDeSimbolos::setUso(key, "Var");
+                                        $$=$1+"&"+key;
+                                    }
+                                  } 
+            | ID {if (chequearVarReDec($1)){
+                    string key = TablaDeSimbolos::changeKey($1);
+                    TablaDeSimbolos::setUso(key, "Var");
+                    $$=key;
+                    }
+                  }
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
                                     string nomEncontrada;
+                                    $$ = EstructuraTercetos::nroActualTerceto();
                                     if (ChequearDeclaracion(partEndID($1), nomEncontrada)){
                                         string tipo;
                                         bool conversion = asignar(nomEncontrada,$3,tipo);
                                         if (!conversion){
-                                            $$ = EstructuraTercetos::nroActualTerceto();
-                                            EstructuraTercetos::addTerceto("=",nomEncontrada,$$);
+                                            if ($3[0] == '['){
+                                                EstructuraTercetos::addTerceto("=",nomEncontrada,$$);
+                                            } else {
+                                                EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
+                                            }
                                         }else{
-                                            $$ = EstructuraTercetos::nroActualTerceto();
                                             EstructuraTercetos::addTerceto("=",nomEncontrada,$$,tipo);
                                         }
                                     } 
@@ -90,15 +103,15 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
 function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();EstructuraTercetos::setAmbito(Ambito::get());}
         ;
 
-functionHeader: VOID ID'('formalParameter')'{   TablaDeSimbolos::changeKey($2);
-                                                TablaDeSimbolos::setUso($2, "Funcion");
-                                                TablaDeSimbolos::setParametroFormal($2,$4);
+functionHeader: VOID ID'('formalParameter')'{   string key = TablaDeSimbolos::changeKey($2);
+                                                TablaDeSimbolos::setUso(key, "Funcion");
                                                 Ambito::add($2);
-                                                TablaDeSimbolos::changeKey($4);
+                                                string keyFormal = TablaDeSimbolos::changeKey($4);
+                                                TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                 EstructuraTercetos::setAmbito(Ambito::get());
                                             }
-              | VOID ID'('')'   {   TablaDeSimbolos::changeKey($2);
-                                    TablaDeSimbolos::setUso($2, "Funcion");
+              | VOID ID'('')'   {   string key = TablaDeSimbolos::changeKey($2);
+                                    TablaDeSimbolos::setUso(key, "Funcion");
                                     Ambito::add($2);
                                     EstructuraTercetos::setAmbito(Ambito::get());
                                 }
@@ -214,10 +227,16 @@ termino: termino'*'factor {
        | factor {$$ = $1;}
        ;
 
-factor: nesting          {$$ = $1;}
+factor: nesting          {  string varNombre = "<NoExiste>";
+                            ChequearDeclaracion(partEndID($1),varNombre);
+                            $$ = varNombre;}
       | constant         {$$ = $1;}
-      | nesting LESSLESS {$$ = EstructuraTercetos::nroSigTerceto();
-                          EstructuraTercetos::addTerceto("-",$1,TablaDeSimbolos::getUno($1),TablaDeSimbolos::getTipo($1));
+      | nesting LESSLESS {string varNombre = "<NoExiste>";
+                          ChequearDeclaracion(partEndID($1),varNombre);
+                          $$ = EstructuraTercetos::nroSigTerceto();
+                          // Si se usa el valor viejo, reemplazar nroSigTerceto por varNombre
+                          EstructuraTercetos::addTerceto("-",varNombre,TablaDeSimbolos::getUno(varNombre),TablaDeSimbolos::getTipo(varNombre));
+                          EstructuraTercetos::addTerceto("=",varNombre,EstructuraTercetos::nroActualTerceto());
                          }
       ;
 
@@ -316,11 +335,15 @@ bool asignar(string izq, string der, string & tipo){
     string tipoDer;
     string tercetoDer = der; //Se hace una copia para el caso de tener que sacarle los corchetes
     if (der[0] != '['){
-        tipoDer = TablaDeSimbolos::getTipo(partEndID(der));
+        tipoDer = TablaDeSimbolos::getTipo(der);
     } else {
         der.erase(0, 1);
 	    der.erase(der.size() - 1, 1);
         tipoDer = EstructuraTercetos::getTipo(der);
+    }
+    if (tipoIzq == " " || tipoDer == " "){
+    		tipo = " ";
+    		return false;
     }
     string valido = Conversion::asignacion(tipoIzq,tipoDer);
     tipo = tipoIzq;
@@ -342,9 +365,22 @@ bool cambiarTipoOp1(string op1, string op2){
     }
 }
 
+string tipoOperando(string operando){
+    if (operando[0] != '['){
+        return TablaDeSimbolos::getTipo(partEndID(operando));
+    } else {
+        operando.erase(0, 1);
+        operando.erase(operando.size() - 1, 1);
+        return EstructuraTercetos::getTipo(operando);
+    }
+}
 
 bool operar(string op1, string op2, string operador, string & opAConvertir, string & tipo){
     string tipoOp1, tipoOp2;
+    if (tipoOp1 == " " || tipoOp2 == " "){
+		tipo = " ";
+		return false;
+    }
     int terceto;
     if (op1[0] != '['){
         tipoOp1 = TablaDeSimbolos::getTipo(partEndID(op1));
@@ -409,4 +445,13 @@ bool ChequearDeclaracion(string var, string & nomEncontrada){
         }
     }
     return encontrada;
+}
+
+bool chequearVarReDec(string var){
+    string ambito=Ambito::get();
+    if (TablaDeSimbolos::tipoAsignado(var+ambito)){
+        yyerror("Variable " + var + " Re-declarada");
+        return false;
+    }
+    return true;
 }

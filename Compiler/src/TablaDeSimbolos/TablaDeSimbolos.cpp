@@ -17,6 +17,7 @@ void TablaDeSimbolos::add(string lexema){
 	if (existe == TablaDeSimbolos::table.end()){
 		TablaDeSimbolos::Datos info;
 		info.consultado = false;
+		info.tipo = "";
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -37,6 +38,7 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo){
 		info.tipo = tipo;
 		info.valor = valor;
 		info.consultado = false;
+		info.tipo = "";
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -54,7 +56,7 @@ string TablaDeSimbolos::getValor(string lexema){
 string TablaDeSimbolos::imprimir() {
 	string salida = "\n			Tabla de Simbolos\n";
 	for (const auto& par : TablaDeSimbolos::table) {
-		salida = salida + "Clave: " + par.first + " | Uso: " + par.second.uso + "\n";
+		salida = salida + "Clave: " + par.first + " | Tipo: " + par.second.tipo + "\n";
 	}
 	return salida;
 }
@@ -94,7 +96,6 @@ void TablaDeSimbolos::chequearPositivos(string nro){
 		add(nro, valor, TablaDeSimbolos::table["-"+nro].tipo);
 	}
 	TablaDeSimbolos::table[nro].consultado = true;
-	//cout << imprimir();
 }
 
 /**
@@ -131,8 +132,11 @@ void TablaDeSimbolos::setTipo(string lexema, string tipo){
 
 // Getters
 
-bool TablaDeSimbolos::tipoAsignado(string lexemaMasAmbito){
-	auto it = TablaDeSimbolos::table.find(lexemaMasAmbito);
+bool TablaDeSimbolos::tipoAsignado(string lexema){
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
+		return false;
+	}
 	return !it->second.tipo.empty();
 }
 
@@ -142,15 +146,19 @@ string TablaDeSimbolos::getParametroFormal(string lexema){
 }
 
 string TablaDeSimbolos::getTipo(string lexema){
-	string dato =  TablaDeSimbolos::table[lexema].tipo;
-	if (dato.empty()){
+	try {
+		string dato =  TablaDeSimbolos::table[lexema].tipo;
+		if (dato.empty()){
+			return " ";
+		}
+		return dato;
+	} catch(const out_of_range & err){
 		return " ";
 	}
-	return dato;
 }
 
 string TablaDeSimbolos::getUno(string lexema){
-	string dato =  TablaDeSimbolos::table[lexema+Ambito::get()].tipo;
+	string dato =  TablaDeSimbolos::table[lexema].tipo;
 	if (dato == "SHORT"){
 		return "1_s";
 	}else if (dato == "ULONG"){

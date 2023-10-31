@@ -1,6 +1,6 @@
 #include "../Headers/Ambito.h"
 
-string Ambito::ambito="";
+string Ambito::ambito=":main";
 
 void Ambito::add(string nuevoAmbito){
 	Ambito::ambito = Ambito::ambito + ":" + nuevoAmbito;
@@ -11,8 +11,6 @@ void Ambito::del(){
 	while(Ambito::ambito[i] != ':'){i--;}
 	if(i > 0){
 		Ambito::ambito = Ambito::ambito.substr(0,i);
-	} else {
-		Ambito::ambito="";
 	}
 }
 
