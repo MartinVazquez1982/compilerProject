@@ -61,11 +61,32 @@ declaration: variableDeclaration
 variableDeclaration: type variableList {setearTipos($1,$2);}
                    ;
 
-objectDeclaration: ID variableList { 
+objectDeclaration: ID objectList {  
                                     string name;
                                     ChequearDeclaracion(partEndID($1), name, "Clase");
+                                    setearTipos($1,$2);
                                    }
                  ;
+
+objectList: objectList ';' ID { if (chequearReDec($3, "Objeto")) {
+                                        string key = TablaDeSimbolos::changeKey($3);
+                                        TablaDeSimbolos::setUso(key, "Obj");
+                                        $$=$1+"&"+key;
+                                        if (InsideClass::insideClass()){
+                                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                        }
+                                    }
+                              } 
+          | ID { if (chequearReDec($1, "Objeto")) {
+                    string key = TablaDeSimbolos::changeKey($1);
+                    TablaDeSimbolos::setUso(key, "Obj");
+                    $$=key;
+                    if (InsideClass::insideClass()){
+                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                    }
+                }
+                } 
+          ;
 
 variableList: variableList ';' ID { if (chequearReDec($3, "Variable")) {
                                         string key = TablaDeSimbolos::changeKey($3);
@@ -495,8 +516,8 @@ bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
 bool chequearReDec(string decl, string usoOriginal){
     string ambito=Ambito::get();
     string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
-    if (uso == "Var" || uso == "Funcion" || uso == "Clase"){
-    	yyerror(uso + " " + decl + " se encuentra Re-declarada como " + usoOriginal);
+    if (uso == "Var" || uso == "Funcion" || uso == "Clase" || uso == "Obj"){
+    	yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
     	return false;
     }
     return true;
