@@ -26,6 +26,10 @@ class TablaDeSimbolos {
 
 			//Funciones
 			string parametro_formal;
+
+			//Clases
+			string clase;
+			string hereda;
 		};
 
 		// Tabla de Simbolos
@@ -60,6 +64,10 @@ class TablaDeSimbolos {
 
 		static void setTipo(string lexema, string tipo);
 
+		static void setClass(string lexema, string clase);
+
+		static void setHerencia(string lexema, string clase);
+
 		// Getters
 
 		static string usoAsignado(string lexema);
@@ -69,6 +77,10 @@ class TablaDeSimbolos {
 		static string getTipo(string lexema);
 
 		static string getUno(string lexema);
+
+		static string getHerencia(string lexema);
+
+		static string getClass(string lexema);
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */

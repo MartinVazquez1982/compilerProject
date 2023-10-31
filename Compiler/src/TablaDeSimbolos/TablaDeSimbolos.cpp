@@ -55,7 +55,7 @@ string TablaDeSimbolos::getValor(string lexema){
 string TablaDeSimbolos::imprimir() {
 	string salida = "\n			Tabla de Simbolos\n";
 	for (const auto& par : TablaDeSimbolos::table) {
-		salida = salida + "Clave: " + par.first + " | Tipo: " + par.second.tipo + "\n";
+		salida = salida + "Clave: " + par.first + " | Clase: " + par.second.clase + "\n" + " | Her: " + par.second.hereda + "\n";
 	}
 	return salida;
 }
@@ -129,6 +129,14 @@ void TablaDeSimbolos::setTipo(string lexema, string tipo){
 	TablaDeSimbolos::table[lexema].tipo = tipo;
 }
 
+void TablaDeSimbolos::setClass(string lexema, string clase){
+	TablaDeSimbolos::table[lexema].clase = clase;
+}
+
+void TablaDeSimbolos::setHerencia(string lexema, string clase){
+	TablaDeSimbolos::table[lexema].hereda = clase;
+}
+
 // Getters
 
 string TablaDeSimbolos::usoAsignado(string lexema){
@@ -168,3 +176,26 @@ string TablaDeSimbolos::getUno(string lexema){
 	return "otro tipo";
 }
 
+string TablaDeSimbolos::getClass(string lexema){
+	try {
+			string dato =  TablaDeSimbolos::table[lexema].clase;
+			if (dato.empty()){
+				return " ";
+			}
+			return dato;
+		} catch(const out_of_range & err){
+			return " ";
+		}
+}
+
+string TablaDeSimbolos::getHerencia(string lexema){
+	try {
+			string dato =  TablaDeSimbolos::table[lexema].hereda;
+			if (dato.empty()){
+				return " ";
+			}
+			return dato;
+		} catch(const out_of_range & err){
+			return " ";
+		}
+}

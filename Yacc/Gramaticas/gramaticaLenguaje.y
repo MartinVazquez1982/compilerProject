@@ -9,6 +9,7 @@
 #include "../AnalisisSemantico/Headers/Ambito.h"
 #include "../ContErrWar/ContErrWar.h"
 #include "../AnalisisSemantico/Headers/Conversion.h"
+#include "../AnalisisSemantico/Headers/InsideClass.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -67,12 +68,18 @@ variableList: variableList ';' ID { if (chequearReDec($3, "Variable")) {
                                         string key = TablaDeSimbolos::changeKey($3);
                                         TablaDeSimbolos::setUso(key, "Var");
                                         $$=$1+"&"+key;
+                                        if (InsideClass::insideClass()){
+                                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                        }
                                     }
                                   } 
             | ID {if (chequearReDec($1, "Variable")){
                     string key = TablaDeSimbolos::changeKey($1);
                     TablaDeSimbolos::setUso(key, "Var");
                     $$=key;
+                    if (InsideClass::insideClass()){
+                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                    }
                     }
                   }
             ;
@@ -80,7 +87,7 @@ variableList: variableList ';' ID { if (chequearReDec($3, "Variable")) {
 assignment: nesting '=' expression {yymenssage("Asignacion");
                                     string nomEncontrada;
                                     $$ = EstructuraTercetos::nroActualTerceto();
-                                    if (ChequearDeclaracion(partEndID($1), nomEncontrada)){
+                                    if (ChequearDeclaracion(partEndID($1), nomEncontrada, "Var")){
                                         string tipo;
                                         bool conversion = asignar(nomEncontrada,$3,tipo);
                                         if (!conversion){
@@ -107,6 +114,9 @@ functionHeader: VOID ID'('formalParameter')'{   if (chequearReDec($2, "Funcion")
                                                     string key = TablaDeSimbolos::changeKey($2);
                                                     TablaDeSimbolos::setUso(key, "Funcion");
                                                     Ambito::add($2);
+                                                    if (InsideClass::insideClass()){
+                                                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                                    }
                                                     string keyFormal = TablaDeSimbolos::changeKey($4);
                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                     EstructuraTercetos::setAmbito(Ambito::get());
@@ -116,6 +126,9 @@ functionHeader: VOID ID'('formalParameter')'{   if (chequearReDec($2, "Funcion")
                                         string key = TablaDeSimbolos::changeKey($2);
                                         TablaDeSimbolos::setUso(key, "Funcion");
                                         Ambito::add($2);
+                                        if (InsideClass::insideClass()){
+                                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                        }
                                         EstructuraTercetos::setAmbito(Ambito::get());
                                     }
                                 }
@@ -165,17 +178,25 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
          | comparison     {yyerror("Faltan  parentesis en la condicion");}
          ;
 
-class: CLASS ID '{'sentenceList'}' {yymenssage("Clase");
-                                    if (chequearReDec($2, "Clase")){
-                                        TablaDeSimbolos::setUso(TablaDeSimbolos::changeKey($2),"Clase");
-                                    }}
-    | CLASS ID '{'sentenceList heredity '}' {yymenssage("Clase");
-                                            if (chequearReDec($2, "Clase")){
-                                                TablaDeSimbolos::setUso(TablaDeSimbolos::changeKey($2),"Clase");
-                                            }}
-    ;
+class: classHeader '{'sentenceList'}' {yymenssage("Clase");InsideClass::outClass();}
+     | classHeader '{'sentenceList heredity '}' {
+                                                 yymenssage("Clase");
+                                                 TablaDeSimbolos::setHerencia(InsideClass::getClass(),$4);
+                                                 InsideClass::outClass();
+                                                 }
+     ;
 
-heredity: ID','
+classHeader: CLASS ID {if (chequearReDec($2, "Clase")){
+                        string name =  TablaDeSimbolos::changeKey($2);
+                        TablaDeSimbolos::setUso(name,"Clase");
+                        InsideClass::inClass(name);
+                        }}
+            ;
+
+heredity: ID',' { string name = "<NoExiste>";
+                ChequearDeclaracion($1,name,"Clase");
+                $$ = name;
+                }
         ;
 
 comparison: expression operatorsLogics expression {$$ = EstructuraTercetos::nroSigTerceto();EstructuraTercetos::addTerceto($2,$1,$3);}
@@ -238,11 +259,11 @@ termino: termino'*'factor {
        ;
 
 factor: nesting          {  string varNombre = "<NoExiste>";
-                            ChequearDeclaracion(partEndID($1),varNombre);
+                            ChequearDeclaracion(partEndID($1),varNombre,"Var");
                             $$ = varNombre;}
       | constant         {$$ = $1;}
       | nesting LESSLESS {string varNombre = "<NoExiste>";
-                          ChequearDeclaracion(partEndID($1),varNombre);
+                          ChequearDeclaracion(partEndID($1),varNombre,"Var");
                           $$ = EstructuraTercetos::nroSigTerceto();
                           // Si se usa el valor viejo, reemplazar nroSigTerceto por varNombre
                           EstructuraTercetos::addTerceto("-",varNombre,TablaDeSimbolos::getUno(varNombre),TablaDeSimbolos::getTipo(varNombre));
@@ -435,18 +456,18 @@ void setearTipos(string tipo, string listVariable){
     }
 }
 
-bool ChequearDeclaracion(string var, string & nomEncontrada){
+bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
     string ambito=Ambito::get();
     bool final = false;
     bool encontrada = false;
     while(! final && ! encontrada){
-        if (TablaDeSimbolos::usoAsignado(var+ambito) == "Var"){
+        if (TablaDeSimbolos::usoAsignado(var+ambito) == tipo){
             nomEncontrada = var+ambito;
             encontrada = true;
         }else{
             if (ambito.empty()){
                 final = true;
-                yyerror("Variable " + var + " NO declarada");
+                yyerror(tipo + " " + var + " NO declarada");
             }
             size_t pos = ambito.find_last_of(":");
             if (pos != string::npos) {
