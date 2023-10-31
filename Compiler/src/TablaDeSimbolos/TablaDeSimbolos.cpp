@@ -109,7 +109,9 @@ void TablaDeSimbolos::del(string lexema){
 
 string TablaDeSimbolos::changeKey(string lexema){
 	TablaDeSimbolos::Datos data = TablaDeSimbolos::table.at(lexema);
+	TablaDeSimbolos::imprimir();
 	TablaDeSimbolos::table.erase(lexema);
+	TablaDeSimbolos::imprimir();
 	TablaDeSimbolos::table[lexema+Ambito::get()] = data;
 	return lexema+Ambito::get();
 }

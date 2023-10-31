@@ -65,6 +65,7 @@ objectDeclaration: ID objectList {
                                     string name;
                                     ChequearDeclaracion(partEndID($1), name, "Clase");
                                     setearTipos($1,$2);
+                                    TablaDeSimbolos::del($1); //El ID al declarar un objeto se agrega automaticamente por error en el lexico
                                    }
                  ;
 
@@ -123,7 +124,8 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         }else{
                                             EstructuraTercetos::addTerceto("=",nomEncontrada,$$,tipo);
                                         }
-                                    } 
+                                    }
+                                    
                                     }
           ;
 
