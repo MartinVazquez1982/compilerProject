@@ -18,6 +18,7 @@ void TablaDeSimbolos::add(string lexema){
 		TablaDeSimbolos::Datos info;
 		info.consultado = false;
 		info.tipo = "";
+		info.nivelHerencia = -1;
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -38,6 +39,7 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo){
 		info.tipo = tipo;
 		info.valor = valor;
 		info.consultado = false;
+		info.nivelHerencia = -1;
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -55,7 +57,7 @@ string TablaDeSimbolos::getValor(string lexema){
 string TablaDeSimbolos::imprimir() {
 	string salida = "\n			Tabla de Simbolos\n";
 	for (const auto& par : TablaDeSimbolos::table) {
-		salida = salida + "Clave: " + par.first + " | Uso: " + par.second.uso + " | Tipo: " + par.second.tipo + " | Clase: " + par.second.clase + "\n" + " | Her: " + par.second.hereda + "\n";
+		salida = salida + "Clave: " + par.first + " | Clase: " + par.second.clase  + " | Her: " + par.second.hereda + " | Nivel: " + to_string(par.second.nivelHerencia) + "\n";
 	}
 	return salida;
 }
@@ -127,7 +129,6 @@ void TablaDeSimbolos::setParametroFormal(string lexema, string parametro){
 }
 
 void TablaDeSimbolos::setTipo(string lexema, string tipo){
-	cout << imprimir();
 	TablaDeSimbolos::table[lexema].tipo = tipo;
 }
 
@@ -137,6 +138,11 @@ void TablaDeSimbolos::setClass(string lexema, string clase){
 
 void TablaDeSimbolos::setHerencia(string lexema, string clase){
 	TablaDeSimbolos::table[lexema].hereda = clase;
+	TablaDeSimbolos::table[lexema].nivelHerencia = TablaDeSimbolos::table[clase].nivelHerencia + 1;
+}
+
+void TablaDeSimbolos::inicNivelHer(string lexema){
+	TablaDeSimbolos::table[lexema].nivelHerencia =  1;
 }
 
 // Getters
@@ -200,4 +206,8 @@ string TablaDeSimbolos::getHerencia(string lexema){
 		} catch(const out_of_range & err){
 			return " ";
 		}
+}
+
+int TablaDeSimbolos::nivelHerencia(string lexema){
+	return TablaDeSimbolos::table[lexema].nivelHerencia;
 }

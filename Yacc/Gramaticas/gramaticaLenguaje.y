@@ -219,6 +219,9 @@ class: classHeader '{'sentenceList'}' {yymenssage("Clase");InsideClass::outClass
      | classHeader '{'sentenceList heredity '}' {
                                                  yymenssage("Clase");
                                                  TablaDeSimbolos::setHerencia(InsideClass::getClass(),$4);
+                                                 if (TablaDeSimbolos::nivelHerencia(InsideClass::getClass()) > 3){
+                                                    yyerror("La clase ha excedido el nivel de herencia (maximo nivel = 3)");
+                                                 }
                                                  InsideClass::outClass();
                                                  }
      ;
@@ -226,12 +229,14 @@ class: classHeader '{'sentenceList'}' {yymenssage("Clase");InsideClass::outClass
 classHeader: CLASS ID {if (chequearReDec($2, "Clase")){
                         string name =  TablaDeSimbolos::changeKey($2);
                         TablaDeSimbolos::setUso(name,"Clase");
+                        TablaDeSimbolos::inicNivelHer(name);
                         InsideClass::inClass(name);
                         }}
             ;
 
 heredity: ID',' { string name = "<NoExiste>";
                 ChequearDeclaracion($1,name,"Clase");
+                TablaDeSimbolos::del($1);
                 $$ = name;
                 }
         ;

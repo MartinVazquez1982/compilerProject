@@ -30,6 +30,7 @@ class TablaDeSimbolos {
 			//Clases
 			string clase;
 			string hereda;
+			int nivelHerencia;
 		};
 
 		// Tabla de Simbolos
@@ -68,6 +69,8 @@ class TablaDeSimbolos {
 
 		static void setHerencia(string lexema, string clase);
 
+		static void inicNivelHer(string lexema);
+
 		// Getters
 
 		static string usoAsignado(string lexema);
@@ -81,6 +84,8 @@ class TablaDeSimbolos {
 		static string getHerencia(string lexema);
 
 		static string getClass(string lexema);
+
+		static int nivelHerencia(string lexema);
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */
