@@ -215,29 +215,37 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
          | comparison     {yyerror("Faltan  parentesis en la condicion");}
          ;
 
-class: classHeader '{'sentenceList'}' {yymenssage("Clase");InsideClass::outClass();}
+class: classHeader '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::forwDeclComp(InsideClass::getClass());InsideClass::outClass();}
      | classHeader '{'sentenceList heredity '}' {
                                                  yymenssage("Clase");
                                                  TablaDeSimbolos::setHerencia(InsideClass::getClass(),$4);
                                                  if (TablaDeSimbolos::nivelHerencia(InsideClass::getClass()) > 3){
                                                     yyerror("La clase ha excedido el nivel de herencia (maximo nivel = 3)");
                                                  }
+                                                 TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
                                                  InsideClass::outClass();
                                                  }
+     | classHeader {claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
      ;
 
 classHeader: CLASS ID {if (chequearReDec($2, "Clase")){
-                        string name =  TablaDeSimbolos::changeKey($2);
-                        TablaDeSimbolos::setUso(name,"Clase");
-                        TablaDeSimbolos::inicNivelHer(name);
-                        InsideClass::inClass(name);
+                            string name =  TablaDeSimbolos::changeKey($2);
+                            TablaDeSimbolos::setUso(name,"Clase");
+                            TablaDeSimbolos::inicNivelHer(name);
+                            InsideClass::inClass(name);
+                        } else {
+                            InsideClass::inClass($2+Ambito::get());
                         }}
             ;
 
 heredity: ID',' { string name = "<NoExiste>";
                 ChequearDeclaracion($1,name,"Clase");
                 TablaDeSimbolos::del($1);
-                $$ = name;
+                if (name == InsideClass::getClass()){
+                    yyerror("La clase hereda de ella misma.");
+                } else {
+                    $$ = name;
+                }
                 }
         ;
 
@@ -523,9 +531,20 @@ bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
 bool chequearReDec(string decl, string usoOriginal){
     string ambito=Ambito::get();
     string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
-    if (uso == "Var" || uso == "Funcion" || uso == "Clase" || uso == "Obj"){
+    if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase"){
     	yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
     	return false;
+    } else if (uso == "Clase" && usoOriginal == "Clase"){
+        return false;
     }
     return true;
+}
+
+void claseSinimplementar(string clase){
+    string name = clase;
+    if (TablaDeSimbolos::getForwDecl(name) != -1){
+        yyerror("Clase " + clase + " se encuentra re-declarada");
+    } else {
+        TablaDeSimbolos::inicForwDecl(name);
+    }
 }

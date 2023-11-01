@@ -50,10 +50,11 @@ short yylhs[] = {                                        -1,
     6,   14,   15,   18,   18,   17,   17,   13,   19,   19,
     5,   21,   21,   22,   22,   23,   12,   12,   25,    9,
     9,    9,    9,    9,   28,   10,   10,   29,   27,   27,
-   27,   27,   27,   26,   26,   26,   26,    7,    7,   31,
-   32,   30,   20,   20,   20,   20,   34,   34,   34,   35,
-   35,   35,   33,   33,   33,   33,   33,   33,   36,   36,
-   36,   36,   36,   36,   16,   16,   16,   11,   37,   24,
+   27,   27,   27,   26,   26,   26,   26,    7,    7,    7,
+   31,   32,   30,   20,   20,   20,   20,   34,   34,   34,
+   35,   35,   35,   33,   33,   33,   33,   33,   33,   36,
+   36,   36,   36,   36,   36,   16,   16,   16,   11,   37,
+   24,
 };
 short yylen[] = {                                         2,
     3,    2,    1,    2,    1,    2,    2,    1,    1,    1,
@@ -61,27 +62,28 @@ short yylen[] = {                                         2,
     1,    2,    2,    3,    1,    3,    1,    3,    3,    1,
     4,    5,    4,    2,    1,    2,    3,    4,    1,    6,
     4,    3,    5,    5,    1,    4,    3,    1,    3,    4,
-    2,    1,    2,    3,    2,    2,    1,    4,    5,    2,
-    2,    3,    3,    3,    1,    3,    3,    3,    1,    1,
-    1,    2,    1,    1,    1,    1,    1,    1,    1,    2,
-    1,    2,    1,    2,    1,    1,    1,    2,    1,    2,
+    2,    1,    2,    3,    2,    2,    1,    4,    5,    1,
+    2,    2,    3,    3,    3,    1,    3,    3,    3,    1,
+    1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
+    2,    1,    2,    1,    2,    1,    1,    1,    2,    1,
+    2,
 };
 short yydefred[] = {                                      0,
-    0,    0,    0,    0,   85,   86,   87,   48,    0,    0,
+    0,    0,    0,    0,   86,   87,   88,   48,    0,    0,
     8,    0,    0,    5,    0,    0,    9,   10,   11,   15,
    16,   17,   18,   19,   20,   21,    0,    0,    0,    0,
-    0,   79,   83,   81,   30,    0,    0,    0,    0,    0,
-    0,    0,   69,   71,   89,   88,   60,    0,   25,    0,
+    0,   80,   84,   82,   30,    0,    0,    0,    0,    0,
+    0,    0,   70,   72,   90,   89,   61,    0,   25,    0,
     2,    0,    4,    6,    7,   27,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,   80,   84,   82,   72,
-   73,   74,   75,   76,    0,    0,   77,   78,    0,   45,
+    0,    0,    0,    0,    0,    0,   81,   85,   83,   73,
+   74,   75,   76,   77,    0,    0,   78,   79,    0,   45,
    42,    0,    0,    0,   52,    0,    0,   56,    0,    0,
     0,    0,    1,    0,    0,   29,   37,    0,    0,    0,
-    0,   35,    0,    0,    0,   66,   54,    0,    0,    0,
-   90,   53,    0,    0,    0,   51,   41,    0,    0,   67,
-   68,   33,    0,    0,   24,   26,   38,   34,   31,   46,
+    0,   35,    0,    0,    0,   67,   54,    0,    0,    0,
+   91,   53,    0,    0,    0,   51,   41,    0,    0,   68,
+   69,   33,    0,    0,   24,   26,   38,   34,   31,   46,
     0,   58,    0,   14,   13,   49,    0,    0,   43,    0,
-   44,   36,   32,   61,   59,   12,   50,   40,
+   44,   36,   32,   62,   59,   12,   50,   40,
 };
 short yydgoto[] = {                                      12,
    13,   14,   15,   16,   17,   18,   19,  115,   20,   21,
@@ -110,14 +112,14 @@ short yyrindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,   44,    0,
     0,    0,  131,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,  -41,    0,    0,
-  -78,  -19,    0,    0,    0,    0,    0,    0,    0,   86,
-    0,    0,    0,    0,    0,    0,   88,    0,    0,    0,
+   86,    0,    0,    0,    0,    0,    0,  -41,    0,    0,
+  -78,  -19,    0,    0,    0,    0,    0,    0,    0,   88,
+    0,    0,    0,    0,    0,    0,   89,    0,    0,    0,
     0,    0,    0,    0,    0,  -74,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,   89,    0,    0,   93,    0,    0,
-    0,    0,   91,    0,    0,    0,    0,    3,   25,   47,
+    0,    0,    0,    0,   90,    0,    0,   94,    0,    0,
+    0,    0,   92,    0,    0,    0,    0,    3,   25,   47,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
    44,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -125,45 +127,45 @@ short yyrindex[] = {                                      0,
 };
 short yygindex[] = {                                      0,
    -2,    2,   54,  -23,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,   45,    0,    0,  373,   -8,
-    0,    0,    0,  -38,    0,  108,   -6,   56,    0,  103,
+    0,    0,    0,    0,    0,   48,    0,    0,  373,   -8,
+    0,    0,    0,  -38,    0,  108,   -6,   56,    0,  104,
     0,    0,    0,   32,   11,    0,    0,
 };
 #define YYTABLESIZE 463
-short yytable[] = {                                      70,
-   70,   70,   70,   70,   45,   70,   89,   52,   64,   97,
-  122,   90,   83,   37,   53,  144,   84,   83,   70,   47,
-   70,   65,  102,   65,   65,   65,   75,   65,   76,   48,
+short yytable[] = {                                      71,
+   71,   71,   71,   71,   45,   71,   89,   52,   64,   97,
+  122,   90,   83,   37,   53,  144,   84,   83,   71,   47,
+   71,   66,  102,   66,   66,   66,   75,   65,   76,   48,
    36,   59,   67,   68,   69,   37,   54,  106,   49,   75,
-   65,   76,   65,   63,   57,   63,   63,   63,   55,   95,
+   66,   76,   66,   64,   57,   64,   64,   64,   55,   95,
    55,   98,   64,   53,  136,  105,   56,   37,  100,  114,
-  104,  128,   63,   84,   63,   64,   61,   64,   64,   64,
+  104,  128,   64,   84,   64,   65,   61,   65,   65,   65,
   110,   75,   60,   76,   80,  117,  138,   63,   59,   84,
-  119,   70,   88,   30,   64,   91,   64,   62,   77,   30,
+  119,   71,   88,   30,   65,   91,   65,   63,   77,   30,
    78,  137,   92,   58,   84,   94,  130,   37,   11,  120,
-  121,   53,   96,   65,   30,   53,  108,  109,  103,  107,
+  121,   53,   96,   66,   30,   53,  108,  109,  103,  107,
   111,  140,  125,  116,  126,  127,  134,   11,  141,  129,
-  135,  142,  143,  145,  146,   63,  148,   11,  147,   23,
-    3,   22,   28,   39,   47,  123,  113,   62,   66,    0,
-  106,  118,   75,    0,   76,   11,    1,   64,  139,    2,
+  135,  142,  143,  145,  146,   64,  148,   11,  147,   60,
+    3,   23,   22,   28,   39,   47,  113,   62,  123,   66,
+  106,  118,   75,    0,   76,   11,    1,   65,  139,    2,
     0,    1,   80,   81,    2,    8,    0,    0,    0,   77,
-    8,   78,    0,   11,    0,    0,   35,   82,    0,   62,
+    8,   78,    0,   11,    0,    0,   35,   82,    0,   63,
     0,   35,   82,   11,    0,    0,    0,    0,   57,   57,
    57,   57,   55,   55,   55,   55,    1,   57,   57,    2,
     0,   55,   55,    0,    0,    8,   10,    0,   57,   57,
     0,    0,   55,   55,    0,    0,   35,   82,   51,    0,
-    0,    0,    0,    0,    0,   70,   70,   70,   70,    0,
-    0,    0,    0,    0,   70,   70,   93,   70,   70,   70,
-   70,    0,    5,    6,    7,   70,   70,   65,   65,   65,
-   65,   32,   33,   34,  132,   35,   65,   65,   49,   65,
-   65,   65,   65,   70,    0,    0,    0,   65,   65,   63,
-   63,   63,   63,   32,   33,   34,   83,   35,   63,   63,
-    0,   63,   63,   63,   63,  112,    0,    0,    0,   63,
-   63,   64,   64,   64,   64,   32,   33,   34,    0,   35,
-   64,   64,    0,   64,   64,   64,   64,   71,   72,   73,
-   74,   64,   64,   62,   62,   62,   62,    0,    0,    0,
-    0,    1,   62,   62,    2,    3,    4,    5,    6,    7,
-    8,    0,    0,   62,   62,   32,   33,   34,    0,   35,
+    0,    0,    0,    0,    0,   71,   71,   71,   71,    0,
+    0,    0,    0,    0,   71,   71,   93,   71,   71,   71,
+   71,    0,    5,    6,    7,   71,   71,   66,   66,   66,
+   66,   32,   33,   34,  132,   35,   66,   66,   49,   66,
+   66,   66,   66,   70,    0,    0,    0,   66,   66,   64,
+   64,   64,   64,   32,   33,   34,   83,   35,   64,   64,
+    0,   64,   64,   64,   64,  112,    0,    0,    0,   64,
+   64,   65,   65,   65,   65,   32,   33,   34,    0,   35,
+   65,   65,    0,   65,   65,   65,   65,   71,   72,   73,
+   74,   65,   65,   63,   63,   63,   63,    0,    0,    0,
+    0,    1,   63,   63,    2,    3,    4,    5,    6,    7,
+    8,    0,    0,   63,   63,   32,   33,   34,    0,   35,
     1,    9,   82,    2,    3,    4,    5,    6,    7,    8,
     1,    0,    0,    2,    3,    4,    5,    6,    7,    8,
     9,    0,    0,    0,    0,    0,    0,    0,    1,    0,
@@ -193,7 +195,7 @@ short yycheck[] = {                                      41,
    90,  100,  277,  123,   61,  104,   75,   76,  267,   41,
    44,  118,  277,   44,  277,   41,   44,   44,  259,  125,
    44,  277,   41,  125,   44,  123,  259,   44,  125,   44,
-    0,   44,   44,   41,   44,   91,   83,   30,   36,   -1,
+    0,   44,   44,   44,   41,   44,   83,   30,   91,   36,
    41,   86,   43,   -1,   45,   44,  257,  123,  259,  260,
    -1,  257,  258,  259,  260,  266,   -1,   -1,   -1,   60,
   266,   62,   -1,   44,   -1,   -1,  277,  278,   -1,  123,
@@ -307,6 +309,7 @@ char *yyrule[] = {
 "condition : comparison",
 "class : classHeader '{' sentenceList '}'",
 "class : classHeader '{' sentenceList heredity '}'",
+"class : classHeader",
 "classHeader : CLASS ID",
 "heredity : ID ','",
 "comparison : expression operatorsLogics expression",
@@ -368,7 +371,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 347 ".\Gramaticas\gramaticaLenguaje.y"
+#line 355 ".\Gramaticas\gramaticaLenguaje.y"
 
 void yymenssage(string menssage){
     cout  << endl  << BLUE << "Estructura detectada: " << menssage  << RESET << endl;
@@ -548,13 +551,24 @@ bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
 bool chequearReDec(string decl, string usoOriginal){
     string ambito=Ambito::get();
     string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
-    if (uso == "Var" || uso == "Funcion" || uso == "Clase" || uso == "Obj"){
+    if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase"){
     	yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
     	return false;
+    } else if (uso == "Clase" && usoOriginal == "Clase"){
+        return false;
     }
     return true;
 }
-#line 558 "y.tab.c"
+
+void claseSinimplementar(string clase){
+    string name = clase;
+    if (TablaDeSimbolos::getForwDecl(name) != -1){
+        yyerror("Clase " + clase + " se encuentra re-declarada");
+    } else {
+        TablaDeSimbolos::inicForwDecl(name);
+    }
+}
+#line 572 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -917,7 +931,7 @@ case 57:
 break;
 case 58:
 #line 218 ".\Gramaticas\gramaticaLenguaje.y"
-{yymenssage("Clase");InsideClass::outClass();}
+{yymenssage("Clase");TablaDeSimbolos::forwDeclComp(InsideClass::getClass());InsideClass::outClass();}
 break;
 case 59:
 #line 219 ".\Gramaticas\gramaticaLenguaje.y"
@@ -927,32 +941,43 @@ case 59:
                                                  if (TablaDeSimbolos::nivelHerencia(InsideClass::getClass()) > 3){
                                                     yyerror("La clase ha excedido el nivel de herencia (maximo nivel = 3)");
                                                  }
+                                                 TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
                                                  InsideClass::outClass();
                                                  }
 break;
 case 60:
-#line 229 ".\Gramaticas\gramaticaLenguaje.y"
-{if (chequearReDec(yyvsp[0], "Clase")){
-                        string name =  TablaDeSimbolos::changeKey(yyvsp[0]);
-                        TablaDeSimbolos::setUso(name,"Clase");
-                        TablaDeSimbolos::inicNivelHer(name);
-                        InsideClass::inClass(name);
-                        }}
+#line 228 ".\Gramaticas\gramaticaLenguaje.y"
+{claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
 break;
 case 61:
-#line 237 ".\Gramaticas\gramaticaLenguaje.y"
+#line 231 ".\Gramaticas\gramaticaLenguaje.y"
+{if (chequearReDec(yyvsp[0], "Clase")){
+                            string name =  TablaDeSimbolos::changeKey(yyvsp[0]);
+                            TablaDeSimbolos::setUso(name,"Clase");
+                            TablaDeSimbolos::inicNivelHer(name);
+                            InsideClass::inClass(name);
+                        } else {
+                            InsideClass::inClass(yyvsp[0]+Ambito::get());
+                        }}
+break;
+case 62:
+#line 241 ".\Gramaticas\gramaticaLenguaje.y"
 { string name = "<NoExiste>";
                 ChequearDeclaracion(yyvsp[-1],name,"Clase");
                 TablaDeSimbolos::del(yyvsp[-1]);
-                yyval = name;
+                if (name == InsideClass::getClass()){
+                    yyerror("La clase hereda de ella misma.");
+                } else {
+                    yyval = name;
+                }
                 }
 break;
-case 62:
-#line 244 ".\Gramaticas\gramaticaLenguaje.y"
+case 63:
+#line 252 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = EstructuraTercetos::nroSigTerceto();EstructuraTercetos::addTerceto(yyvsp[-1],yyvsp[-2],yyvsp[0]);}
 break;
-case 63:
-#line 247 ".\Gramaticas\gramaticaLenguaje.y"
+case 64:
+#line 255 ".\Gramaticas\gramaticaLenguaje.y"
 {
                                     string op, tipo; /*Aca se almacena el operando a convertir en caso de ser necesario*/
                                     bool conversion = operar(yyvsp[-2],yyvsp[0],"+",op,tipo);
@@ -966,8 +991,8 @@ case 63:
                                     }
                                   }
 break;
-case 64:
-#line 259 ".\Gramaticas\gramaticaLenguaje.y"
+case 65:
+#line 267 ".\Gramaticas\gramaticaLenguaje.y"
 {
                                     string op, tipo; /*Aca se almacena el operando a convertir en caso de ser necesario*/
                                     bool conversion = operar(yyvsp[-2],yyvsp[0],"-",op,tipo);
@@ -981,16 +1006,16 @@ case 64:
                                     }
                                   }
 break;
-case 65:
-#line 271 ".\Gramaticas\gramaticaLenguaje.y"
+case 66:
+#line 279 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
-case 66:
-#line 272 ".\Gramaticas\gramaticaLenguaje.y"
+case 67:
+#line 280 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Expresion no puede ir entre parentesis");}
 break;
-case 67:
-#line 275 ".\Gramaticas\gramaticaLenguaje.y"
+case 68:
+#line 283 ".\Gramaticas\gramaticaLenguaje.y"
 {
                             string op, tipo; /*Aca se almacena el operando a convertir en caso de ser necesario*/
                             bool conversion = operar(yyvsp[-2],yyvsp[0],"*",op,tipo);
@@ -1004,8 +1029,8 @@ case 67:
                             }
                            }
 break;
-case 68:
-#line 287 ".\Gramaticas\gramaticaLenguaje.y"
+case 69:
+#line 295 ".\Gramaticas\gramaticaLenguaje.y"
 { 
                             string op, tipo; /*Aca se almacena el operando a convertir en caso de ser necesario*/
                             bool conversion = operar(yyvsp[-2],yyvsp[0],"/",op,tipo);
@@ -1020,22 +1045,22 @@ case 68:
                             
                            }
 break;
-case 69:
-#line 300 ".\Gramaticas\gramaticaLenguaje.y"
+case 70:
+#line 308 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
-case 70:
-#line 303 ".\Gramaticas\gramaticaLenguaje.y"
+case 71:
+#line 311 ".\Gramaticas\gramaticaLenguaje.y"
 {  string varNombre = "<NoExiste>";
                             ChequearDeclaracion(partEndID(yyvsp[0]),varNombre,"Var");
                             yyval = varNombre;}
 break;
-case 71:
-#line 306 ".\Gramaticas\gramaticaLenguaje.y"
+case 72:
+#line 314 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
-case 72:
-#line 307 ".\Gramaticas\gramaticaLenguaje.y"
+case 73:
+#line 315 ".\Gramaticas\gramaticaLenguaje.y"
 {string varNombre = "<NoExiste>";
                           ChequearDeclaracion(partEndID(yyvsp[-1]),varNombre,"Var");
                           yyval = EstructuraTercetos::nroSigTerceto();
@@ -1044,75 +1069,75 @@ case 72:
                           EstructuraTercetos::addTerceto("=",varNombre,EstructuraTercetos::nroActualTerceto());
                          }
 break;
-case 73:
-#line 316 ".\Gramaticas\gramaticaLenguaje.y"
+case 74:
+#line 324 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "==";}
 break;
-case 74:
-#line 317 ".\Gramaticas\gramaticaLenguaje.y"
+case 75:
+#line 325 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "!!";}
 break;
-case 75:
-#line 318 ".\Gramaticas\gramaticaLenguaje.y"
+case 76:
+#line 326 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">=";}
 break;
-case 76:
-#line 319 ".\Gramaticas\gramaticaLenguaje.y"
+case 77:
+#line 327 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<=";}
 break;
-case 77:
-#line 320 ".\Gramaticas\gramaticaLenguaje.y"
+case 78:
+#line 328 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<";}
 break;
-case 78:
-#line 321 ".\Gramaticas\gramaticaLenguaje.y"
+case 79:
+#line 329 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">";}
 break;
-case 79:
-#line 324 ".\Gramaticas\gramaticaLenguaje.y"
+case 80:
+#line 332 ".\Gramaticas\gramaticaLenguaje.y"
 {chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
 break;
-case 80:
-#line 325 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
-break;
 case 81:
-#line 326 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
+#line 333 ".\Gramaticas\gramaticaLenguaje.y"
+{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
 break;
 case 82:
-#line 327 ".\Gramaticas\gramaticaLenguaje.y"
-{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
+#line 334 ".\Gramaticas\gramaticaLenguaje.y"
+{TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 83:
-#line 328 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = yyvsp[0];}
+#line 335 ".\Gramaticas\gramaticaLenguaje.y"
+{TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
 break;
 case 84:
-#line 329 ".\Gramaticas\gramaticaLenguaje.y"
-{yyerror("Una constante ULONG no puede ser negativa");}
+#line 336 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = yyvsp[0];}
 break;
 case 85:
-#line 332 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval="SHORT";}
+#line 337 ".\Gramaticas\gramaticaLenguaje.y"
+{yyerror("Una constante ULONG no puede ser negativa");}
 break;
 case 86:
-#line 333 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval="ULONG";}
+#line 340 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval="SHORT";}
 break;
 case 87:
-#line 334 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval="FLOAT";}
+#line 341 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval="ULONG";}
 break;
 case 88:
-#line 337 ".\Gramaticas\gramaticaLenguaje.y"
+#line 342 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval="FLOAT";}
+break;
+case 89:
+#line 345 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Print",yyvsp[0],"");}
 break;
-case 90:
-#line 343 ".\Gramaticas\gramaticaLenguaje.y"
+case 91:
+#line 351 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1116 "y.tab.c"
+#line 1141 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

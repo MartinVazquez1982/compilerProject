@@ -19,6 +19,7 @@ void TablaDeSimbolos::add(string lexema){
 		info.consultado = false;
 		info.tipo = "";
 		info.nivelHerencia = -1;
+		info.forwDecl = -1;
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -40,6 +41,7 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo){
 		info.valor = valor;
 		info.consultado = false;
 		info.nivelHerencia = -1;
+		info.forwDecl = -1;
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -57,7 +59,7 @@ string TablaDeSimbolos::getValor(string lexema){
 string TablaDeSimbolos::imprimir() {
 	string salida = "\n			Tabla de Simbolos\n";
 	for (const auto& par : TablaDeSimbolos::table) {
-		salida = salida + "Clave: " + par.first + " | Clase: " + par.second.clase  + " | Her: " + par.second.hereda + " | Nivel: " + to_string(par.second.nivelHerencia) + "\n";
+		salida = salida + "Clave: " + par.first + " | Clase: " + par.second.clase  + " | Imp: " + to_string(par.second.forwDecl) + "\n";
 	}
 	return salida;
 }
@@ -81,7 +83,6 @@ void TablaDeSimbolos::chequearNegativos(string nro){
 	} else {
 		TablaDeSimbolos::table.erase(nro);
 	}
-	//cout << imprimir();
 }
 
 /**
@@ -141,8 +142,18 @@ void TablaDeSimbolos::setHerencia(string lexema, string clase){
 	TablaDeSimbolos::table[lexema].nivelHerencia = TablaDeSimbolos::table[clase].nivelHerencia + 1;
 }
 
+void TablaDeSimbolos::forwDeclComp(string lexema){
+	TablaDeSimbolos::table[lexema].forwDecl = 1;
+}
+
+// Inicializaciones
+
 void TablaDeSimbolos::inicNivelHer(string lexema){
 	TablaDeSimbolos::table[lexema].nivelHerencia =  1;
+}
+
+void TablaDeSimbolos::inicForwDecl(string lexema){
+	TablaDeSimbolos::table[lexema].forwDecl = 0;
 }
 
 // Getters
@@ -210,4 +221,8 @@ string TablaDeSimbolos::getHerencia(string lexema){
 
 int TablaDeSimbolos::nivelHerencia(string lexema){
 	return TablaDeSimbolos::table[lexema].nivelHerencia;
+}
+
+int TablaDeSimbolos::getForwDecl(string lexema){
+	return TablaDeSimbolos::table[lexema].forwDecl;
 }
