@@ -371,7 +371,9 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 355 ".\Gramaticas\gramaticaLenguaje.y"
+#line 310 ".\Gramaticas\gramaticaLenguaje.y"
+
+// ============================== Mensajes ==============================
 
 void yymenssage(string menssage){
     cout  << endl  << BLUE << "Estructura detectada: " << menssage  << RESET << endl;
@@ -387,6 +389,8 @@ void yywarning(string menssage){
     ContErrWar::sumWar();
 }
 
+// ============================== Chequeo Rango ==============================
+
 void chequearRangoSHORT(string valor){
     int chequear = stoi(TablaDeSimbolos::getValor(valor));
     if (chequear >= 128){
@@ -397,6 +401,8 @@ void chequearRangoSHORT(string valor){
     }
     cout << TablaDeSimbolos::imprimir();
 }
+
+// ============================== Tercetos Sentencias de Control ==============================
 
 void jumpEndWhile(){
     int tercetoFalse = EstructuraTercetos::desapilar();
@@ -431,7 +437,9 @@ string partEndID(string nesting){
     return nesting.substr(dot_index + 1);
 }
 
-bool asignar(string izq, string der, string & tipo){
+// ============================== Conversiones Implicitas ==============================
+
+bool converAsig(string izq, string der, string & tipo){
     string tipoIzq = TablaDeSimbolos::getTipo(izq);
     string tipoDer;
     string tercetoDer = der; //Se hace una copia para el caso de tener que sacarle los corchetes
@@ -476,7 +484,7 @@ string tipoOperando(string operando){
     }
 }
 
-bool operar(string op1, string op2, string operador, string & opAConvertir, string & tipo){
+bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
     string tipoOp1, tipoOp2;
     if (tipoOp1 == " " || tipoOp2 == " "){
 		tipo = " ";
@@ -518,6 +526,8 @@ bool operar(string op1, string op2, string operador, string & opAConvertir, stri
     return false;
 }
 
+// ============================== Cargar tipos Lista de variables ==============================
+
 void setearTipos(string tipo, string listVariable){
     string var;
     std::istringstream variableStream(listVariable);  // Asegúrate de inicializar el istringstream
@@ -525,6 +535,8 @@ void setearTipos(string tipo, string listVariable){
         TablaDeSimbolos::setTipo(var, tipo);
     }
 }
+
+// ============================== Chequeo Variable NO declarada ==============================
 
 bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
     string ambito=Ambito::get();
@@ -548,6 +560,8 @@ bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
     return encontrada;
 }
 
+// ============================== Chequeo Re declaradas ==============================
+
 bool chequearReDec(string decl, string usoOriginal){
     string ambito=Ambito::get();
     string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
@@ -560,6 +574,8 @@ bool chequearReDec(string decl, string usoOriginal){
     return true;
 }
 
+// ============================== Forward Declaration ==============================
+
 void claseSinimplementar(string clase){
     string name = clase;
     if (TablaDeSimbolos::getForwDecl(name) != -1){
@@ -568,7 +584,23 @@ void claseSinimplementar(string clase){
         TablaDeSimbolos::inicForwDecl(name);
     }
 }
-#line 572 "y.tab.c"
+
+// ============================== Pasos a seguir al detectar una operacion ==============================
+
+string stepsOperation(string op1, string op2, string operador){
+    string op, tipo, salida; //Aca se almacena el operando a convertir en caso de ser necesario
+    bool conversion = converOp(op1,op2,op,tipo);
+    salida = EstructuraTercetos::nroSigTerceto();
+    if (!conversion){
+        EstructuraTercetos::addTerceto(operador,op1,op2,tipo);
+    } else if (op == "op1") {
+        EstructuraTercetos::addTerceto(operador,EstructuraTercetos::nroActualTerceto(),op2,tipo);
+    } else {
+        EstructuraTercetos::addTerceto(operador,op1,EstructuraTercetos::nroActualTerceto(),tipo);
+    }
+    return salida;
+}
+#line 604 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -792,7 +824,7 @@ case 28:
                                     yyval = EstructuraTercetos::nroActualTerceto();
                                     if (ChequearDeclaracion(partEndID(yyvsp[-2]), nomEncontrada, "Var")){
                                         string tipo;
-                                        bool conversion = asignar(nomEncontrada,yyvsp[0],tipo);
+                                        bool conversion = converAsig(nomEncontrada,yyvsp[0],tipo);
                                         if (!conversion){
                                             if (yyvsp[0][0] == '['){
                                                 EstructuraTercetos::addTerceto("=",nomEncontrada,yyval);
@@ -978,89 +1010,44 @@ case 63:
 break;
 case 64:
 #line 255 ".\Gramaticas\gramaticaLenguaje.y"
-{
-                                    string op, tipo; /*Aca se almacena el operando a convertir en caso de ser necesario*/
-                                    bool conversion = operar(yyvsp[-2],yyvsp[0],"+",op,tipo);
-                                    yyval = EstructuraTercetos::nroSigTerceto();
-                                    if (!conversion){
-                                        EstructuraTercetos::addTerceto("+",yyvsp[-2],yyvsp[0],tipo);
-                                    } else if (op == "op1") {
-                                        EstructuraTercetos::addTerceto("+",EstructuraTercetos::nroActualTerceto(),yyvsp[0],tipo);
-                                    } else {
-                                        EstructuraTercetos::addTerceto("+",yyvsp[-2],EstructuraTercetos::nroActualTerceto(),tipo);
-                                    }
-                                  }
+{ yyval = stepsOperation(yyvsp[-2], yyvsp[0], "+"); }
 break;
 case 65:
-#line 267 ".\Gramaticas\gramaticaLenguaje.y"
-{
-                                    string op, tipo; /*Aca se almacena el operando a convertir en caso de ser necesario*/
-                                    bool conversion = operar(yyvsp[-2],yyvsp[0],"-",op,tipo);
-                                    yyval = EstructuraTercetos::nroSigTerceto();
-                                    if (!conversion){
-                                        EstructuraTercetos::addTerceto("-",yyvsp[-2],yyvsp[0],tipo);
-                                    } else if (op == "op1") {
-                                        EstructuraTercetos::addTerceto("-",EstructuraTercetos::nroActualTerceto(),yyvsp[0],tipo);
-                                    } else {
-                                        EstructuraTercetos::addTerceto("-",yyvsp[-2],EstructuraTercetos::nroActualTerceto(),tipo);
-                                    }
-                                  }
+#line 256 ".\Gramaticas\gramaticaLenguaje.y"
+{ yyval = stepsOperation(yyvsp[-2], yyvsp[0], "-"); }
 break;
 case 66:
-#line 279 ".\Gramaticas\gramaticaLenguaje.y"
+#line 257 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 67:
-#line 280 ".\Gramaticas\gramaticaLenguaje.y"
+#line 258 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Expresion no puede ir entre parentesis");}
 break;
 case 68:
-#line 283 ".\Gramaticas\gramaticaLenguaje.y"
-{
-                            string op, tipo; /*Aca se almacena el operando a convertir en caso de ser necesario*/
-                            bool conversion = operar(yyvsp[-2],yyvsp[0],"*",op,tipo);
-                            yyval = EstructuraTercetos::nroSigTerceto();
-                            if (!conversion){
-                                EstructuraTercetos::addTerceto("*",yyvsp[-2],yyvsp[0],tipo);
-                            } else if (op == "op1") {
-                                EstructuraTercetos::addTerceto("*",EstructuraTercetos::nroActualTerceto(),yyvsp[0],tipo);
-                            } else {
-                                EstructuraTercetos::addTerceto("*",yyvsp[-2],EstructuraTercetos::nroActualTerceto(),tipo);
-                            }
-                           }
+#line 261 ".\Gramaticas\gramaticaLenguaje.y"
+{ yyval = stepsOperation(yyvsp[-2], yyvsp[0], "*"); }
 break;
 case 69:
-#line 295 ".\Gramaticas\gramaticaLenguaje.y"
-{ 
-                            string op, tipo; /*Aca se almacena el operando a convertir en caso de ser necesario*/
-                            bool conversion = operar(yyvsp[-2],yyvsp[0],"/",op,tipo);
-                            yyval = EstructuraTercetos::nroSigTerceto();
-                            if (!conversion){
-                                EstructuraTercetos::addTerceto("/",yyvsp[-2],yyvsp[0],tipo);
-                            } else if (op == "op1") {
-                                EstructuraTercetos::addTerceto("/",EstructuraTercetos::nroActualTerceto(),yyvsp[0],tipo);
-                            } else {
-                                EstructuraTercetos::addTerceto("/",yyvsp[-2],EstructuraTercetos::nroActualTerceto(),tipo);
-                            }
-                            
-                           }
+#line 262 ".\Gramaticas\gramaticaLenguaje.y"
+{ yyval = stepsOperation(yyvsp[-2], yyvsp[0], "/"); }
 break;
 case 70:
-#line 308 ".\Gramaticas\gramaticaLenguaje.y"
+#line 263 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 71:
-#line 311 ".\Gramaticas\gramaticaLenguaje.y"
+#line 266 ".\Gramaticas\gramaticaLenguaje.y"
 {  string varNombre = "<NoExiste>";
                             ChequearDeclaracion(partEndID(yyvsp[0]),varNombre,"Var");
                             yyval = varNombre;}
 break;
 case 72:
-#line 314 ".\Gramaticas\gramaticaLenguaje.y"
+#line 269 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 73:
-#line 315 ".\Gramaticas\gramaticaLenguaje.y"
+#line 270 ".\Gramaticas\gramaticaLenguaje.y"
 {string varNombre = "<NoExiste>";
                           ChequearDeclaracion(partEndID(yyvsp[-1]),varNombre,"Var");
                           yyval = EstructuraTercetos::nroSigTerceto();
@@ -1070,74 +1057,74 @@ case 73:
                          }
 break;
 case 74:
-#line 324 ".\Gramaticas\gramaticaLenguaje.y"
+#line 279 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "==";}
 break;
 case 75:
-#line 325 ".\Gramaticas\gramaticaLenguaje.y"
+#line 280 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "!!";}
 break;
 case 76:
-#line 326 ".\Gramaticas\gramaticaLenguaje.y"
+#line 281 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">=";}
 break;
 case 77:
-#line 327 ".\Gramaticas\gramaticaLenguaje.y"
+#line 282 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<=";}
 break;
 case 78:
-#line 328 ".\Gramaticas\gramaticaLenguaje.y"
+#line 283 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<";}
 break;
 case 79:
-#line 329 ".\Gramaticas\gramaticaLenguaje.y"
+#line 284 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">";}
 break;
 case 80:
-#line 332 ".\Gramaticas\gramaticaLenguaje.y"
+#line 287 ".\Gramaticas\gramaticaLenguaje.y"
 {chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 81:
-#line 333 ".\Gramaticas\gramaticaLenguaje.y"
+#line 288 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
 break;
 case 82:
-#line 334 ".\Gramaticas\gramaticaLenguaje.y"
+#line 289 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 83:
-#line 335 ".\Gramaticas\gramaticaLenguaje.y"
+#line 290 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
 break;
 case 84:
-#line 336 ".\Gramaticas\gramaticaLenguaje.y"
+#line 291 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 85:
-#line 337 ".\Gramaticas\gramaticaLenguaje.y"
+#line 292 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Una constante ULONG no puede ser negativa");}
 break;
 case 86:
-#line 340 ".\Gramaticas\gramaticaLenguaje.y"
+#line 295 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="SHORT";}
 break;
 case 87:
-#line 341 ".\Gramaticas\gramaticaLenguaje.y"
+#line 296 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="ULONG";}
 break;
 case 88:
-#line 342 ".\Gramaticas\gramaticaLenguaje.y"
+#line 297 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="FLOAT";}
 break;
 case 89:
-#line 345 ".\Gramaticas\gramaticaLenguaje.y"
+#line 300 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Print",yyvsp[0],"");}
 break;
 case 91:
-#line 351 ".\Gramaticas\gramaticaLenguaje.y"
+#line 306 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1141 "y.tab.c"
+#line 1128 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

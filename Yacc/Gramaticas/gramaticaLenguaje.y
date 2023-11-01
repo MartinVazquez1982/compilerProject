@@ -114,7 +114,7 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                     $$ = EstructuraTercetos::nroActualTerceto();
                                     if (ChequearDeclaracion(partEndID($1), nomEncontrada, "Var")){
                                         string tipo;
-                                        bool conversion = asignar(nomEncontrada,$3,tipo);
+                                        bool conversion = converAsig(nomEncontrada,$3,tipo);
                                         if (!conversion){
                                             if ($3[0] == '['){
                                                 EstructuraTercetos::addTerceto("=",nomEncontrada,$$);
@@ -252,59 +252,14 @@ heredity: ID',' { string name = "<NoExiste>";
 comparison: expression operatorsLogics expression {$$ = EstructuraTercetos::nroSigTerceto();EstructuraTercetos::addTerceto($2,$1,$3);}
          ;
 
-expression: expression'+'termino {
-                                    string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
-                                    bool conversion = operar($1,$3,"+",op,tipo);
-                                    $$ = EstructuraTercetos::nroSigTerceto();
-                                    if (!conversion){
-                                        EstructuraTercetos::addTerceto("+",$1,$3,tipo);
-                                    } else if (op == "op1") {
-                                        EstructuraTercetos::addTerceto("+",EstructuraTercetos::nroActualTerceto(),$3,tipo);
-                                    } else {
-                                        EstructuraTercetos::addTerceto("+",$1,EstructuraTercetos::nroActualTerceto(),tipo);
-                                    }
-                                  }
-          | expression'-'termino {
-                                    string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
-                                    bool conversion = operar($1,$3,"-",op,tipo);
-                                    $$ = EstructuraTercetos::nroSigTerceto();
-                                    if (!conversion){
-                                        EstructuraTercetos::addTerceto("-",$1,$3,tipo);
-                                    } else if (op == "op1") {
-                                        EstructuraTercetos::addTerceto("-",EstructuraTercetos::nroActualTerceto(),$3,tipo);
-                                    } else {
-                                        EstructuraTercetos::addTerceto("-",$1,EstructuraTercetos::nroActualTerceto(),tipo);
-                                    }
-                                  }
+expression: expression'+'termino { $$ = stepsOperation($1, $3, "+"); }
+          | expression'-'termino { $$ = stepsOperation($1, $3, "-"); }
           | termino {$$ = $1;}
           | '(' expression ')' {yyerror("Expresion no puede ir entre parentesis");}
           ;
 
-termino: termino'*'factor {
-                            string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
-                            bool conversion = operar($1,$3,"*",op,tipo);
-                            $$ = EstructuraTercetos::nroSigTerceto();
-                            if (!conversion){
-                                EstructuraTercetos::addTerceto("*",$1,$3,tipo);
-                            } else if (op == "op1") {
-                                EstructuraTercetos::addTerceto("*",EstructuraTercetos::nroActualTerceto(),$3,tipo);
-                            } else {
-                                EstructuraTercetos::addTerceto("*",$1,EstructuraTercetos::nroActualTerceto(),tipo);
-                            }
-                           }
-       | termino'/'factor { 
-                            string op, tipo; //Aca se almacena el operando a convertir en caso de ser necesario
-                            bool conversion = operar($1,$3,"/",op,tipo);
-                            $$ = EstructuraTercetos::nroSigTerceto();
-                            if (!conversion){
-                                EstructuraTercetos::addTerceto("/",$1,$3,tipo);
-                            } else if (op == "op1") {
-                                EstructuraTercetos::addTerceto("/",EstructuraTercetos::nroActualTerceto(),$3,tipo);
-                            } else {
-                                EstructuraTercetos::addTerceto("/",$1,EstructuraTercetos::nroActualTerceto(),tipo);
-                            }
-                            
-                           }
+termino: termino'*'factor { $$ = stepsOperation($1, $3, "*"); }
+       | termino'/'factor { $$ = stepsOperation($1, $3, "/"); }
        | factor {$$ = $1;}
        ;
 
@@ -353,6 +308,8 @@ return: RETURN ',' {EstructuraTercetos::addTerceto("Return","","");}
 
 %%
 
+// ============================== Mensajes ==============================
+
 void yymenssage(string menssage){
     cout  << endl  << BLUE << "Estructura detectada: " << menssage  << RESET << endl;
 }
@@ -367,6 +324,8 @@ void yywarning(string menssage){
     ContErrWar::sumWar();
 }
 
+// ============================== Chequeo Rango ==============================
+
 void chequearRangoSHORT(string valor){
     int chequear = stoi(TablaDeSimbolos::getValor(valor));
     if (chequear >= 128){
@@ -377,6 +336,8 @@ void chequearRangoSHORT(string valor){
     }
     cout << TablaDeSimbolos::imprimir();
 }
+
+// ============================== Tercetos Sentencias de Control ==============================
 
 void jumpEndWhile(){
     int tercetoFalse = EstructuraTercetos::desapilar();
@@ -411,7 +372,9 @@ string partEndID(string nesting){
     return nesting.substr(dot_index + 1);
 }
 
-bool asignar(string izq, string der, string & tipo){
+// ============================== Conversiones Implicitas ==============================
+
+bool converAsig(string izq, string der, string & tipo){
     string tipoIzq = TablaDeSimbolos::getTipo(izq);
     string tipoDer;
     string tercetoDer = der; //Se hace una copia para el caso de tener que sacarle los corchetes
@@ -456,7 +419,7 @@ string tipoOperando(string operando){
     }
 }
 
-bool operar(string op1, string op2, string operador, string & opAConvertir, string & tipo){
+bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
     string tipoOp1, tipoOp2;
     if (tipoOp1 == " " || tipoOp2 == " "){
 		tipo = " ";
@@ -498,6 +461,8 @@ bool operar(string op1, string op2, string operador, string & opAConvertir, stri
     return false;
 }
 
+// ============================== Cargar tipos Lista de variables ==============================
+
 void setearTipos(string tipo, string listVariable){
     string var;
     std::istringstream variableStream(listVariable);  // Asegúrate de inicializar el istringstream
@@ -505,6 +470,8 @@ void setearTipos(string tipo, string listVariable){
         TablaDeSimbolos::setTipo(var, tipo);
     }
 }
+
+// ============================== Chequeo Variable NO declarada ==============================
 
 bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
     string ambito=Ambito::get();
@@ -528,6 +495,8 @@ bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
     return encontrada;
 }
 
+// ============================== Chequeo Re declaradas ==============================
+
 bool chequearReDec(string decl, string usoOriginal){
     string ambito=Ambito::get();
     string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
@@ -540,6 +509,8 @@ bool chequearReDec(string decl, string usoOriginal){
     return true;
 }
 
+// ============================== Forward Declaration ==============================
+
 void claseSinimplementar(string clase){
     string name = clase;
     if (TablaDeSimbolos::getForwDecl(name) != -1){
@@ -547,4 +518,20 @@ void claseSinimplementar(string clase){
     } else {
         TablaDeSimbolos::inicForwDecl(name);
     }
+}
+
+// ============================== Pasos a seguir al detectar una operacion ==============================
+
+string stepsOperation(string op1, string op2, string operador){
+    string op, tipo, salida; //Aca se almacena el operando a convertir en caso de ser necesario
+    bool conversion = converOp(op1,op2,op,tipo);
+    salida = EstructuraTercetos::nroSigTerceto();
+    if (!conversion){
+        EstructuraTercetos::addTerceto(operador,op1,op2,tipo);
+    } else if (op == "op1") {
+        EstructuraTercetos::addTerceto(operador,EstructuraTercetos::nroActualTerceto(),op2,tipo);
+    } else {
+        EstructuraTercetos::addTerceto(operador,op1,EstructuraTercetos::nroActualTerceto(),tipo);
+    }
+    return salida;
 }
