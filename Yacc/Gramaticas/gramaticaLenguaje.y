@@ -473,6 +473,20 @@ void setearTipos(string tipo, string listVariable){
 
 // ============================== Chequeo Variable NO declarada ==============================
 
+string sigID(string & var){
+    size_t indicePunto = var.find('.');       
+    if (indicePunto != std::string::npos) {
+        string primeraParte = var.substr(0, indicePunto);
+        string var = var.substr(indicePunto + 1);
+
+        return primeraParte;
+    } else {
+        string aux=var;
+        var.clear();
+        return aux;
+    }
+}
+
 bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
     string ambito=Ambito::get();
     bool final = false;
