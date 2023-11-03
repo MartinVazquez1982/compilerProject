@@ -17,8 +17,11 @@ class AccionesSemanticas{
 		// Indica que se indentifico un token
 		static bool tokenIdentificado;
 
-		// Alamcena el caracter anterior en caso que se tenga que volver a leer
+		// Almacena el caracter anterior en caso que se tenga que volver a leer
 		static char caracterAnterior;
+
+		// Almacena si hubo un error al reconocer un ID (Letra mayuscula)
+		static bool errorID;
 
 	public:
 
@@ -67,6 +70,8 @@ class AccionesSemanticas{
 		static void AS14(char caracter);
 
 		static void AS15(char caracter);
+
+		static void AS16(char caracter);
 
 		static void AS17(char caracter);
 
