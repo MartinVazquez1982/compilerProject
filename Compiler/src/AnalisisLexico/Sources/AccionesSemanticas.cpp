@@ -16,6 +16,7 @@ string AccionesSemanticas::entrada = "";
 bool AccionesSemanticas::habilitarLectura = true;
 bool AccionesSemanticas::enviarWarning = true;
 bool AccionesSemanticas::tokenIdentificado = false;
+bool AccionesSemanticas::errorID = false;
 int AccionesSemanticas::nroToken;
 char AccionesSemanticas::caracterAnterior;
 int AccionesSemanticas::lineaInicioToken;
@@ -258,6 +259,17 @@ void AccionesSemanticas::AS15(char caracter){
 }
 
 /**
+ * Agrega caracter al string siempre y cuando la longitud
+ * sea menor a 7, dado que la palabra reservada mas larga
+ * es de 6 caracteres
+ */
+void AccionesSemanticas::AS16(char caracter){
+	if (entrada.length() < 10){
+		AS4(caracter);
+	}
+}
+
+/**
  * Bloquea la lectura de otro caracter del archivo,
  * agrega un identificador a la tabla de simbolos y
  * vuelva al automata al estado 0
@@ -329,6 +341,9 @@ void AccionesSemanticas::AS21(char caracter){
  */
 void AccionesSemanticas::AS22(char caracter){
 	if (entrada.length() < 20){
+		if (isupper(caracter)){
+			errorID = true;
+		}
 		AS4(caracter);
 		enviarWarning = true;
 	} else if (enviarWarning){
@@ -416,9 +431,16 @@ void AccionesSemanticas::AS27(char caracter){
  * invoca a la AS17
  */
 void AccionesSemanticas::AS28(char caracter){
-	AS17(caracter);
-	nroToken = 277;
-	tokenIdentificado = true;
+	if (!errorID){
+		AS17(caracter);
+		nroToken = 277;
+		tokenIdentificado = true;
+	} else {
+		cout << RED << "Linea " + to_string(lineaInicioToken) + ": Identificador contiene mayuscula/s - " << entrada << RESET << endl;
+		ContErrWar::sumErr();
+		errorID = false;
+		AS13(caracter);
+	}
 }
 
 /**
