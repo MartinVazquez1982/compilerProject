@@ -117,6 +117,13 @@ string TablaDeSimbolos::changeKey(string lexema){
 	return lexema+Ambito::get();
 }
 
+string TablaDeSimbolos::changeKeyClass(string lexema, string className){
+	TablaDeSimbolos::Datos data = TablaDeSimbolos::table.at(lexema);
+	TablaDeSimbolos::table.erase(lexema);
+	TablaDeSimbolos::table[lexema+"-"+className] = data;
+	return lexema+"-"+className;
+}
+
 // Setters
 
 void TablaDeSimbolos::setUso(string lexema, string uso){

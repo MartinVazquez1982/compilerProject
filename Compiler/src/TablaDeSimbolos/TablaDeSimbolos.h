@@ -58,6 +58,8 @@ class TablaDeSimbolos {
 
 		static string changeKey(string lexema);
 
+		static string changeKeyClass(string lexema, string className);
+
 		// Setters
 
 		static void setUso(string lexema, string uso);

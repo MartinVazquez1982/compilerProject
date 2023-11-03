@@ -69,7 +69,7 @@ objectDeclaration: ID objectList {
                                    }
                  ;
 
-objectList: objectList ';' ID { if (chequearReDec($3, "Objeto")) {
+objectList: objectList ';' ID { if (noReDeclarada($3, "Objeto")) {
                                         string key = TablaDeSimbolos::changeKey($3);
                                         TablaDeSimbolos::setUso(key, "Obj");
                                         $$=$1+"&"+key;
@@ -78,7 +78,7 @@ objectList: objectList ';' ID { if (chequearReDec($3, "Objeto")) {
                                         }
                                     }
                               } 
-          | ID { if (chequearReDec($1, "Objeto")) {
+          | ID { if (noReDeclarada($1, "Objeto")) {
                     string key = TablaDeSimbolos::changeKey($1);
                     TablaDeSimbolos::setUso(key, "Obj");
                     $$=key;
@@ -89,24 +89,38 @@ objectList: objectList ';' ID { if (chequearReDec($3, "Objeto")) {
                 } 
           ;
 
-variableList: variableList ';' ID { if (chequearReDec($3, "Variable")) {
+variableList: variableList ';' ID { if (InsideClass::insideClass()){
+                                        if (noReDeclarada($3+"-"+InsideClass::getClass(), "Atr")) {
+                                            string key = TablaDeSimbolos::changeKeyClass($3,InsideClass::getClass());
+                                            TablaDeSimbolos::setUso(key, "Atr");
+                                            $$=$1+"&"+key;
+                                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                        }
+                                   }else{
+                                    if (noReDeclarada($3, "Var")){
                                         string key = TablaDeSimbolos::changeKey($3);
                                         TablaDeSimbolos::setUso(key, "Var");
                                         $$=$1+"&"+key;
-                                        if (InsideClass::insideClass()){
-                                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                        }
                                     }
-                                  } 
-            | ID {if (chequearReDec($1, "Variable")){
-                    string key = TablaDeSimbolos::changeKey($1);
-                    TablaDeSimbolos::setUso(key, "Var");
-                    $$=key;
-                    if (InsideClass::insideClass()){
-                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                  }
+                                }
+
+            | ID {if (InsideClass::insideClass()){
+                        if (noReDeclarada($1+"-"+InsideClass::getClass(), "Atr")){
+                            string key = TablaDeSimbolos::changeKeyClass($1,InsideClass::getClass());
+                            TablaDeSimbolos::setUso(key, "Atr");
+                            $$=key;
+                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                        }
+                    }else{
+                        if (noReDeclarada($1, "Var")){
+                            string key = TablaDeSimbolos::changeKey($1);
+                            TablaDeSimbolos::setUso(key, "Var");
+                            $$=key;
+                        }
                     }
-                    }
-                  }
+                }
+                  
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
@@ -136,7 +150,7 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
 function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();EstructuraTercetos::setAmbito(Ambito::get());}
         ;
 
-functionHeader: VOID ID'('formalParameter')'{   if (chequearReDec($2, "Funcion")) {
+functionHeader: VOID ID'('formalParameter')'{   if (noReDeclarada($2, "Funcion")) {
                                                     string key = TablaDeSimbolos::changeKey($2);
                                                     TablaDeSimbolos::setUso(key, "Funcion");
                                                     Ambito::add($2);
@@ -148,7 +162,7 @@ functionHeader: VOID ID'('formalParameter')'{   if (chequearReDec($2, "Funcion")
                                                     EstructuraTercetos::setAmbito(Ambito::get());
                                                 }
                                             }
-              | VOID ID'('')'   {   if (chequearReDec($2, "Funcion")) {
+              | VOID ID'('')'   {   if (noReDeclarada($2, "Funcion")) {
                                         string key = TablaDeSimbolos::changeKey($2);
                                         TablaDeSimbolos::setUso(key, "Funcion");
                                         Ambito::add($2);
@@ -226,16 +240,20 @@ class: classHeader '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::forw
                                                  InsideClass::outClass();
                                                  }
      | classHeader {claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
+     | classHeader '{'sentenceList heredity sentenceList'}'  {yyerror("La herencia debe ir al final de la declaracion de la clase");}
      ;
 
-classHeader: CLASS ID {if (chequearReDec($2, "Clase")){
-                            string name =  TablaDeSimbolos::changeKey($2);
-                            TablaDeSimbolos::setUso(name,"Clase");
-                            TablaDeSimbolos::inicNivelHer(name);
-                            InsideClass::inClass(name);
-                        } else {
-                            InsideClass::inClass($2+Ambito::get());
-                        }}
+classHeader: CLASS ID { if ((!classInFunction($2)) && !classInClass($2)){
+                            if (noReDeclarada($2, "Clase")){
+                                string name =  TablaDeSimbolos::changeKey($2);
+                                TablaDeSimbolos::setUso(name,"Clase");
+                                TablaDeSimbolos::inicNivelHer(name);
+                                InsideClass::inClass(name);
+                            } else {
+                                InsideClass::inClass($2);
+                            }
+                        }
+                      }
             ;
 
 heredity: ID',' { string name = "<NoExiste>";
@@ -511,7 +529,7 @@ bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
 
 // ============================== Chequeo Re declaradas ==============================
 
-bool chequearReDec(string decl, string usoOriginal){
+bool noReDeclarada(string decl, string usoOriginal){
     string ambito=Ambito::get();
     string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
     if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase"){
@@ -548,4 +566,44 @@ string stepsOperation(string op1, string op2, string operador){
         EstructuraTercetos::addTerceto(operador,op1,EstructuraTercetos::nroActualTerceto(),tipo);
     }
     return salida;
+}
+
+int contarCaracter(string cadena, char caracter) {
+    int contador = 0;
+    for (char c : cadena) {
+        if (c == caracter) {
+            contador++;
+        }
+    }
+    return contador;
+}
+
+string obtenerUltimaParte(string cadena, char separador) {
+    size_t ultimaPosicion = cadena.find_last_of(separador);
+    if (ultimaPosicion != std::string::npos) {
+        return cadena.substr(ultimaPosicion + 1);
+    }
+    // Si no se encuentra el separador, devolver toda la cadena
+    return cadena;
+}
+
+bool classInFunction(string nombre){
+    string ambito = Ambito::get();
+    char caracterBuscado = ':';
+    int cantidad = contarCaracter(ambito, caracterBuscado);
+    if ( cantidad >= 2 ){
+        yyerror("No es posible declarar una clase dentro de una funcion - Clase " + nombre + " dentro de funcion " + obtenerUltimaParte(ambito,caracterBuscado));
+        return true;
+    }else{
+        return false;
+    }
+}
+
+bool classInClass(string nombre){
+    if (InsideClass::insideClass()){
+        yyerror("No es posible declarar una clase dentro de otra - Clase " + nombre + " dentro de clase " + InsideClass::getClass());
+        return true;
+    } else{
+        return false;
+    }
 }

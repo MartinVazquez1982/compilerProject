@@ -2,14 +2,13 @@
 #define ANALISISSEMANTICO_SOURCES_INSIDECLASS_H_
 
 #include <string>
-#include <stack>
 
 using namespace std;
 
 class InsideClass {
 
 	private:
-		static stack<string> clase;
+		static string clase;
 
 	public:
 

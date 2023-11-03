@@ -2,20 +2,20 @@
 
 using namespace std;
 
-stack<string> InsideClass::clase = stack<string>();
+string InsideClass::clase = " ";
 
 void InsideClass::inClass(string clase){
-	InsideClass::clase.push(clase);
+	InsideClass::clase = clase;
 }
 
 void InsideClass::outClass(){
-	InsideClass::clase.pop();
+	InsideClass::clase = " ";
 }
 
 string InsideClass::getClass(){
-	return InsideClass::clase.top();
+	return InsideClass::clase;
 }
 
 bool InsideClass::insideClass(){
-	return (InsideClass::clase.size() > 0);
+	return clase != " ";
 }
