@@ -34,6 +34,8 @@ class AccionesSemanticas{
 		// Alamcena la linea en donde inicio el token
 		static int lineaInicioToken;
 
+		// Se alamacena el token que se reconocio
+		static string tokenAlmacenado;
 
 		static char caracterLeido();
 

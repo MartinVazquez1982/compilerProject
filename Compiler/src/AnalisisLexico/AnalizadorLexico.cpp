@@ -5,6 +5,15 @@
 #include "./Headers/AccionesSemanticas.h"
 using namespace std;
 
+void impresionToken(int token){
+
+	if ( token < 273 || token == 278 ){
+		cout << endl << "=> Token Reconocido: " << AccionesSemanticas::tokenAlmacenado << "  | Nro de Token: " << token << endl;
+	} else {
+		cout << endl << "=> Token Reconocido: " << AccionesSemanticas::tokenAlmacenado << "  | Nro de Token: " << token << " |  Lexema: " << AccionesSemanticas::entrada << endl;
+	}
+}
+
 /**
  * Se busca el proximo token del archivo fuente
  *
@@ -23,8 +32,9 @@ int yylex(){
 		}
 		Dato estado = Automata::pasoAutomata(caracter);
 		if (estado.AS != nullptr) estado.AS(caracter);
+		string salida;
 		if(AccionesSemanticas::tokenReconocido()){
-			//cout << "\nNro de Token Reconocido: " << AccionesSemanticas::nroToken << endl;
+			impresionToken(AccionesSemanticas::nroToken);
 			int salida = AccionesSemanticas::nroToken;
 			if(salida == 277 || salida == 276 || salida == 275 || salida == 274 || salida == 273) yylval=AccionesSemanticas::entrada;
 			return salida;

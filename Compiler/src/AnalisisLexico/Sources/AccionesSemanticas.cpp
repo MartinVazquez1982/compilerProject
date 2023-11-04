@@ -20,6 +20,7 @@ bool AccionesSemanticas::errorID = false;
 int AccionesSemanticas::nroToken;
 char AccionesSemanticas::caracterAnterior;
 int AccionesSemanticas::lineaInicioToken;
+string AccionesSemanticas::tokenAlmacenado;
 
 /**
  * @return caracter almacenado en caracterAnterior
@@ -37,6 +38,7 @@ char AccionesSemanticas::caracterLeido(){
 bool AccionesSemanticas::tokenReconocido(){
 	if (tokenIdentificado){
 		tokenIdentificado = false;
+
 		return true;
 	}
 	return false;
@@ -142,7 +144,6 @@ void AccionesSemanticas::AS5(char caracter){
  */
 void AccionesSemanticas::AS6(char caracter){
 	TablaDeSimbolos::add(entrada);
-	//cout << TablaDeSimbolos::imprimir() << endl;
 }
 
 /**
@@ -286,6 +287,7 @@ void AccionesSemanticas::AS17(char caracter){
  */
 void AccionesSemanticas::AS18(char caracter){
 	nroToken = int(caracter);
+	tokenAlmacenado = caracter;
 	tokenIdentificado = true;
 	AS10(caracter);
 }
@@ -300,6 +302,7 @@ void AccionesSemanticas::AS19(char caracter){
         cout << RED << "Linea: " + to_string(nroLineas) + ": NO existe la palabra reservada " + entrada << RESET << endl;
         ContErrWar::sumErr();
 	} else {
+		tokenAlmacenado = entrada;
 		tokenIdentificado = true;
 	}
     AS13(caracter);
@@ -313,9 +316,11 @@ void AccionesSemanticas::AS20(char caracter){
 	tokenIdentificado = true;
 	if (caracter=='='){
 		nroToken = 269;
+		tokenAlmacenado = "==";
 		AS10(caracter);
 	} else {
 		nroToken = int('=');
+		tokenAlmacenado = "=";
 		AS13(caracter);
 	}
 }
@@ -328,9 +333,11 @@ void AccionesSemanticas::AS21(char caracter){
 	tokenIdentificado = true;
 	if (caracter=='-'){
 		nroToken = 268;
+		tokenAlmacenado = "--";
 		AS10(caracter);
 	} else {
 		nroToken = int('-');
+		tokenAlmacenado = "-";
 		AS13(caracter);
 	}
 }
@@ -360,7 +367,6 @@ void AccionesSemanticas::AS22(char caracter){
 void AccionesSemanticas::AS23(char caracter){
 	if (caracter == '%'){
 		TablaDeSimbolos::add(entrada, entrada.substr(1,entrada.length()-2),"STRING");
-		//cout << TablaDeSimbolos::imprimir() << endl;
 	} else {
 		size_t pos = entrada.find('_');
 		string valor = entrada.substr(0, pos);
@@ -368,7 +374,6 @@ void AccionesSemanticas::AS23(char caracter){
 			TablaDeSimbolos::add(entrada, valor ,"SHORT");
 		} else {
 			TablaDeSimbolos::add(entrada, valor ,"ULONG");
-			//cout << TablaDeSimbolos::imprimir() << endl;
 		}
 	}
 }
@@ -380,10 +385,13 @@ void AccionesSemanticas::AS23(char caracter){
 void AccionesSemanticas::AS24(char caracter){
 	tokenIdentificado = true;
 	if(caracter == '%'){
+		tokenAlmacenado = "CTE Cadena";
 		nroToken = 276;
 	} else if (caracter == 's'){
+		tokenAlmacenado = "CTE SHORT";
 		nroToken = 273;
 	} else {
+		tokenAlmacenado = "CTE ULONG";
 		nroToken = 274;
 	}
 }
@@ -396,7 +404,7 @@ void AccionesSemanticas::AS25(char caracter){
 	TablaDeSimbolos::add(entrada, entrada,"FLOAT");
 	tokenIdentificado = true;
 	nroToken = 275;
-	//cout << TablaDeSimbolos::imprimir() << endl;
+	tokenAlmacenado = "CTE FLOAT";
 }
 
 /**
@@ -407,12 +415,15 @@ void AccionesSemanticas::AS26(char caracter){
 	if (caracter == '='){
 		if (entrada == ">"){
 			nroToken = 271;
+			tokenAlmacenado = "=>";
 		} else {
 			nroToken = 272;
+			tokenAlmacenado = "=<";
 		}
 		AS10(caracter);
 	} else {
 		nroToken = int(entrada[0]);
+		tokenAlmacenado = entrada[0];
 		AS13(caracter);
 	}
 }
@@ -423,6 +434,7 @@ void AccionesSemanticas::AS26(char caracter){
 void AccionesSemanticas::AS27(char caracter){
 	nroToken = 270;
 	tokenIdentificado = true;
+	tokenAlmacenado = "!!";
 	AS10(caracter);
 }
 
@@ -434,6 +446,7 @@ void AccionesSemanticas::AS28(char caracter){
 	if (!errorID){
 		AS17(caracter);
 		nroToken = 277;
+		tokenAlmacenado = "ID";
 		tokenIdentificado = true;
 	} else {
 		cout << RED << "Linea " + to_string(lineaInicioToken) + ": Identificador contiene mayuscula/s - " << entrada << RESET << endl;

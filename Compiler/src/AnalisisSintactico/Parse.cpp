@@ -444,17 +444,21 @@ string partEndID(string nesting){
 
 // ============================== Conversiones Implicitas ==============================
 
+string tipoOperando(string operando){
+    if (operando[0] != '['){
+    	cout << operando << endl;
+        return TablaDeSimbolos::getTipo(operando);
+    } else {
+        operando.erase(0, 1);
+        operando.erase(operando.size() - 1, 1);
+        return EstructuraTercetos::getTipo(operando);
+    }
+}
+
 bool converAsig(string izq, string der, string & tipo){
     string tipoIzq = TablaDeSimbolos::getTipo(izq);
-    string tipoDer;
     string tercetoDer = der; //Se hace una copia para el caso de tener que sacarle los corchetes
-    if (der[0] != '['){
-        tipoDer = TablaDeSimbolos::getTipo(der);
-    } else {
-        der.erase(0, 1);
-	    der.erase(der.size() - 1, 1);
-        tipoDer = EstructuraTercetos::getTipo(der);
-    }
+    string tipoDer = tipoOperando(der);
     if (tipoIzq == " " || tipoDer == " "){
     		tipo = " ";
     		return false;
@@ -479,36 +483,14 @@ bool cambiarTipoOp1(string op1, string op2){
     }
 }
 
-string tipoOperando(string operando){
-    if (operando[0] != '['){
-        return TablaDeSimbolos::getTipo(partEndID(operando));
-    } else {
-        operando.erase(0, 1);
-        operando.erase(operando.size() - 1, 1);
-        return EstructuraTercetos::getTipo(operando);
-    }
-}
-
 bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
     string tipoOp1, tipoOp2;
+    int terceto;
+    tipoOp1 = tipoOperando(op1);
+    tipoOp2 = tipoOperando(op2);
     if (tipoOp1 == " " || tipoOp2 == " "){
 		tipo = " ";
 		return false;
-    }
-    int terceto;
-    if (op1[0] != '['){
-        tipoOp1 = TablaDeSimbolos::getTipo(partEndID(op1));
-    } else {
-        op1.erase(0, 1);
-	    op1.erase(op1.size() - 1, 1);
-        tipoOp1 = EstructuraTercetos::getTipo(op1);
-    }
-    if (op2[0] != '['){
-        tipoOp2 = TablaDeSimbolos::getTipo(partEndID(op2));
-    } else {
-        op2.erase(0, 1);
-	    op2.erase(op2.size() - 1, 1);
-        tipoOp2 = EstructuraTercetos::getTipo(op2);
     }
     string valido = Conversion::operacion(tipoOp1,tipoOp2);
     if (valido == "ERROR"){
@@ -659,7 +641,7 @@ bool classInClass(string nombre){
         return false;
     }
 }
-#line 663 "y.tab.c"
+#line 644 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1202,7 +1184,7 @@ case 92:
 #line 324 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1206 "y.tab.c"
+#line 1187 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
