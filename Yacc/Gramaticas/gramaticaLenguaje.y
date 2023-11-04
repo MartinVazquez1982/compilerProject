@@ -124,22 +124,21 @@ variableList: variableList ';' ID { if (InsideClass::insideClass()){
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
-                                    string nomEncontrada;
-                                    $$ = EstructuraTercetos::nroActualTerceto();
-                                    if (ChequearDeclaracion(partEndID($1), nomEncontrada, "Var")){
+                                    string nomEncontrada, nomAtributo;
+                                    //$$ = EstructuraTercetos::nroActualTerceto();
+                                    if ((esObjeto($1) && (ChequearDeclObjeto($1,nomEncontrada, nomAtributo))) || (!esObjeto($1) && ChequearDeclaracion($1, nomEncontrada, "Var"))){
                                         string tipo;
-                                        bool conversion = converAsig(nomEncontrada,$3,tipo);
+                                        bool conversion = converAsig(nomAtributo,$3,tipo);
                                         if (!conversion){
                                             if ($3[0] == '['){
-                                                EstructuraTercetos::addTerceto("=",nomEncontrada,$$);
+                                                EstructuraTercetos::addTerceto("=",nomEncontrada,$3);
                                             } else {
                                                 EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
                                             }
                                         }else{
-                                            EstructuraTercetos::addTerceto("=",nomEncontrada,$$,tipo);
+                                            EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
                                         }
                                     }
-                                    
                                     }
           ;
 
@@ -281,16 +280,30 @@ termino: termino'*'factor { $$ = stepsOperation($1, $3, "*"); }
        | factor {$$ = $1;}
        ;
 
-factor: nesting          {  string varNombre = "<NoExiste>";
-                            ChequearDeclaracion(partEndID($1),varNombre,"Var");
-                            $$ = varNombre;}
+factor: nesting          {  string nomEncontrada, nomAtributo = "<NoExiste>";
+                            bool chequeoOK;
+                            if (esObjeto($1)){
+                               chequeoOK = ChequearDeclObjeto($1,nomEncontrada,nomAtributo);
+                               $$ = nomEncontrada+"@"+nomAtributo;
+                            }else{
+                               chequeoOK = ChequearDeclaracion($1,nomEncontrada,"Var");
+                               $$ = nomEncontrada;
+                            } 
+                        }
       | constant         {$$ = $1;}
-      | nesting LESSLESS {string varNombre = "<NoExiste>";
-                          ChequearDeclaracion(partEndID($1),varNombre,"Var");
-                          $$ = EstructuraTercetos::nroSigTerceto();
+      | nesting LESSLESS {string nomEncontrada, nomAtributo = "<NoExiste>";
+                          bool chequeoOK;
+                          if (esObjeto($1))
+                            chequeoOK = ChequearDeclObjeto($1,nomEncontrada, nomAtributo);
+                            $$ = "-"+nomEncontrada+"@"+nomAtributo;
+                          else{
+                            chequeoOK = ChequearDeclaracion($1,nomEncontrada,"Var");
+                            $$ = "-"+nomEncontrada;
+                          } 
+                          
                           // Si se usa el valor viejo, reemplazar nroSigTerceto por varNombre
-                          EstructuraTercetos::addTerceto("-",varNombre,TablaDeSimbolos::getUno(varNombre),TablaDeSimbolos::getTipo(varNombre));
-                          EstructuraTercetos::addTerceto("=",varNombre,EstructuraTercetos::nroActualTerceto());
+                          //   EstructuraTercetos::addTerceto("-",varNombre,TablaDeSimbolos::getUno(varNombre),TablaDeSimbolos::getTipo(varNombre));
+                          //   EstructuraTercetos::addTerceto("=",varNombre,EstructuraTercetos::nroActualTerceto());
                          }
       ;
 
@@ -413,9 +426,9 @@ bool converAsig(string izq, string der, string & tipo){
     string valido = Conversion::asignacion(tipoIzq,tipoDer);
     tipo = tipoIzq;
     if (valido == "ERROR"){
-        yyerror("No es posible asignarle un "+tipoDer+" a un "+tipoIzq);
+        yyerror("No es posible asignarle un tipo "+tipoDer+" a un tipo "+tipoIzq);
     }else if (tipoIzq != tipoDer){
-    		string conversion = string(1,tipoDer[0])+"to"+string(1,tipoIzq[0]);
+            string conversion = string(1,tipoDer[0])+"to"+string(1,tipoIzq[0]); 
             EstructuraTercetos::addTerceto(conversion,tercetoDer,"",tipoIzq);
             return true;
     }
@@ -476,8 +489,8 @@ string sigID(string & var){
     size_t indicePunto = var.find('.');       
     if (indicePunto != std::string::npos) {
         string primeraParte = var.substr(0, indicePunto);
-        string var = var.substr(indicePunto + 1);
-
+        string segundaParte = var.substr(indicePunto + static_cast<size_t>(1));
+        var=segundaParte;
         return primeraParte;
     } else {
         string aux=var;
@@ -486,24 +499,71 @@ string sigID(string & var){
     }
 }
 
-bool ChequearDeclaracion(string var, string & nomEncontrada, string tipo){
+bool ChequearDeclaracion(string var, string & nomEncontrada, string uso){
     string ambito=Ambito::get();
     bool final = false;
     bool encontrada = false;
     while(! final && ! encontrada){
-        if (TablaDeSimbolos::usoAsignado(var+ambito) == tipo){
+        if (TablaDeSimbolos::usoAsignado(var+ambito) == uso){
             nomEncontrada = var+ambito;
             encontrada = true;
         }else{
             if (ambito.empty()){
                 final = true;
-                yyerror(tipo + " " + var + " NO declarada");
+                yyerror(uso + " " + var + " NO declarada");
             }
             size_t pos = ambito.find_last_of(":");
             if (pos != string::npos) {
                 ambito = ambito.substr(0, pos);
             }
         }
+    }
+    return encontrada;
+}
+int contarCaracter(string cadena, char caracter) {
+    int contador = 0;
+    for (char c : cadena) {
+        if (c == caracter) {
+            contador++;
+        }
+    }
+    return contador;
+}
+
+bool esObjeto(string nesting){
+    return contarCaracter(nesting,'.') > 0;
+}
+
+bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo){
+    string check = sigID(obj);
+    bool encontrada = false;
+    bool final = ! ChequearDeclaracion(check, nomEncontrada, "Obj");
+    string antCheck = TablaDeSimbolos::getTipo(nomEncontrada)+":main";
+    while (! final && ! encontrada){
+        check = sigID(obj);
+        if (TablaDeSimbolos::usoAsignado(check+":main") == "Clase"){
+        	if (TablaDeSimbolos::getHerencia(antCheck) != check+":main"){
+        		yyerror("Clase " + antCheck + " No hereda de " + check);
+        		final = true;
+        	} else {
+				antCheck = check+":main";
+				nomEncontrada = check + "." + nomEncontrada;
+				if (obj.length() == 0){
+					yyerror("Objeto esta intentando utilizar una clase "+ check +" en lugar de un atributo");
+					final = true;
+				}
+        	}
+        } else if (TablaDeSimbolos::usoAsignado(check+"-"+antCheck) == "Atr"){
+        	nomEncontrada = check + "." + nomEncontrada;
+            if (obj.length() == 0){
+            	nomAtributo = check+"-"+antCheck;
+                encontrada = true;
+            } 
+        } else {
+            yyerror("Clase/atributo no existente");
+            final = true;
+        }
+        
     }
     return encontrada;
 }
@@ -535,8 +595,34 @@ void claseSinimplementar(string clase){
 
 // ============================== Pasos a seguir al detectar una operacion ==============================
 
+string obtenerUltimaParte(string cadena, char separador) {
+    size_t ultimaPosicion = cadena.find_last_of(separador);
+    if (ultimaPosicion != std::string::npos) {
+        return cadena.substr(ultimaPosicion + 1);
+    }
+    // Si no se encuentra el separador, devolver toda la cadena
+    return cadena;
+}
+
+bool revisarLessLess(string & op){
+    if (op[0] == '-'){
+        op = obtenerUltimaParte(op,'-');
+        
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void crearTerLessLess(string op){
+    EstructuraTercetos::addTerceto("-",op,TablaDeSimbolos::getUno(op),TablaDeSimbolos::getTipo(op));
+    EstructuraTercetos::addTerceto("=",op,EstructuraTercetos::nroActualTerceto());
+}
+
 string stepsOperation(string op1, string op2, string operador){
     string op, tipo, salida; //Aca se almacena el operando a convertir en caso de ser necesario
+    bool lessLessOp1 = revisarLessLess(op1);
+    bool lessLessOp2 = revisarLessLess(op2);
     bool conversion = converOp(op1,op2,op,tipo);
     salida = EstructuraTercetos::nroSigTerceto();
     if (!conversion){
@@ -546,26 +632,9 @@ string stepsOperation(string op1, string op2, string operador){
     } else {
         EstructuraTercetos::addTerceto(operador,op1,EstructuraTercetos::nroActualTerceto(),tipo);
     }
+    if (lessLessOp1) crearTerLessLess(op1);
+    if (lessLessOp2) crearTerLessLess(op2);
     return salida;
-}
-
-int contarCaracter(string cadena, char caracter) {
-    int contador = 0;
-    for (char c : cadena) {
-        if (c == caracter) {
-            contador++;
-        }
-    }
-    return contador;
-}
-
-string obtenerUltimaParte(string cadena, char separador) {
-    size_t ultimaPosicion = cadena.find_last_of(separador);
-    if (ultimaPosicion != std::string::npos) {
-        return cadena.substr(ultimaPosicion + 1);
-    }
-    // Si no se encuentra el separador, devolver toda la cadena
-    return cadena;
 }
 
 bool classInFunction(string nombre){
