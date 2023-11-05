@@ -16,6 +16,12 @@ string InsideClass::getClass(){
 	return InsideClass::clase;
 }
 
+string InsideClass::getClassSinMain(){
+	string salida = InsideClass::clase;
+	size_t posDosPuntos = salida.find(':');
+	return salida.substr(0, posDosPuntos);
+}
+
 bool InsideClass::insideClass(){
 	return clase != " ";
 }

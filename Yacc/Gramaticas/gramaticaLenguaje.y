@@ -103,26 +103,42 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
 function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();EstructuraTercetos::setAmbito(Ambito::get());}
         ;
 
-functionHeader: VOID ID'('formalParameter')'{   if (noReDeclarada($2, "Funcion")) {
-                                                    string key = TablaDeSimbolos::changeKey($2);
-                                                    TablaDeSimbolos::setUso(key, "Funcion");
-                                                    Ambito::add($2);
-                                                    if (InsideClass::insideClass()){
-                                                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                                    }
+functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){  
+                                                if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                                    string key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                                    TablaDeSimbolos::setUso(key, "Metodo");
+                                                    Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                                     string keyFormal = TablaDeSimbolos::changeKey($4);
                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                     EstructuraTercetos::setAmbito(Ambito::get());
                                                 }
+                                              }else{
+                                                if (noReDeclarada($2, "Funcion")) {
+                                                    string key = TablaDeSimbolos::changeKey($2);
+                                                    TablaDeSimbolos::setUso(key, "Funcion");
+                                                    Ambito::add($2);
+                                                    string keyFormal = TablaDeSimbolos::changeKey($4);
+                                                    TablaDeSimbolos::setParametroFormal(key,keyFormal);
+                                                    EstructuraTercetos::setAmbito(Ambito::get());
+                                                }
+                                              }
                                             }
-              | VOID ID'('')'   {   if (noReDeclarada($2, "Funcion")) {
-                                        string key = TablaDeSimbolos::changeKey($2);
-                                        TablaDeSimbolos::setUso(key, "Funcion");
-                                        Ambito::add($2);
-                                        if (InsideClass::insideClass()){
-                                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                        }
+              | VOID ID'('')'   {if (InsideClass::insideClass()){
+                                    if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                        string key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                        TablaDeSimbolos::setUso(key, "Metodo");
+                                        Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                         EstructuraTercetos::setAmbito(Ambito::get());
+                                    }
+                                }else{ 
+                                        if (noReDeclarada($2, "Funcion")) {
+                                            string key = TablaDeSimbolos::changeKey($2);
+                                            TablaDeSimbolos::setUso(key, "Funcion");
+                                            Ambito::add($2);
+                                            EstructuraTercetos::setAmbito(Ambito::get());
+                                        }
                                     }
                                 }
               ;
@@ -136,18 +152,33 @@ formalParameter: type ID {$$ = $2; TablaDeSimbolos::setUso($2, "Parametro Formal
 
 functionCall: nesting'('')' {
                             string name;
-                            if (ChequearDeclaracion(partEndID($1),name,"Funcion")){
-                                EstructuraTercetos::addTerceto("Call",partEndID($1),"");
+                            string tipo;
+                            if (esObjeto($1)){
+                                if (ChequearDeclObjeto($1,name,tipo,false)){
+                                    EstructuraTercetos::addTerceto("Call",name,"");
+                                }
+                            } else {
+                                if (ChequearDeclaracion($1,name,"Funcion")){
+                                    EstructuraTercetos::addTerceto("Call",name,"");
+                                }
                             }
                             }
             | nesting'('realParameter')' {
                                             string name;
-                                            if (ChequearDeclaracion(partEndID($1),name,"Funcion")){
-                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(partEndID($1)),$3);
-                                                EstructuraTercetos::addTerceto("Call",partEndID($1),"");
+                                            string tipo;
+                                            if (esObjeto($1)){
+                                                if (ChequearDeclObjeto($1,name,tipo,false)){
+                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
+                                                    EstructuraTercetos::addTerceto("Call",name,"");
+                                                }
+                                            }else{
+                                                if (ChequearDeclaracion($1,name,"Funcion")){
+                                                    EstructuraTercetos::addTerceto("Call",name,"");
+                                                }
                                             }
                                          }
             ;
+
 
 realParameter: expression
              ;
@@ -481,7 +512,7 @@ bool esObjeto(string nesting){
     return contarCaracter(nesting,'.') > 0;
 }
 
-bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo){
+bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo, bool esAtributo = true){
     string check = sigID(obj);
     TablaDeSimbolos::del(check);
     bool encontrada = false;
@@ -509,11 +540,30 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
                 antCheck = tipo+":main";
                 if (obj.length() == 0){
                     yyerror("Uso no valido de atributo");
+                    final = true;
                 }
             } else {
+                if (esAtributo){
+                    if (obj.length() == 0){
+                        nomAtributo = check+"-"+antCheck;
+                        encontrada = true;
+                    }
+                } else {
+                    yyerror("Uso no valido de atributo en el llamado a metodo");
+                    final = true;
+                }
+            }
+        }else if (TablaDeSimbolos::usoAsignado(check+"-"+antCheck) == "Metodo"){
+            if (esAtributo){
+                yyerror("Uso no valido de atributo en la invocacion a metodo");
+                final = true;
+            } else {
                 if (obj.length() == 0){
-                    nomAtributo = check+"-"+antCheck;
+                    nomEncontrada = check+"-"+antCheck;
                     encontrada = true;
+                } else {
+                    yyerror("Uso no valido de invocacion a metodo");
+                    final = true;
                 }
             }
         } else {
@@ -618,6 +668,7 @@ bool classInClass(string nombre){
         return false;
     }
 }
+
 // ======================== Pasos en declaracion de objetos y variables ========================
 
 string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = ""){

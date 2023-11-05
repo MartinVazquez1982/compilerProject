@@ -20,6 +20,8 @@ class InsideClass {
 
 		static string getClass();
 
+		static string getClassSinMain();
+
 };
 
 #endif /* ANALISISSEMANTICO_SOURCES_INSIDECLASS_H_ */
