@@ -404,7 +404,6 @@ void chequearRangoSHORT(string valor){
     } else {
         TablaDeSimbolos::chequearPositivos(valor);
     }
-    cout << TablaDeSimbolos::imprimir();
 }
 
 // ============================== Tercetos Sentencias de Control ==============================

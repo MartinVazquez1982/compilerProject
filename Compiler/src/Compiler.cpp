@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 	/*if(ContErrWar::generarCodigo()){
 		EstructuraTercetos::mostrarTercetos();
 	}*/
-	cout << TablaDeSimbolos::imprimir();
+	TablaDeSimbolos::imprimir();
 	EstructuraTercetos::mostrarTercetos();
 	return 0;
 }

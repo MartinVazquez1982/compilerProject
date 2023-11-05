@@ -10,6 +10,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 
@@ -52,7 +53,7 @@ class TablaDeSimbolos {
 
 		static void chequearPositivos(string nro);
 
-		static string imprimir();
+		static void imprimir();
 
 		static void del(string lexema);
 
