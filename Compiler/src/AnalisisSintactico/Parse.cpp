@@ -466,9 +466,12 @@ string tipoOperando(string operando){
 }
 
 bool converAsig(string izq, string der, string & tipo){
-    string tipoIzq = TablaDeSimbolos::getTipo(izq);
+    string atrIzq, atrDer;
+    dividirStringPorArroba(izq, izq, atrIzq);
+    dividirStringPorArroba(der, der, atrDer);
+    string tipoIzq = TablaDeSimbolos::getTipo(atrIzq);
     string tercetoDer = der; //Se hace una copia para el caso de tener que sacarle los corchetes
-    string tipoDer = tipoOperando(der);
+    string tipoDer = tipoOperando(atrDer);
     if (tipoIzq == " " || tipoDer == " "){
     		tipo = " ";
     		return false;
@@ -687,18 +690,18 @@ string stepsOperation(string op1, string op2, string operador){
     bool lessLessOp2 = revisarLessLess(op2);
     bool conversion = converOp(op1,op2,op,tipo);
     salida = EstructuraTercetos::nroSigTerceto();
+    string nom1, nom2, tip1, tip2;
+    dividirStringPorArroba(op1, nom1, tip1);
+    dividirStringPorArroba(op2, nom2, tip2);
     if (!conversion){
-        string nom1, nom2, tip1, tip2;
-        dividirStringPorArroba(op1, nom1, tip1);
-        dividirStringPorArroba(op2, nom2, tip2);
         EstructuraTercetos::addTerceto(operador,nom1,nom2,tipo);
     } else if (op == "op1") {
-        EstructuraTercetos::addTerceto(operador,EstructuraTercetos::nroActualTerceto(),op2,tipo);
+        EstructuraTercetos::addTerceto(operador,EstructuraTercetos::nroActualTerceto(),nom2,tipo);
     } else {
-        EstructuraTercetos::addTerceto(operador,op1,EstructuraTercetos::nroActualTerceto(),tipo);
+        EstructuraTercetos::addTerceto(operador,nom1,EstructuraTercetos::nroActualTerceto(),tipo);
     }
-    if (lessLessOp1) crearTerLessLess(op1);
-    if (lessLessOp2) crearTerLessLess(op2);
+    if (lessLessOp1) crearTerLessLess(nom1);
+    if (lessLessOp2) crearTerLessLess(nom2);
     return salida;
 }
 
@@ -763,7 +766,7 @@ string stepsFactor(string fact, bool lessLess = false){
     if (chequeoOK && lessLess) salida = "-"+salida;
     return salida;
 }
-#line 768 "y.tab.c"
+#line 770 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -963,7 +966,7 @@ case 28:
                                                 EstructuraTercetos::addTerceto("=",nomEncontrada,yyvsp[0],tipo);
                                             }
                                         }else{
-                                            EstructuraTercetos::addTerceto("=",nomEncontrada,yyvsp[0],tipo);
+                                            EstructuraTercetos::addTerceto("=",nomEncontrada,EstructuraTercetos::nroActualTerceto(),tipo);
                                         }
                                     }
                                     }
@@ -1253,7 +1256,7 @@ case 92:
 #line 269 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1258 "y.tab.c"
+#line 1260 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

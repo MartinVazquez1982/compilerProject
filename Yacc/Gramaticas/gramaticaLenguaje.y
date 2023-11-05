@@ -90,7 +90,7 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                                 EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
                                             }
                                         }else{
-                                            EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
+                                            EstructuraTercetos::addTerceto("=",nomEncontrada,EstructuraTercetos::nroActualTerceto(),tipo);
                                         }
                                     }
                                     }
@@ -297,7 +297,6 @@ void chequearRangoSHORT(string valor){
     } else {
         TablaDeSimbolos::chequearPositivos(valor);
     }
-    cout << TablaDeSimbolos::imprimir();
 }
 
 // ============================== Tercetos Sentencias de Control ==============================
@@ -360,9 +359,12 @@ string tipoOperando(string operando){
 }
 
 bool converAsig(string izq, string der, string & tipo){
-    string tipoIzq = TablaDeSimbolos::getTipo(izq);
+    string atrIzq, atrDer;
+    dividirStringPorArroba(izq, izq, atrIzq);
+    dividirStringPorArroba(der, der, atrDer);
+    string tipoIzq = TablaDeSimbolos::getTipo(atrIzq);
     string tercetoDer = der; //Se hace una copia para el caso de tener que sacarle los corchetes
-    string tipoDer = tipoOperando(der);
+    string tipoDer = tipoOperando(atrDer);
     if (tipoIzq == " " || tipoDer == " "){
     		tipo = " ";
     		return false;
@@ -581,18 +583,18 @@ string stepsOperation(string op1, string op2, string operador){
     bool lessLessOp2 = revisarLessLess(op2);
     bool conversion = converOp(op1,op2,op,tipo);
     salida = EstructuraTercetos::nroSigTerceto();
+    string nom1, nom2, tip1, tip2;
+    dividirStringPorArroba(op1, nom1, tip1);
+    dividirStringPorArroba(op2, nom2, tip2);
     if (!conversion){
-        string nom1, nom2, tip1, tip2;
-        dividirStringPorArroba(op1, nom1, tip1);
-        dividirStringPorArroba(op2, nom2, tip2);
         EstructuraTercetos::addTerceto(operador,nom1,nom2,tipo);
     } else if (op == "op1") {
-        EstructuraTercetos::addTerceto(operador,EstructuraTercetos::nroActualTerceto(),op2,tipo);
+        EstructuraTercetos::addTerceto(operador,EstructuraTercetos::nroActualTerceto(),nom2,tipo);
     } else {
-        EstructuraTercetos::addTerceto(operador,op1,EstructuraTercetos::nroActualTerceto(),tipo);
+        EstructuraTercetos::addTerceto(operador,nom1,EstructuraTercetos::nroActualTerceto(),tipo);
     }
-    if (lessLessOp1) crearTerLessLess(op1);
-    if (lessLessOp2) crearTerLessLess(op2);
+    if (lessLessOp1) crearTerLessLess(nom1);
+    if (lessLessOp2) crearTerLessLess(nom2);
     return salida;
 }
 
