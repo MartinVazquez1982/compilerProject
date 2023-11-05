@@ -376,7 +376,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 297 ".\Gramaticas\gramaticaLenguaje.y"
+#line 273 ".\Gramaticas\gramaticaLenguaje.y"
 
 // ============================== Mensajes ==============================
 
@@ -444,9 +444,21 @@ string partEndID(string nesting){
 
 // ============================== Conversiones Implicitas ==============================
 
+void dividirStringPorArroba(const string &input, string &nombreLlamado, string &nombraAtri) {
+    size_t posicionArroba = input.find('@');
+    if (posicionArroba != std::string::npos) {
+        string comNom = input;
+        nombreLlamado = input.substr(0, posicionArroba);
+        nombraAtri = comNom.substr(posicionArroba + 1);
+    } else {
+        nombreLlamado = input;
+        nombraAtri = input;
+    }
+}
+
 string tipoOperando(string operando){
     if (operando[0] != '['){
-        return TablaDeSimbolos::getTipo(partEndID(operando));
+        return TablaDeSimbolos::getTipo(operando);
     } else {
         operando.erase(0, 1);
         operando.erase(operando.size() - 1, 1);
@@ -483,10 +495,11 @@ bool cambiarTipoOp1(string op1, string op2){
 }
 
 bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
-    string tipoOp1, tipoOp2;
-    int terceto;
-    tipoOp1 = tipoOperando(op1);
-    tipoOp2 = tipoOperando(op2);
+    string tipoOp1, tipoOp2, atrOp1, atrOp2;
+    dividirStringPorArroba(op1, op1, atrOp1);
+    dividirStringPorArroba(op2, op2, atrOp2);
+    tipoOp1 = tipoOperando(atrOp1);
+    tipoOp2 = tipoOperando(atrOp2);
     if (tipoOp1 == " " || tipoOp2 == " "){
 		tipo = " ";
 		return false;
@@ -670,12 +683,16 @@ void crearTerLessLess(string op){
 
 string stepsOperation(string op1, string op2, string operador){
     string op, tipo, salida; //Aca se almacena el operando a convertir en caso de ser necesario
+    
     bool lessLessOp1 = revisarLessLess(op1);
     bool lessLessOp2 = revisarLessLess(op2);
     bool conversion = converOp(op1,op2,op,tipo);
     salida = EstructuraTercetos::nroSigTerceto();
     if (!conversion){
-        EstructuraTercetos::addTerceto(operador,op1,op2,tipo);
+        string nom1, nom2, tip1, tip2;
+        dividirStringPorArroba(op1, nom1, tip1);
+        dividirStringPorArroba(op2, nom2, tip2);
+        EstructuraTercetos::addTerceto(operador,nom1,nom2,tipo);
     } else if (op == "op1") {
         EstructuraTercetos::addTerceto(operador,EstructuraTercetos::nroActualTerceto(),op2,tipo);
     } else {
@@ -708,10 +725,6 @@ bool classInClass(string nombre){
 }
 // ======================== Pasos en declaracion de objetos y variables ========================
 
-string anidarNombres(string declarado, string declaraciones){
-
-}
-
 string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = ""){
     string key;
     if (InsideClass::insideClass()){
@@ -734,7 +747,24 @@ string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = "
     }
     return salida;
 }
-#line 738 "y.tab.c"
+
+// ======================== Pasos cuando se reconoce un factor ========================
+
+string stepsFactor(string fact, bool lessLess = false){
+    string nomEncontrada, nomAtributo = "<NoExiste>";
+    bool chequeoOK;
+    string salida;
+    if (esObjeto(fact)){
+        chequeoOK = ChequearDeclObjeto(fact,nomEncontrada, nomAtributo);
+        if (chequeoOK)  salida = nomEncontrada+"@"+nomAtributo;
+    }else{
+        chequeoOK = ChequearDeclaracion(fact,nomEncontrada,"Var");
+        if (chequeoOK) salida = nomEncontrada;
+    } 
+    if (chequeoOK && lessLess) salida = "-"+salida;
+    return salida;
+}
+#line 768 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1146,109 +1176,85 @@ case 71:
 break;
 case 72:
 #line 237 ".\Gramaticas\gramaticaLenguaje.y"
-{  string nomEncontrada, nomAtributo = "<NoExiste>";
-                            bool chequeoOK;
-                            if (esObjeto(yyvsp[0])){
-                               chequeoOK = ChequearDeclObjeto(yyvsp[0],nomEncontrada,nomAtributo);
-                               if (chequeoOK){
-                                    yyval = nomEncontrada+"@"+nomAtributo;
-                               }
-                            }else{
-                               chequeoOK = ChequearDeclaracion(yyvsp[0],nomEncontrada,"Var");
-                               yyval = nomEncontrada;
-                            } 
-                        }
+{yyval = stepsFactor(yyvsp[0]);}
 break;
 case 73:
-#line 249 ".\Gramaticas\gramaticaLenguaje.y"
+#line 238 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 74:
-#line 250 ".\Gramaticas\gramaticaLenguaje.y"
-{string nomEncontrada, nomAtributo = "<NoExiste>";
-                          bool chequeoOK;
-                          if (esObjeto(yyvsp[-1])){
-                            chequeoOK = ChequearDeclObjeto(yyvsp[-1],nomEncontrada, nomAtributo);
-                            yyval = "-"+nomEncontrada+"@"+nomAtributo;
-                          }else{
-                            chequeoOK = ChequearDeclaracion(yyvsp[-1],nomEncontrada,"Var");
-                            yyval = "-"+nomEncontrada;
-                          } 
-                          
-                          /* Si se usa el valor viejo, reemplazar nroSigTerceto por varNombre*/
-                          /*   EstructuraTercetos::addTerceto("-",varNombre,TablaDeSimbolos::getUno(varNombre),TablaDeSimbolos::getTipo(varNombre));*/
-                          /*   EstructuraTercetos::addTerceto("=",varNombre,EstructuraTercetos::nroActualTerceto());*/
-                         }
+#line 239 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = stepsFactor(yyvsp[-1], true);}
 break;
 case 75:
-#line 266 ".\Gramaticas\gramaticaLenguaje.y"
+#line 242 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "==";}
 break;
 case 76:
-#line 267 ".\Gramaticas\gramaticaLenguaje.y"
+#line 243 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "!!";}
 break;
 case 77:
-#line 268 ".\Gramaticas\gramaticaLenguaje.y"
+#line 244 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">=";}
 break;
 case 78:
-#line 269 ".\Gramaticas\gramaticaLenguaje.y"
+#line 245 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<=";}
 break;
 case 79:
-#line 270 ".\Gramaticas\gramaticaLenguaje.y"
+#line 246 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<";}
 break;
 case 80:
-#line 271 ".\Gramaticas\gramaticaLenguaje.y"
+#line 247 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">";}
 break;
 case 81:
-#line 274 ".\Gramaticas\gramaticaLenguaje.y"
+#line 250 ".\Gramaticas\gramaticaLenguaje.y"
 {chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 82:
-#line 275 ".\Gramaticas\gramaticaLenguaje.y"
+#line 251 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
 break;
 case 83:
-#line 276 ".\Gramaticas\gramaticaLenguaje.y"
+#line 252 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 84:
-#line 277 ".\Gramaticas\gramaticaLenguaje.y"
+#line 253 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = yyvsp[0];}
 break;
 case 85:
-#line 278 ".\Gramaticas\gramaticaLenguaje.y"
+#line 254 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 86:
-#line 279 ".\Gramaticas\gramaticaLenguaje.y"
+#line 255 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Una constante ULONG no puede ser negativa");}
 break;
 case 87:
-#line 282 ".\Gramaticas\gramaticaLenguaje.y"
+#line 258 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="SHORT";}
 break;
 case 88:
-#line 283 ".\Gramaticas\gramaticaLenguaje.y"
+#line 259 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="ULONG";}
 break;
 case 89:
-#line 284 ".\Gramaticas\gramaticaLenguaje.y"
+#line 260 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="FLOAT";}
 break;
 case 90:
-#line 287 ".\Gramaticas\gramaticaLenguaje.y"
+#line 263 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Print",yyvsp[0],"");}
 break;
 case 92:
-#line 293 ".\Gramaticas\gramaticaLenguaje.y"
+#line 269 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1252 "y.tab.c"
+#line 1258 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

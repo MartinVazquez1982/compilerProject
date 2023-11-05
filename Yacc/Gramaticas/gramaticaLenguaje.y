@@ -234,33 +234,9 @@ termino: termino'*'factor { $$ = stepsOperation($1, $3, "*"); }
        | factor {$$ = $1;}
        ;
 
-factor: nesting          {  string nomEncontrada, nomAtributo = "<NoExiste>";
-                            bool chequeoOK;
-                            if (esObjeto($1)){
-                               chequeoOK = ChequearDeclObjeto($1,nomEncontrada,nomAtributo);
-                               if (chequeoOK){
-                                    $$ = nomEncontrada+"@"+nomAtributo;
-                               }
-                            }else{
-                               chequeoOK = ChequearDeclaracion($1,nomEncontrada,"Var");
-                               $$ = nomEncontrada;
-                            } 
-                        }
+factor: nesting          {$$ = stepsFactor($1);}
       | constant         {$$ = $1;}
-      | nesting LESSLESS {string nomEncontrada, nomAtributo = "<NoExiste>";
-                          bool chequeoOK;
-                          if (esObjeto($1)){
-                            chequeoOK = ChequearDeclObjeto($1,nomEncontrada, nomAtributo);
-                            $$ = "-"+nomEncontrada+"@"+nomAtributo;
-                          }else{
-                            chequeoOK = ChequearDeclaracion($1,nomEncontrada,"Var");
-                            $$ = "-"+nomEncontrada;
-                          } 
-                          
-                          // Si se usa el valor viejo, reemplazar nroSigTerceto por varNombre
-                          //   EstructuraTercetos::addTerceto("-",varNombre,TablaDeSimbolos::getUno(varNombre),TablaDeSimbolos::getTipo(varNombre));
-                          //   EstructuraTercetos::addTerceto("=",varNombre,EstructuraTercetos::nroActualTerceto());
-                         }
+      | nesting LESSLESS {$$ = stepsFactor($1, true);}
       ;
 
 operatorsLogics: EQUAL {$$ = "==";}
@@ -361,9 +337,21 @@ string partEndID(string nesting){
 
 // ============================== Conversiones Implicitas ==============================
 
+void dividirStringPorArroba(const string &input, string &nombreLlamado, string &nombraAtri) {
+    size_t posicionArroba = input.find('@');
+    if (posicionArroba != std::string::npos) {
+        string comNom = input;
+        nombreLlamado = input.substr(0, posicionArroba);
+        nombraAtri = comNom.substr(posicionArroba + 1);
+    } else {
+        nombreLlamado = input;
+        nombraAtri = input;
+    }
+}
+
 string tipoOperando(string operando){
     if (operando[0] != '['){
-        return TablaDeSimbolos::getTipo(partEndID(operando));
+        return TablaDeSimbolos::getTipo(operando);
     } else {
         operando.erase(0, 1);
         operando.erase(operando.size() - 1, 1);
@@ -400,10 +388,11 @@ bool cambiarTipoOp1(string op1, string op2){
 }
 
 bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
-    string tipoOp1, tipoOp2;
-    int terceto;
-    tipoOp1 = tipoOperando(op1);
-    tipoOp2 = tipoOperando(op2);
+    string tipoOp1, tipoOp2, atrOp1, atrOp2;
+    dividirStringPorArroba(op1, op1, atrOp1);
+    dividirStringPorArroba(op2, op2, atrOp2);
+    tipoOp1 = tipoOperando(atrOp1);
+    tipoOp2 = tipoOperando(atrOp2);
     if (tipoOp1 == " " || tipoOp2 == " "){
 		tipo = " ";
 		return false;
@@ -593,7 +582,10 @@ string stepsOperation(string op1, string op2, string operador){
     bool conversion = converOp(op1,op2,op,tipo);
     salida = EstructuraTercetos::nroSigTerceto();
     if (!conversion){
-        EstructuraTercetos::addTerceto(operador,op1,op2,tipo);
+        string nom1, nom2, tip1, tip2;
+        dividirStringPorArroba(op1, nom1, tip1);
+        dividirStringPorArroba(op2, nom2, tip2);
+        EstructuraTercetos::addTerceto(operador,nom1,nom2,tipo);
     } else if (op == "op1") {
         EstructuraTercetos::addTerceto(operador,EstructuraTercetos::nroActualTerceto(),op2,tipo);
     } else {
@@ -646,5 +638,22 @@ string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = "
     } else {
         salida = key;
     }
+    return salida;
+}
+
+// ======================== Pasos cuando se reconoce un factor ========================
+
+string stepsFactor(string fact, bool lessLess = false){
+    string nomEncontrada, nomAtributo = "<NoExiste>";
+    bool chequeoOK;
+    string salida;
+    if (esObjeto(fact)){
+        chequeoOK = ChequearDeclObjeto(fact,nomEncontrada, nomAtributo);
+        if (chequeoOK)  salida = nomEncontrada+"@"+nomAtributo;
+    }else{
+        chequeoOK = ChequearDeclaracion(fact,nomEncontrada,"Var");
+        if (chequeoOK) salida = nomEncontrada;
+    } 
+    if (chequeoOK && lessLess) salida = "-"+salida;
     return salida;
 }
