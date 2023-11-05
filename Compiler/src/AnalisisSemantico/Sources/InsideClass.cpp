@@ -3,9 +3,14 @@
 using namespace std;
 
 string InsideClass::clase = " ";
+stack<string> InsideClass::metodos;
 
 void InsideClass::inClass(string clase){
 	InsideClass::clase = clase;
+}
+
+void InsideClass::addMethod(string metodo){
+	InsideClass::metodos.push(metodo);
 }
 
 void InsideClass::outClass(){
@@ -24,4 +29,22 @@ string InsideClass::getClassSinMain(){
 
 bool InsideClass::insideClass(){
 	return clase != " ";
+}
+
+bool InsideClass::moreMethods(){
+	return !InsideClass::metodos.empty();
+}
+
+string InsideClass::getMethod(){
+	return InsideClass::metodos.top();
+}
+
+void InsideClass::outMethod(){
+	InsideClass::metodos.pop();
+}
+
+void InsideClass::unstackMethods(){
+	while(InsideClass::moreMethods()){
+		InsideClass::metodos.pop();
+	}
 }

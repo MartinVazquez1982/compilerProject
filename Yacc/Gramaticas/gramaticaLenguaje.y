@@ -100,11 +100,14 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
        | ID {$$ = $1;}
        ;
 
-function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();EstructuraTercetos::setAmbito(Ambito::get());}
+function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();
+                                            EstructuraTercetos::setAmbito(Ambito::get());
+                                            }
         ;
 
 functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){  
-                                                if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                                if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")){
+                                                    InsideClass::addMethod($2);
                                                     string key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                     TablaDeSimbolos::setUso(key, "Metodo");
                                                     Ambito::add($2+"-"+InsideClass::getClassSinMain());
@@ -126,9 +129,11 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                             }
               | VOID ID'('')'   {if (InsideClass::insideClass()){
                                     if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                        InsideClass::addMethod($2);
                                         string key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                         TablaDeSimbolos::setUso(key, "Metodo");
                                         Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                        string Amb = Ambito::get();
                                         TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                         EstructuraTercetos::setAmbito(Ambito::get());
                                     }
@@ -179,7 +184,6 @@ functionCall: nesting'('')' {
                                          }
             ;
 
-
 realParameter: expression
              ;
 
@@ -213,7 +217,11 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
          | comparison     {yyerror("Faltan  parentesis en la condicion");}
          ;
 
-class: classHeader '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::forwDeclComp(InsideClass::getClass());InsideClass::outClass();}
+class: classHeader '{'sentenceList'}' { yymenssage("Clase");
+                                        TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
+                                        InsideClass::outClass();
+                                        InsideClass::unstackMethods();
+                                      }
      | classHeader '{'sentenceList heredity '}' {
                                                  yymenssage("Clase");
                                                  TablaDeSimbolos::setHerencia(InsideClass::getClass(),$4);
@@ -221,6 +229,7 @@ class: classHeader '{'sentenceList'}' {yymenssage("Clase");TablaDeSimbolos::forw
                                                     yyerror("La clase ha excedido el nivel de herencia (maximo nivel = 3)");
                                                  }
                                                  TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
+                                                 ChequearSobrescritura();
                                                  InsideClass::outClass();
                                                  }
      | classHeader {claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
@@ -589,6 +598,25 @@ bool noReDeclarada(string decl, string usoOriginal){
     return true;
 }
 
+// ============================== Sobrescritura de metodos ==============================
+
+void ChequearSobrescritura(){
+    string clase = InsideClass::getClass();
+    string herencia = TablaDeSimbolos::getHerencia(clase);
+    string metodoActual, uso;
+    if (!(herencia == " ")){
+        while (InsideClass::moreMethods()){
+            metodoActual = InsideClass::getMethod();
+            uso = TablaDeSimbolos::usoAsignado(metodoActual+"-"+herencia);
+            if (uso == "Metodo"){
+                yyerror("No es posible en la clase "+clase+" sobreescribir el metodo "+metodoActual+" de la clase "+herencia+" de la cual hereda");
+            }
+            InsideClass::outMethod();
+        }
+    }
+    InsideClass::unstackMethods(); //En el caso de no haber herencia se vacia la pila llena de metodos
+}
+
 // ============================== Forward Declaration ==============================
 
 void claseSinimplementar(string clase){
@@ -673,7 +701,7 @@ bool classInClass(string nombre){
 
 string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = ""){
     string key;
-    if (InsideClass::insideClass()){
+    if ((InsideClass::insideClass()) && (!InsideClass::moreMethods())){
         if (noReDeclarada(declarado+"-"+InsideClass::getClass(), "Atr")){
             key = TablaDeSimbolos::changeKeyClass(declarado,InsideClass::getClass());
             TablaDeSimbolos::setUso(key, "Atr");

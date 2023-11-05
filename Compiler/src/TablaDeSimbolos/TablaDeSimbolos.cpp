@@ -188,11 +188,15 @@ void TablaDeSimbolos::inicForwDecl(string lexema){
 // Getters
 
 string TablaDeSimbolos::usoAsignado(string lexema){
-	auto it = TablaDeSimbolos::table.find(lexema);
-	if (it == TablaDeSimbolos::table.end()){
+	try {
+		auto it = TablaDeSimbolos::table.find(lexema);
+		if (it == TablaDeSimbolos::table.end()){
+			return "&";
+		}
+		return it->second.uso;
+	}catch(const out_of_range & err){
 		return "&";
 	}
-	return it->second.uso;
 }
 
 string TablaDeSimbolos::getParametroFormal(string lexema){
