@@ -59,7 +59,7 @@ string TablaDeSimbolos::getValor(string lexema){
 string TablaDeSimbolos::imprimir() {
 	string salida = "\n			Tabla de Simbolos\n";
 	for (const auto& par : TablaDeSimbolos::table) {
-		salida = salida + "Clave: " + par.first + " | Clase: " + par.second.clase  + " | Imp: " + to_string(par.second.forwDecl) + "\n";
+		salida = salida + "Clave: " + par.first + " | Clase: " + par.second.clase  + " | tipo: " + par.second.tipo +  " | uso: " + par.second.uso  + "\n";
 	}
 	return salida;
 }

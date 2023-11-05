@@ -63,64 +63,18 @@ variableDeclaration: type variableList {setearTipos($1,$2);}
 
 objectDeclaration: ID objectList {  
                                     string name;
-                                    ChequearDeclaracion(partEndID($1), name, "Clase");
+                                    ChequearDeclaracion($1, name, "Clase");
                                     setearTipos($1,$2);
                                     TablaDeSimbolos::del($1); //El ID al declarar un objeto se agrega automaticamente por error en el lexico
                                    }
                  ;
 
-objectList: objectList ';' ID { if (noReDeclarada($3, "Objeto")) {
-                                        string key = TablaDeSimbolos::changeKey($3);
-                                        TablaDeSimbolos::setUso(key, "Obj");
-                                        $$=$1+"&"+key;
-                                        if (InsideClass::insideClass()){
-                                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                        }
-                                    }
-                              } 
-          | ID { if (noReDeclarada($1, "Objeto")) {
-                    string key = TablaDeSimbolos::changeKey($1);
-                    TablaDeSimbolos::setUso(key, "Obj");
-                    $$=key;
-                    if (InsideClass::insideClass()){
-                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                    }
-                }
-                } 
+objectList: objectList ';' ID { $$ = stepsDeclVarAndObj($3, "Obj", $1);} 
+          | ID {$$ = stepsDeclVarAndObj($1, "Obj");} 
           ;
 
-variableList: variableList ';' ID { if (InsideClass::insideClass()){
-                                        if (noReDeclarada($3+"-"+InsideClass::getClass(), "Atr")) {
-                                            string key = TablaDeSimbolos::changeKeyClass($3,InsideClass::getClass());
-                                            TablaDeSimbolos::setUso(key, "Atr");
-                                            $$=$1+"&"+key;
-                                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                        }
-                                   }else{
-                                    if (noReDeclarada($3, "Var")){
-                                        string key = TablaDeSimbolos::changeKey($3);
-                                        TablaDeSimbolos::setUso(key, "Var");
-                                        $$=$1+"&"+key;
-                                    }
-                                  }
-                                }
-
-            | ID {if (InsideClass::insideClass()){
-                        if (noReDeclarada($1+"-"+InsideClass::getClass(), "Atr")){
-                            string key = TablaDeSimbolos::changeKeyClass($1,InsideClass::getClass());
-                            TablaDeSimbolos::setUso(key, "Atr");
-                            $$=key;
-                            TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                        }
-                    }else{
-                        if (noReDeclarada($1, "Var")){
-                            string key = TablaDeSimbolos::changeKey($1);
-                            TablaDeSimbolos::setUso(key, "Var");
-                            $$=key;
-                        }
-                    }
-                }
-                  
+variableList: variableList ';' ID {$$ = stepsDeclVarAndObj($3, "Var", $1);}
+            | ID { $$ = stepsDeclVarAndObj($1, "Var");}
             ;
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
@@ -284,7 +238,9 @@ factor: nesting          {  string nomEncontrada, nomAtributo = "<NoExiste>";
                             bool chequeoOK;
                             if (esObjeto($1)){
                                chequeoOK = ChequearDeclObjeto($1,nomEncontrada,nomAtributo);
-                               $$ = nomEncontrada+"@"+nomAtributo;
+                               if (chequeoOK){
+                                    $$ = nomEncontrada+"@"+nomAtributo;
+                               }
                             }else{
                                chequeoOK = ChequearDeclaracion($1,nomEncontrada,"Var");
                                $$ = nomEncontrada;
@@ -293,10 +249,10 @@ factor: nesting          {  string nomEncontrada, nomAtributo = "<NoExiste>";
       | constant         {$$ = $1;}
       | nesting LESSLESS {string nomEncontrada, nomAtributo = "<NoExiste>";
                           bool chequeoOK;
-                          if (esObjeto($1))
+                          if (esObjeto($1)){
                             chequeoOK = ChequearDeclObjeto($1,nomEncontrada, nomAtributo);
                             $$ = "-"+nomEncontrada+"@"+nomAtributo;
-                          else{
+                          }else{
                             chequeoOK = ChequearDeclaracion($1,nomEncontrada,"Var");
                             $$ = "-"+nomEncontrada;
                           } 
@@ -536,11 +492,13 @@ bool esObjeto(string nesting){
 
 bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo){
     string check = sigID(obj);
+    TablaDeSimbolos::del(check);
     bool encontrada = false;
     bool final = ! ChequearDeclaracion(check, nomEncontrada, "Obj");
     string antCheck = TablaDeSimbolos::getTipo(nomEncontrada)+":main";
     while (! final && ! encontrada){
         check = sigID(obj);
+        TablaDeSimbolos::del(check);
         if (TablaDeSimbolos::usoAsignado(check+":main") == "Clase"){
         	if (TablaDeSimbolos::getHerencia(antCheck) != check+":main"){
         		yyerror("Clase " + antCheck + " No hereda de " + check);
@@ -554,11 +512,19 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
 				}
         	}
         } else if (TablaDeSimbolos::usoAsignado(check+"-"+antCheck) == "Atr"){
+            string tipo = TablaDeSimbolos::getTipo(check+"-"+antCheck);
         	nomEncontrada = check + "." + nomEncontrada;
-            if (obj.length() == 0){
-            	nomAtributo = check+"-"+antCheck;
-                encontrada = true;
-            } 
+            if (tipo != "SHORT" && tipo != "ULONG" && tipo != "FLOAT"){
+                antCheck = tipo+":main";
+                if (obj.length() == 0){
+                    yyerror("Uso no valido de atributo");
+                }
+            } else {
+                if (obj.length() == 0){
+                    nomAtributo = check+"-"+antCheck;
+                    encontrada = true;
+                }
+            }
         } else {
             yyerror("Clase/atributo no existente");
             final = true;
@@ -621,6 +587,7 @@ void crearTerLessLess(string op){
 
 string stepsOperation(string op1, string op2, string operador){
     string op, tipo, salida; //Aca se almacena el operando a convertir en caso de ser necesario
+    
     bool lessLessOp1 = revisarLessLess(op1);
     bool lessLessOp2 = revisarLessLess(op2);
     bool conversion = converOp(op1,op2,op,tipo);
@@ -656,4 +623,28 @@ bool classInClass(string nombre){
     } else{
         return false;
     }
+}
+// ======================== Pasos en declaracion de objetos y variables ========================
+
+string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = ""){
+    string key;
+    if (InsideClass::insideClass()){
+        if (noReDeclarada(declarado+"-"+InsideClass::getClass(), "Atr")){
+            key = TablaDeSimbolos::changeKeyClass(declarado,InsideClass::getClass());
+            TablaDeSimbolos::setUso(key, "Atr");
+            TablaDeSimbolos::setClass(key,InsideClass::getClass());
+        }
+    } else {
+        if (noReDeclarada(declarado, uso)) {
+            key = TablaDeSimbolos::changeKey(declarado);
+            TablaDeSimbolos::setUso(key, uso);
+        }
+    }
+    string salida;
+    if (declaraciones != ""){
+        salida = declaraciones+"&"+key;
+    } else {
+        salida = key;
+    }
+    return salida;
 }
