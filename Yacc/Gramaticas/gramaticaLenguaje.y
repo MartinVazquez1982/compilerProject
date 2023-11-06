@@ -102,21 +102,38 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
 
 function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();
                                             EstructuraTercetos::setAmbito(Ambito::get());
+                                            if ((InsideClass::insideClass()) && (InsideClass::getFuncInMethod())){
+                                                InsideClass::setFuncInMethod(false);
+                                                InsideClass::setNivelValido(true);
+                                            }
                                             }
         ;
 
-functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){  
-                                                if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")){
-                                                    InsideClass::addMethod($2);
-                                                    string key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
-                                                    TablaDeSimbolos::setUso(key, "Metodo");
-                                                    Ambito::add($2+"-"+InsideClass::getClassSinMain());
-                                                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                                    string keyFormal = TablaDeSimbolos::changeKey($4);
-                                                    TablaDeSimbolos::setParametroFormal(key,keyFormal);
-                                                    EstructuraTercetos::setAmbito(Ambito::get());
+functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){ 
+                                                string key; 
+                                                if ((InsideClass::getFuncInMethod())){ //Se trata de una funcion dentro de un metodo
+                                                    if (InsideClass::getNivelValido()){
+                                                        key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                                        TablaDeSimbolos::setUso(key, "Funcion");
+                                                        Ambito::add($2);
+                                                        InsideClass::setNivelValido(false);
+                                                    }else{
+                                                        yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
+                                                    }
+                                                }else{ //Se trata de un metodo
+                                                    if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                                        InsideClass::addMethod($2);
+                                                        key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                                        TablaDeSimbolos::setUso(key, "Metodo");
+                                                        Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                                        InsideClass::setFuncInMethod(true);
+                                                    }
                                                 }
-                                              }else{
+                                                TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                                string keyFormal = TablaDeSimbolos::changeKey($4);
+                                                TablaDeSimbolos::setParametroFormal(key,keyFormal);
+                                                EstructuraTercetos::setAmbito(Ambito::get());
+                                            }else{
                                                 if (noReDeclarada($2, "Funcion")) {
                                                     string key = TablaDeSimbolos::changeKey($2);
                                                     TablaDeSimbolos::setUso(key, "Funcion");
@@ -128,15 +145,27 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                               }
                                             }
               | VOID ID'('')'   {if (InsideClass::insideClass()){
-                                    if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
-                                        InsideClass::addMethod($2);
-                                        string key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
-                                        TablaDeSimbolos::setUso(key, "Metodo");
-                                        Ambito::add($2+"-"+InsideClass::getClassSinMain());
-                                        string Amb = Ambito::get();
+                                        string key;
+                                        if ((InsideClass::getFuncInMethod()) ){ //Se trata de una funcion dentro de un metodo
+                                            if (InsideClass::getNivelValido()){
+                                                key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                                TablaDeSimbolos::setUso(key, "Funcion");
+                                                Ambito::add($2);
+                                                InsideClass::setNivelValido(false);
+                                            }else{
+                                                yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
+                                            }
+                                        }else{ //Se trata de un metodo
+                                            if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                                InsideClass::addMethod($2);
+                                                key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                                TablaDeSimbolos::setUso(key, "Metodo");
+                                                Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                                InsideClass::setFuncInMethod(true);
+                                            }
+                                        }
                                         TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                         EstructuraTercetos::setAmbito(Ambito::get());
-                                    }
                                 }else{ 
                                         if (noReDeclarada($2, "Funcion")) {
                                             string key = TablaDeSimbolos::changeKey($2);
