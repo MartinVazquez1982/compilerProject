@@ -43,7 +43,7 @@ class TablaDeSimbolos {
 		static void addConsultado(string lexema, string atributo, string valor);
 
 	public:
-		static void add(string lexema, string valor, string tipo);
+		static void add(string lexema, string valor, string tipo, string uso);
 
 		static void add(string lexema);
 

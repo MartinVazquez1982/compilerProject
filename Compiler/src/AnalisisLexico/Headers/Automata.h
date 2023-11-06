@@ -18,7 +18,7 @@ class Automata{
 	private:
 
 		// Cantidad de filas de la matriz del automata
-		const static int FILAS = 19;
+		const static int FILAS = 22;
 
 		// Cantidad de columnas de la matriz del automata
 		const static int COLUMNAS = 23;

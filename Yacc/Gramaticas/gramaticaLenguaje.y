@@ -82,7 +82,13 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                     //$$ = EstructuraTercetos::nroActualTerceto();
                                     if ((esObjeto($1) && (ChequearDeclObjeto($1,nomEncontrada, nomAtributo))) || (!esObjeto($1) && ChequearDeclaracion($1, nomEncontrada, "Var"))){
                                         string tipo;
-                                        bool conversion = converAsig(nomAtributo,$3,tipo);
+                                        TablaDeSimbolos::del($1);
+                                        bool conversion;
+                                        if (esObjeto($1) ){
+                                            conversion = converAsig(nomAtributo,$3,tipo);
+                                        } else {
+                                            conversion = converAsig(nomEncontrada,$3,tipo);
+                                        } 
                                         if (!conversion){
                                             if ($3[0] == '['){
                                                 EstructuraTercetos::addTerceto("=",nomEncontrada,$3);
@@ -321,9 +327,9 @@ operatorsLogics: EQUAL {$$ = "==";}
                ;
 
 constant: CTESHORT {chequearRangoSHORT($1); $$ = $1;}
-        | '-'CTESHORT {TablaDeSimbolos::chequearNegativos($2);$$ = $2;}
+        | '-'CTESHORT {TablaDeSimbolos::chequearNegativos($2);$$ = "-"+$2;}
         | CTEFLOAT {TablaDeSimbolos::chequearPositivos($1); $$ = $1;}
-        | '-'CTEFLOAT {TablaDeSimbolos::chequearNegativos($2);$$ = $2;}
+        | '-'CTEFLOAT {TablaDeSimbolos::chequearNegativos($2);$$ = "-"+$2;}
         | CTEULONG {$$ = $1;}
         | '-'CTEULONG {yyerror("Una constante ULONG no puede ser negativa");}
         ;

@@ -104,6 +104,9 @@ void AccionesSemanticas::AS2(char caracter){
 		case 18:
 			cout << RED << "Linea " + to_string(lineaInicioToken) + ": cadena de texto mal definida" << RESET << endl;
 			break;
+		case 19:
+			cout << RED << "Linea " + to_string(lineaInicioToken) + ": Constante numerica mal definida" << RESET << endl;
+			break;
 		default:
 			cout << RED << "Linea " + to_string(lineaInicioToken) + ": error lexico" << RESET << endl;
 			break;
@@ -181,7 +184,7 @@ void AccionesSemanticas::AS8(char caracter){
 
 /**
  * Chequea rando de las constantes de tipo SHORT, si hay un overflow
- * llama a la AS10 y sino a la AS15
+ * llama a la AS10 y sino a la AS14
  */
 void AccionesSemanticas::AS9(char caracter){
 	//-2^7 < x < 2^7-1
@@ -243,7 +246,11 @@ void AccionesSemanticas::AS13(char caracter){
  * devuelve el token de la cadena y manda al automata al estado 0
  */
 void AccionesSemanticas::AS14(char caracter){
-	AS4(caracter);
+	if (caracter == '%'){
+		AS4(caracter);
+	} else {
+		AS5(caracter);
+	}
 	AS10(caracter);
 	AS23(caracter);
 	AS24(caracter);
@@ -254,7 +261,7 @@ void AccionesSemanticas::AS14(char caracter){
  * devuelve al automata al estado 0
  */
 void AccionesSemanticas::AS15(char caracter){
-	AS4(caracter);
+	AS5(caracter);
 	AS8(caracter);
 	AS10(caracter);
 }
@@ -366,14 +373,14 @@ void AccionesSemanticas::AS22(char caracter){
  */
 void AccionesSemanticas::AS23(char caracter){
 	if (caracter == '%'){
-		TablaDeSimbolos::add(entrada, entrada.substr(1,entrada.length()-2),"STRING");
+		TablaDeSimbolos::add(entrada, entrada.substr(1,entrada.length()-2),"STRING", "Const");
 	} else {
 		size_t pos = entrada.find('_');
 		string valor = entrada.substr(0, pos);
-		if (caracter == 's'){
-			TablaDeSimbolos::add(entrada, valor ,"SHORT");
+		if (entrada[entrada.length()-1] == 's'){
+			TablaDeSimbolos::add(entrada, valor ,"SHORT", "Const");
 		} else {
-			TablaDeSimbolos::add(entrada, valor ,"ULONG");
+			TablaDeSimbolos::add(entrada, valor ,"ULONG", "Const");
 		}
 	}
 }
@@ -387,7 +394,7 @@ void AccionesSemanticas::AS24(char caracter){
 	if(caracter == '%'){
 		tokenAlmacenado = "CTE Cadena";
 		nroToken = 276;
-	} else if (caracter == 's'){
+	} else if (entrada[entrada.length()-1]  == 's'){
 		tokenAlmacenado = "CTE SHORT";
 		nroToken = 273;
 	} else {
@@ -401,7 +408,7 @@ void AccionesSemanticas::AS24(char caracter){
  * de una constante FLOAT
  */
 void AccionesSemanticas::AS25(char caracter){
-	TablaDeSimbolos::add(entrada, entrada,"FLOAT");
+	TablaDeSimbolos::add(entrada, entrada,"FLOAT", "Const");
 	tokenIdentificado = true;
 	nroToken = 275;
 	tokenAlmacenado = "CTE FLOAT";

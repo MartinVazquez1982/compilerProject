@@ -33,7 +33,7 @@ void TablaDeSimbolos::add(string lexema){
  *
  * @param 3 Tipo de la entrada
  */
-void TablaDeSimbolos::add(string lexema, string valor, string tipo){
+void TablaDeSimbolos::add(string lexema, string valor, string tipo, string uso){
 	auto existe = TablaDeSimbolos::table.find(lexema);
 	if (existe == TablaDeSimbolos::table.end()){
 		TablaDeSimbolos::Datos info;
@@ -41,6 +41,7 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo){
 		info.valor = valor;
 		info.consultado = false;
 		info.nivelHerencia = -1;
+		info.uso = uso;
 		info.forwDecl = -1;
 		TablaDeSimbolos::table[lexema]=info;
 	}
@@ -61,6 +62,7 @@ void TablaDeSimbolos::imprimir() {
 	cout << left << setw(25) << "Lexema";
 	cout << left << setw(10) << "Uso";
 	cout << left << setw(10) << "Valor";
+	cout << left << setw(10) << "Tipo";
 	cout << left << setw(25) << "Parametro Formal";
 	cout << left << setw(19) << "Clase";
 	cout << left << setw(19) << "Hereda";
@@ -68,6 +70,7 @@ void TablaDeSimbolos::imprimir() {
 	cout << left << "ForwDecl" << endl;
 
 	cout << setfill('-') << setw(24) << "" << " ";
+	cout << setfill('-') << setw(9) << "" << " ";
 	cout << setfill('-') << setw(9) << "" << " ";
 	cout << setfill('-') << setw(9) << "" << " ";
 	cout << setfill('-') << setw(24) << "" << " ";
@@ -80,6 +83,7 @@ void TablaDeSimbolos::imprimir() {
 		cout << left << setw(25) << par.first;
 			cout << left << setw(10) << par.second.uso;
 			cout << left << setw(10) << par.second.valor;
+			cout << left << setw(10) << par.second.tipo;
 			cout << left << setw(25) << par.second.parametro_formal;
 			cout << left << setw(19) << par.second.clase;
 			cout << left << setw(19) << par.second.hereda;
@@ -103,7 +107,7 @@ void TablaDeSimbolos::chequearNegativos(string nro){
 		if (!info.consultado){
 			TablaDeSimbolos::table.erase(nro);
 		}
-		add(nroConSigno, "-"+info.valor, info.tipo);
+		add(nroConSigno, "-"+info.valor, info.tipo, info.uso);
 	} else {
 		TablaDeSimbolos::table.erase(nro);
 	}
@@ -119,7 +123,7 @@ void TablaDeSimbolos::chequearPositivos(string nro){
 	auto existe = TablaDeSimbolos::table.find(nro);
 	if (existe == TablaDeSimbolos::table.end()){
 		string valor = nro.substr(0,nro.find("_"));
-		add(nro, valor, TablaDeSimbolos::table["-"+nro].tipo);
+		add(nro, valor, TablaDeSimbolos::table["-"+nro].tipo, TablaDeSimbolos::table["-"+nro].uso);
 	}
 	TablaDeSimbolos::table[nro].consultado = true;
 }
