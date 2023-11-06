@@ -9,7 +9,7 @@ unordered_map<string,vector<EstructuraTercetos::terceto>> EstructuraTercetos::li
 
 stack<int> EstructuraTercetos::pilaTercetos;
 
-string EstructuraTercetos::ambito = "main";
+string EstructuraTercetos::ambito = ":main";
 
 void EstructuraTercetos::addTerceto(string operador, string operando1, string operando2){
 	EstructuraTercetos::terceto nuevoTerceto;

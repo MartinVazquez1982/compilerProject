@@ -80,7 +80,7 @@ variableList: variableList ';' ID {$$ = stepsDeclVarAndObj($3, "Var", $1);}
 assignment: nesting '=' expression {yymenssage("Asignacion");
                                     string nomEncontrada, nomAtributo;
                                     //$$ = EstructuraTercetos::nroActualTerceto();
-                                    if ((esObjeto($1) && (ChequearDeclObjeto($1,nomEncontrada, nomAtributo))) || (!esObjeto($1) && ChequearDeclaracion($1, nomEncontrada, "Var"))){
+                                    if (esObjeto($1) && (ChequearDeclObjeto($1,nomEncontrada, nomAtributo)) || !esObjeto($1) && (ChequearDeclaracion($1,nomEncontrada, "Var"))){
                                         string tipo;
                                         TablaDeSimbolos::del($1);
                                         bool conversion;
@@ -191,7 +191,7 @@ functionBody: sentenceList return
             | return {yywarning("Funcion vacia");} 
             ;
 
-formalParameter: type ID {$$ = $2; TablaDeSimbolos::setUso($2, "Parametro Formal"); setearTipos($1,$2);}
+formalParameter: type ID {$$ = $2; TablaDeSimbolos::setUso($2, "PF"); setearTipos($1,$2);}
                ;
 
 functionCall: nesting'('')' {
@@ -212,11 +212,21 @@ functionCall: nesting'('')' {
                                             string tipo;
                                             if (esObjeto($1)){
                                                 if (ChequearDeclObjeto($1,name,tipo,false)){
-                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
-                                                    EstructuraTercetos::addTerceto("Call",name,"");
+                                                    string tipo;
+                                                    if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)){
+                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
+                                                        EstructuraTercetos::addTerceto("Call",name,"");
+                                                    }
                                                 }
                                             }else{
                                                 if (ChequearDeclaracion($1,name,"Funcion")){
+                                                    TablaDeSimbolos::del($1);
+                                                    string tipo;
+                                                    if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)) {
+                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto());
+                                                    } else {
+                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
+                                                    }
                                                     EstructuraTercetos::addTerceto("Call",name,"");
                                                 }
                                             }
@@ -770,10 +780,14 @@ string stepsFactor(string fact, bool lessLess = false){
     if (esObjeto(fact)){
         chequeoOK = ChequearDeclObjeto(fact,nomEncontrada, nomAtributo);
         if (chequeoOK)  salida = nomEncontrada+"@"+nomAtributo;
+    } else if (Ambito::insideMethod()){
+        chequeoOK = ChequearDeclaracion(fact, nomEncontrada, "PF");
+        if (chequeoOK) salida = nomEncontrada;
     }else{
         chequeoOK = ChequearDeclaracion(fact,nomEncontrada,"Var");
         if (chequeoOK) salida = nomEncontrada;
-    } 
+    }
+    TablaDeSimbolos::del(fact);
     if (chequeoOK && lessLess) salida = "-"+salida;
     return salida;
 }

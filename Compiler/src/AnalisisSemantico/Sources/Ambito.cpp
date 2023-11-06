@@ -17,3 +17,14 @@ void Ambito::del(){
 string Ambito::get(){
 	return Ambito::ambito;
 }
+
+bool Ambito::insideMethod(){
+	int primeraPosicion = ambito.find(':');
+	if (primeraPosicion != string::npos) {
+		int segundaPosicion = ambito.find(':', primeraPosicion + 1);
+		if (segundaPosicion != string::npos) {
+			return true;
+		}
+	}
+	return false;
+}
