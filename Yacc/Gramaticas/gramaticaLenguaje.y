@@ -106,7 +106,7 @@ function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del()
         ;
 
 functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){  
-                                                if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")){
+                                                if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")){
                                                     InsideClass::addMethod($2);
                                                     string key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                     TablaDeSimbolos::setUso(key, "Metodo");
@@ -128,7 +128,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                               }
                                             }
               | VOID ID'('')'   {if (InsideClass::insideClass()){
-                                    if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                    if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                         InsideClass::addMethod($2);
                                         string key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                         TablaDeSimbolos::setUso(key, "Metodo");
@@ -589,7 +589,7 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
 bool noReDeclarada(string decl, string usoOriginal){
     string ambito=Ambito::get();
     string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
-    if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase"){
+    if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase" || uso == "Atr" || uso == "Metodo"){
     	yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
     	return false;
     } else if (uso == "Clase" && usoOriginal == "Clase"){
@@ -702,7 +702,7 @@ bool classInClass(string nombre){
 string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = ""){
     string key;
     if ((InsideClass::insideClass()) && (!InsideClass::moreMethods())){
-        if (noReDeclarada(declarado+"-"+InsideClass::getClass(), "Atr")){
+        if (noReDeclarada(declarado+"-"+InsideClass::getClassSinMain(), "Atr")){
             key = TablaDeSimbolos::changeKeyClass(declarado,InsideClass::getClass());
             TablaDeSimbolos::setUso(key, "Atr");
             TablaDeSimbolos::setClass(key,InsideClass::getClass());

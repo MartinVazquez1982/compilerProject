@@ -11,6 +11,7 @@ class InsideClass {
 	private:
 		static string clase;
 		static stack<string> metodos;
+
 	public:
 
 		static void inClass(string clase);
