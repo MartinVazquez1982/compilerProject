@@ -113,10 +113,12 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                 string key; 
                                                 if ((InsideClass::getFuncInMethod())){ //Se trata de una funcion dentro de un metodo
                                                     if (InsideClass::getNivelValido()){
-                                                        key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
-                                                        TablaDeSimbolos::setUso(key, "Funcion");
-                                                        Ambito::add($2);
-                                                        InsideClass::setNivelValido(false);
+                                                        if (noReDeclarada($2, "Funcion")) { 
+                                                            key = TablaDeSimbolos::changeKey($2);
+                                                            TablaDeSimbolos::setUso(key, "Funcion");
+                                                            Ambito::add($2);
+                                                            InsideClass::setNivelValido(false);
+                                                        }
                                                     }else{
                                                         yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                                     }
@@ -148,10 +150,12 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                         string key;
                                         if ((InsideClass::getFuncInMethod()) ){ //Se trata de una funcion dentro de un metodo
                                             if (InsideClass::getNivelValido()){
-                                                key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
-                                                TablaDeSimbolos::setUso(key, "Funcion");
-                                                Ambito::add($2);
-                                                InsideClass::setNivelValido(false);
+                                                if (noReDeclarada($2, "Funcion")) {
+                                                    key = TablaDeSimbolos::changeKey($2);
+                                                    TablaDeSimbolos::setUso(key, "Funcion");
+                                                    Ambito::add($2);
+                                                    InsideClass::setNivelValido(false);
+                                                }
                                             }else{
                                                 yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                             }
