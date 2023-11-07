@@ -1,0 +1,17 @@
+{
+	SHORT x, 
+
+	VOID func(){
+		SHORT x,
+		RETURN,
+	},
+
+	SHORT y,
+
+	VOID func2(){
+		SHORT x,
+		RETURN,
+	},
+
+	SHORT y,
+}
