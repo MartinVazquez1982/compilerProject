@@ -665,7 +665,10 @@ bool noReDeclarada(string decl, string usoOriginal){
     if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase" || uso == "Atr" || uso == "Metodo"){
     	yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
     	return false;
-    } else if (uso == "Clase" && usoOriginal == "Clase"){
+    } else if (uso == "Clase" && usoOriginal == "Clase" ){
+        if (TablaDeSimbolos::getForwDecl(decl+ambito) == 1){
+            yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
+        }   
         return false;
     }
     return true;
@@ -830,7 +833,7 @@ string stepsFactor(string fact, bool lessLess = false){
     if (chequeoOK && lessLess) salida = "-"+salida;
     return salida;
 }
-#line 834 "y.tab.c"
+#line 837 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1474,7 +1477,7 @@ case 92:
 #line 420 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1478 "y.tab.c"
+#line 1481 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
