@@ -5,6 +5,7 @@ using namespace std;
 
 stack<unordered_set<string>> VarSinInic::varSinUsar;
 
+
 void VarSinInic::addTop(){
 	varSinUsar.push(unordered_set<string>());
 }
