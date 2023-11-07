@@ -4,8 +4,8 @@ using namespace std;
 
 string InsideClass::clase = " ";
 stack<string> InsideClass::metodos;
-bool InsideClass::funcionEnMetodo = false;
-bool InsideClass::nivelValido = true;
+bool InsideClass::Method = false;
+bool InsideClass::FuncionMethod = false;
 
 
 void InsideClass::inClass(string clase){
@@ -52,18 +52,18 @@ void InsideClass::unstackMethods(){
 	}
 }
 
-bool InsideClass::getFuncInMethod(){
-	return InsideClass::funcionEnMetodo;
+bool InsideClass::insideMethod(){
+	return InsideClass::Method;
 }
 
-void InsideClass::setFuncInMethod(bool valor){
-	InsideClass::funcionEnMetodo = valor;
+void InsideClass::insideMethod(bool valor){
+	InsideClass::Method = valor;
 }
 
-bool InsideClass::getNivelValido(){
-	return InsideClass::nivelValido;
+bool InsideClass::insideFuncionMethod(){
+	return InsideClass::FuncionMethod;
 }
 
-void InsideClass::setNivelValido(bool valor){
-	InsideClass::nivelValido = valor;
+void InsideClass::insideFuncionMethod(bool valor){
+	InsideClass::FuncionMethod = valor;
 }

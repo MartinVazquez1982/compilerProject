@@ -21,6 +21,8 @@ class Ambito {
 
 		static bool insideMethod();
 
+
+
 };
 
 
