@@ -1,8 +1,16 @@
 {
+	SHORT z,
 	CLASS aaa {
-		FLOAT x,
-	},
-	CLASS aaa { *{ERROR: Se esta redeclarando la clase aaa}*
-		FLOAT z,
-	},
+		SHORT y,
+		VOID func1(FLOAT y){
+			z = 33_s,
+			RETURN,
+		},
+	},	 
+	aaa obj,
+	obj.y = 23_s,
+	FLOAT d,
+	d = 3.0,
+	obj.func1(d),
+	bbb objbbb, *{ERROR: No se declaro la clase bbb}*
 }

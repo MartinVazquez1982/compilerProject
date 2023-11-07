@@ -1,0 +1,4 @@
+{
+	aaa obj,  *{ERROR: No se declaro la clase aaa}*
+	obj.x = 1_s,
+}

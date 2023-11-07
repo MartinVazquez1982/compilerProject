@@ -1,0 +1,11 @@
+{
+	SHORT z,
+	aaa obj,  *{ERROR: No se declaro la clase aaa}*
+	CLASS aaa {
+		SHORT y,
+		VOID func1(FLOAT y){
+			z = 33_s,
+			RETURN,
+		},
+	},	 
+}
