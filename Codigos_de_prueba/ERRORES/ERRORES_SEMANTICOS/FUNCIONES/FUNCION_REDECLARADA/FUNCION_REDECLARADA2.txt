@@ -1,0 +1,11 @@
+{
+	VOID fun1(){
+		VOID fun2(){
+			RETURN,
+		},
+		VOID fun2(){
+			RETURN,
+		},
+		RETURN,	
+	},
+}

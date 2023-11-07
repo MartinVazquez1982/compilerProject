@@ -1,0 +1,21 @@
+{
+	SHORT x,
+
+	VOID func1(){
+		SHORT y,
+		VOID func2(){
+			SHORT z,
+			x = y * z,
+			RETURN,
+		},
+		RETURN,
+	},
+
+	VOID func2(){
+		SHORT y,
+		x = y - z, *{Variable "z" no declarada}*
+		RETURN,
+	},
+
+	x = y/z, *{Variable "y" y "z" no declarada}*
+}

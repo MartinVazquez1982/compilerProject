@@ -1,0 +1,11 @@
+{
+	SHORT x,
+	VOID funcion(){
+		VOID func(){
+			RETURN,
+		},
+		RETURN,
+	},
+	x=12_s,
+	func(),*{error de func no declarada ya que si bien existe, no se encuentra visible en el main por el ambito en el que se declaro}*
+}

@@ -1,0 +1,14 @@
+{
+	VOID fun1(){
+		SHORT x,
+		VOID fun2(){
+			RETURN,
+		},
+		fun3(),*{fun 3 no se encuentra dentro del ambito para poder ser llamada, ya que se encuentra en el main}*
+		RETURN,
+	},
+	VOID fun3(){
+		SHORT y,
+		RETURN,
+	},
+}
