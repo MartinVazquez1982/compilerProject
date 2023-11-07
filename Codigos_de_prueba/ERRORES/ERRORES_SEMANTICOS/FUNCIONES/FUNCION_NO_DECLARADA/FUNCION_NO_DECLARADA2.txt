@@ -7,6 +7,6 @@
 	},
 	CLASS b{
 		a obj,
-		a.funcion(),*{objeto de la clase a intenta llamar a funcion la cual no se enceuntra en a y da error}*
+		obj.funcion(),*{objeto de la clase a intenta llamar a funcion la cual no se enceuntra en a y da error}*
 	},
 }

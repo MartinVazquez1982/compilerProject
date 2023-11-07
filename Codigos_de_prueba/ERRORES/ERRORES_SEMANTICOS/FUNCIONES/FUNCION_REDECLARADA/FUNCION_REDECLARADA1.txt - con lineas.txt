@@ -1,0 +1,8 @@
+1 {
+2 	VOID func(){
+3 		RETURN,
+4 	},
+5 	VOID func(SHORT x){
+6 		RETURN,
+7 	},
+8 }
