@@ -98,6 +98,8 @@ class TablaDeSimbolos {
 		static int nivelHerencia(string lexema);
 
 		static int getForwDecl(string lexema);
+
+		static bool tieneParametros(string lexema);
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */
