@@ -648,7 +648,11 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
         TablaDeSimbolos::del(check);
         if (TablaDeSimbolos::usoAsignado(check+":main") == "Clase"){
         	if (TablaDeSimbolos::getHerencia(antCheck) != check+":main"){
-        		yyerror("Clase " + antCheck + " No hereda de " + check);
+                if (check+":main" == antCheck){
+                    yyerror("Invocacion incorrecta de la clase " + check);
+                } else {
+                    yyerror("Clase " + antCheck + " No hereda de " + check);
+                }
         		final = true;
         	} else {
 				antCheck = check+":main";

@@ -605,7 +605,11 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
         TablaDeSimbolos::del(check);
         if (TablaDeSimbolos::usoAsignado(check+":main") == "Clase"){
         	if (TablaDeSimbolos::getHerencia(antCheck) != check+":main"){
-        		yyerror("Clase " + antCheck + " No hereda de " + check);
+                if (check+":main" == antCheck){
+                    yyerror("Invocacion incorrecta de la clase " + check);
+                } else {
+                    yyerror("Clase " + antCheck + " No hereda de " + check);
+                }
         		final = true;
         	} else {
 				antCheck = check+":main";
@@ -833,7 +837,7 @@ string stepsFactor(string fact, bool lessLess = false){
     if (chequeoOK && lessLess) salida = "-"+salida;
     return salida;
 }
-#line 837 "y.tab.c"
+#line 841 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1477,7 +1481,7 @@ case 92:
 #line 420 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1481 "y.tab.c"
+#line 1485 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
