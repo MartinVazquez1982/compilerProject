@@ -62,10 +62,14 @@ variableDeclaration: type variableList {setearTipos($1,$2);}
                    ;
 
 objectDeclaration: ID objectList {  
-                                    string name;
-                                    ChequearDeclaracion($1, name, "Clase");
-                                    setearTipos($1,$2);
-                                    TablaDeSimbolos::del($1); //El ID al declarar un objeto se agrega automaticamente por error en el lexico
+                                    if (InsideClass::insideClass() && $1 == InsideClass::getClassSinMain()){
+                                        yyerror("No es posible declarar un atributo el cual su tipo sea la misma clase a la que pertenece");
+                                    }else{
+                                        string name;
+                                        ChequearDeclaracion($1, name, "Clase");
+                                        setearTipos($1,$2);
+                                        TablaDeSimbolos::del($1); //El ID al declarar un objeto se agrega automaticamente por error en el lexico
+                                    }
                                    }
                  ;
 
@@ -118,32 +122,36 @@ function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del()
                                         ;}
         ;
 
-functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){ 
-                                                string key; 
-                                                if ((InsideClass::insideMethod())){ //Se trata de una funcion dentro de un metodo
-                                                    if (!(InsideClass::insideFuncionMethod())){
-                                                        if (noReDeclarada($2, "Funcion")) { 
-                                                            key = TablaDeSimbolos::changeKey($2);
-                                                            TablaDeSimbolos::setUso(key, "Funcion");
-                                                            Ambito::add($2);
-                                                            InsideClass::insideFuncionMethod(true);
+functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
+                                                    string key; 
+                                                    if ((InsideClass::insideMethod())){ //Se trata de una funcion dentro de un metodo
+                                                        if (!(InsideClass::insideFuncionMethod())){
+                                                            if (noReDeclarada($2, "Funcion")) { 
+                                                                key = TablaDeSimbolos::changeKey($2);
+                                                                TablaDeSimbolos::setUso(key, "Funcion");
+                                                                Ambito::add($2);
+                                                                InsideClass::insideFuncionMethod(true);
+                                                            }
+                                                        }else{
+                                                            yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                                         }
-                                                    }else{
-                                                        yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
+                                                    }else{ //Se trata de un metodo
+                                                        if ($2 == InsideClass::getClassSinMain()){
+                                                            yyerror("No es posible declarar un metodo con el mismo nombre al de la clase a la que pertenece");
+                                                        }else{
+                                                            if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
+                                                                InsideClass::addMethod($2);
+                                                                key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                                                TablaDeSimbolos::setUso(key, "Metodo");
+                                                                Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                                                InsideClass::insideMethod(true);
+                                                        }
+                                                        }
                                                     }
-                                                }else{ //Se trata de un metodo
-                                                    if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
-                                                        InsideClass::addMethod($2);
-                                                        key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
-                                                        TablaDeSimbolos::setUso(key, "Metodo");
-                                                        Ambito::add($2+"-"+InsideClass::getClassSinMain());
-                                                        InsideClass::insideMethod(true);
-                                                    }
-                                                }
-                                                TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                                string keyFormal = TablaDeSimbolos::changeKey($4);
-                                                TablaDeSimbolos::setParametroFormal(key,keyFormal);
-                                                EstructuraTercetos::setAmbito(Ambito::get());
+                                                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                                    string keyFormal = TablaDeSimbolos::changeKey($4);
+                                                    TablaDeSimbolos::setParametroFormal(key,keyFormal);
+                                                    EstructuraTercetos::setAmbito(Ambito::get()); 
                                             }else{
                                                 if (noReDeclarada($2, "Funcion")) {
                                                     string key = TablaDeSimbolos::changeKey($2);
@@ -156,7 +164,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                               }
                                             }
               | VOID ID'('')'   {if (InsideClass::insideClass()){
-                                        string key;
+                                        string key; 
                                         if ((InsideClass::insideMethod())){ //Se trata de una funcion dentro de un metodo
                                             if (!(InsideClass::insideFuncionMethod())){
                                                 if (noReDeclarada($2, "Funcion")) { 
@@ -169,12 +177,16 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                 yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                             }
                                         }else{ //Se trata de un metodo
-                                            if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
-                                                InsideClass::addMethod($2);
-                                                key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
-                                                TablaDeSimbolos::setUso(key, "Metodo");
-                                                Ambito::add($2+"-"+InsideClass::getClassSinMain());
-                                                InsideClass::insideMethod(true);
+                                            if ($2 == InsideClass::getClassSinMain()){
+                                                yyerror("No es posible declarar un metodo con el mismo nombre al de la clase a la que pertenece");
+                                            }else{
+                                                if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
+                                                    InsideClass::addMethod($2);
+                                                    key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                                    TablaDeSimbolos::setUso(key, "Metodo");
+                                                    Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                                    InsideClass::insideMethod(true);
+                                            }
                                             }
                                         }
                                         TablaDeSimbolos::setClass(key,InsideClass::getClass());
@@ -756,11 +768,15 @@ bool classInClass(string nombre){
 
 string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = ""){
     string key;
-    if ((InsideClass::insideClass()) && (!InsideClass::moreMethods())){
-        if (noReDeclarada(declarado+"-"+InsideClass::getClassSinMain(), "Atr")){
-            key = TablaDeSimbolos::changeKeyClass(declarado,InsideClass::getClass());
-            TablaDeSimbolos::setUso(key, "Atr");
-            TablaDeSimbolos::setClass(key,InsideClass::getClass());
+    if ((InsideClass::insideClass()) && (!InsideClass::insideMethod())){
+        if (declarado == InsideClass::getClassSinMain()){
+            yyerror("El nombre del atributo "+declarado+" es igual al nombre de la clase");
+        }else{
+            if (noReDeclarada(declarado+"-"+InsideClass::getClassSinMain(), "Atr")){
+                key = TablaDeSimbolos::changeKeyClass(declarado,InsideClass::getClass());
+                TablaDeSimbolos::setUso(key, "Atr");
+                TablaDeSimbolos::setClass(key,InsideClass::getClass());
+            }
         }
     } else {
         if (noReDeclarada(declarado, uso)) {
