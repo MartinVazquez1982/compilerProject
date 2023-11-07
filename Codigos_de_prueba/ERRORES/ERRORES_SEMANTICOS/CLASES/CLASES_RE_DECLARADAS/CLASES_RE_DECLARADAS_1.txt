@@ -1,4 +1,5 @@
 {
+	SHORT x,
 	CLASS aaa {
 		FLOAT x,
 	},
@@ -12,6 +13,4 @@
 			RETURN,
 		},
 	},
-	
-
 }

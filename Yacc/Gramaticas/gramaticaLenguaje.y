@@ -708,7 +708,10 @@ bool noReDeclarada(string decl, string usoOriginal){
     if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase" || uso == "Atr" || uso == "Metodo"){
     	yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
     	return false;
-    } else if (uso == "Clase" && usoOriginal == "Clase"){
+    } else if (uso == "Clase" && usoOriginal == "Clase" ){
+        if (TablaDeSimbolos::getForwDecl(decl+ambito) == 1){
+            yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
+        }   
         return false;
     }
     return true;
