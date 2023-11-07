@@ -263,3 +263,17 @@ int TablaDeSimbolos::nivelHerencia(string lexema){
 int TablaDeSimbolos::getForwDecl(string lexema){
 	return TablaDeSimbolos::table[lexema].forwDecl;
 }
+
+
+bool TablaDeSimbolos::tieneParametros(string lexema){
+		auto it = TablaDeSimbolos::table.find(lexema);
+		if (it == TablaDeSimbolos::table.end()){
+			return false;
+		}
+		string parametro = it->second.parametro_formal;
+		if (parametro.empty()){
+			return false;
+		} else {
+			return true;
+		}
+}

@@ -214,11 +214,19 @@ functionCall: nesting'('')' {
                             string tipo;
                             if (esObjeto($1)){
                                 if (ChequearDeclObjeto($1,name,tipo,false)){
-                                    EstructuraTercetos::addTerceto("Call",name,"");
+                                    if (!TablaDeSimbolos::tieneParametros(name)){
+                                        EstructuraTercetos::addTerceto("Call",name,"");
+                                    } else {
+                                        yyerror("El metodo " + name + " requiere parametro");
+                                    }
                                 }
                             } else {
                                 if (ChequearDeclaracion($1,name,"Funcion")){
-                                    EstructuraTercetos::addTerceto("Call",name,"");
+                                    if (!TablaDeSimbolos::tieneParametros(name)){
+                                        EstructuraTercetos::addTerceto("Call",name,"");
+                                    } else {
+                                        yyerror("La funcion " + name + " requiere parametro");
+                                    }
                                 }
                             }
                             TablaDeSimbolos::del($1);
@@ -229,21 +237,31 @@ functionCall: nesting'('')' {
                                             if (esObjeto($1)){
                                                 if (ChequearDeclObjeto($1,name,tipo,false)){
                                                     string tipo;
-                                                    if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)){
-                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
+                                                    if (TablaDeSimbolos::tieneParametros(name)){
+                                                        if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)){
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto());
+                                                        } else {
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
+                                                        }
                                                         EstructuraTercetos::addTerceto("Call",name,"");
+                                                    } else {
+                                                        yyerror("El metodo " + name + " NO requiere parametro");
                                                     }
                                                 }
                                             }else{
                                                 if (ChequearDeclaracion($1,name,"Funcion")){
                                                     TablaDeSimbolos::del($1);
                                                     string tipo;
-                                                    if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)) {
-                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto());
+                                                    if (TablaDeSimbolos::tieneParametros(name)){
+                                                        if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)) {
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto());
+                                                        } else {
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
+                                                        }
+                                                        EstructuraTercetos::addTerceto("Call",name,"");
                                                     } else {
-                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
+                                                        yyerror("La funcion " + name + " NO requiere parametro");
                                                     }
-                                                    EstructuraTercetos::addTerceto("Call",name,"");
                                                 }
                                             }
                                             TablaDeSimbolos::del($1);
@@ -555,10 +573,15 @@ string sigID(string & var){
     }
 }
 
-bool ChequearDeclaracion(string var, string & nomEncontrada, string uso){
+bool ChequearDeclaracion(string var, string & nomEncontrada, string uso, bool chequeoFormal = false){
     string ambito=Ambito::get();
     bool final = false;
     bool encontrada = false;
+    if (chequeoFormal){
+        if (TablaDeSimbolos::usoAsignado(var+ambito) == "PF"){
+            encontrada = true;
+        }
+    }
     while(! final && ! encontrada){
         if (TablaDeSimbolos::usoAsignado(var+ambito) == uso){
             nomEncontrada = var+ambito;
@@ -803,7 +826,7 @@ string stepsFactor(string fact, bool lessLess = false){
         chequeoOK = ChequearDeclObjeto(fact,nomEncontrada, nomAtributo);
         if (chequeoOK)  salida = nomEncontrada+"@"+nomAtributo;
     } else if (Ambito::insideMethod()){
-        chequeoOK = ChequearDeclaracion(fact, nomEncontrada, "PF");
+        chequeoOK = ChequearDeclaracion(fact, nomEncontrada, "Var", true);
         if (chequeoOK) salida = nomEncontrada;
     }else{
         chequeoOK = ChequearDeclaracion(fact,nomEncontrada,"Var");
