@@ -23,7 +23,7 @@
 
 %%
 
-program: '{'sentenceList'}'
+program: '{'sentenceList'}' {ChequearForwardDeclarations();}
         | '{''}' {yywarning("Programa vacio");}
         | sentenceList {yyerror("Falta llaves delimitadores de programa");}
         ;
@@ -330,7 +330,8 @@ classHeader: CLASS ID { if ((!classInFunction($2)) && !classInClass($2)){
                                 TablaDeSimbolos::inicNivelHer(name);
                                 InsideClass::inClass(name);
                             } else {
-                                InsideClass::inClass($2);
+                                InsideClass::inClass($2+Ambito::get());
+                                TablaDeSimbolos::del($2);
                             }
                         }
                       }
@@ -715,6 +716,18 @@ void claseSinimplementar(string clase){
         yyerror("Clase " + clase + " se encuentra re-declarada");
     } else {
         TablaDeSimbolos::inicForwDecl(name);
+    }
+}
+
+void ChequearForwardDeclarations(){
+    if(!(TablaDeSimbolos::forwDeclAll())){
+        string forwDecl = "";
+        while (!(TablaDeSimbolos::forwDeclAll())){
+            forwDecl = forwDecl + TablaDeSimbolos::nextForwDecl() + ", ";
+        }
+        forwDecl.pop_back();
+        forwDecl.pop_back();
+        yyerror("No se completo la declaracion de las siguientes clases: "+forwDecl);
     }
 }
 

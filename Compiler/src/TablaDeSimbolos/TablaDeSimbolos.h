@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <string>
 #include <iomanip>
+#include <set>
 
 using namespace std;
 
@@ -37,6 +38,8 @@ class TablaDeSimbolos {
 
 		// Tabla de Simbolos
 		static unordered_map<string, Datos> table;
+
+		static set<string> forwardDeclaration;
 
 		static void fueConsultado(string lexema);
 
@@ -100,6 +103,10 @@ class TablaDeSimbolos {
 		static int getForwDecl(string lexema);
 
 		static bool tieneParametros(string lexema);
+
+		static bool forwDeclAll();
+
+		static string nextForwDecl();
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */
