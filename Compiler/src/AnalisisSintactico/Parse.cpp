@@ -1041,7 +1041,7 @@ case 28:
                                         bool conversion;
                                         if (esObjeto(yyvsp[-2]) ){
                                             conversion = converAsig(nomAtributo,yyvsp[0],tipo);
-                                            VarSinInic::delVar(sigID(yyvsp[-2]));
+                                            VarSinInic::delVar(sigID(yyvsp[-2])+Ambito::get());
                                         } else {
                                             conversion = converAsig(nomEncontrada,yyvsp[0],tipo);
                                             VarSinInic::delVar(nomEncontrada);

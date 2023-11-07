@@ -95,7 +95,7 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         bool conversion;
                                         if (esObjeto($1) ){
                                             conversion = converAsig(nomAtributo,$3,tipo);
-                                            VarSinInic::delVar(sigID($1));
+                                            VarSinInic::delVar(sigID($1)+Ambito::get());
                                         } else {
                                             conversion = converAsig(nomEncontrada,$3,tipo);
                                             VarSinInic::delVar(nomEncontrada);
