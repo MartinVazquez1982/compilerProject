@@ -1,0 +1,5 @@
+{
+	SHORT x,
+	FLOAT y,
+	x = y,
+}

@@ -1,0 +1,11 @@
+{
+	CLASS aaa {
+		SHORT x,
+	},
+	CLASS bbb {
+		FLOAT y,
+	},
+	aaa obja,
+	bbb objb,
+	obja.x = objb.y,
+}

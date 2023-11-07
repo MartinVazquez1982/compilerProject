@@ -1,0 +1,5 @@
+{
+	ULONG x,
+	FLOAT y,
+	x = y,
+}

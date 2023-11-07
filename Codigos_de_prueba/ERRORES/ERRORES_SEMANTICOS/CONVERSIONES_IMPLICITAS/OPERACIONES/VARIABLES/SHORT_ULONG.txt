@@ -1,0 +1,6 @@
+{
+	SHORT x,
+	ULONG y,
+	FLOAT z,
+	z = x / y,
+}

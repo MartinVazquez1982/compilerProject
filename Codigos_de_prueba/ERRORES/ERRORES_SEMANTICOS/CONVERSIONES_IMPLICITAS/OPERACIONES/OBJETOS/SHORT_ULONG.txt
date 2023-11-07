@@ -1,0 +1,12 @@
+{
+	CLASS aaa {
+		SHORT x,
+		FLOAT z,
+	},
+	CLASS bbb {
+		ULONG y,
+	},
+	aaa obja,
+	bbb objb,
+	obja.z = objb.y * obja.x,
+}

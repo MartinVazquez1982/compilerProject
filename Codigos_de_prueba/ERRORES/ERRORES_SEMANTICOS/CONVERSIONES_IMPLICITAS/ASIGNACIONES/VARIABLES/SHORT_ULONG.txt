@@ -1,0 +1,5 @@
+{
+	SHORT x,
+	ULONG y,
+	x = y,
+}
