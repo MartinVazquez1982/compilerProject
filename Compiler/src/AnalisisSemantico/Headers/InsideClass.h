@@ -11,8 +11,8 @@ class InsideClass {
 	private:
 		static string clase;
 		static stack<string> metodos;
-		static bool funcionEnMetodo;
-		static bool nivelValido;
+		static bool Method;
+		static bool FuncionMethod;
 	public:
 
 		static void inClass(string clase);
@@ -35,13 +35,13 @@ class InsideClass {
 
 		static void unstackMethods();
 
-		static bool getFuncInMethod();
+		static bool insideMethod();
 
-		static void setFuncInMethod(bool valor);
+		static void insideMethod(bool valor);
 
-		static bool getNivelValido();
+		static bool insideFuncionMethod();
 
-		static void setNivelValido(bool valor);
+		static void insideFuncionMethod(bool valor);
 
 };
 

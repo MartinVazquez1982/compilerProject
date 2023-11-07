@@ -108,33 +108,36 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
 
 function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();
                                             EstructuraTercetos::setAmbito(Ambito::get());
-                                            if ((InsideClass::insideClass()) && (InsideClass::getFuncInMethod())){
-                                                InsideClass::setFuncInMethod(false);
-                                                InsideClass::setNivelValido(true);
+                                            if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && (InsideClass::insideFuncionMethod())){
+                                                InsideClass::insideFuncionMethod(false);
+                                            }else{
+                                                if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && !(InsideClass::insideFuncionMethod())){
+                                                    InsideClass::insideMethod(false);
+                                                }
                                             }
-                                            }
+                                        ;}
         ;
 
 functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){ 
                                                 string key; 
-                                                if ((InsideClass::getFuncInMethod())){ //Se trata de una funcion dentro de un metodo
-                                                    if (InsideClass::getNivelValido()){
+                                                if ((InsideClass::insideMethod())){ //Se trata de una funcion dentro de un metodo
+                                                    if (!(InsideClass::insideFuncionMethod())){
                                                         if (noReDeclarada($2, "Funcion")) { 
                                                             key = TablaDeSimbolos::changeKey($2);
                                                             TablaDeSimbolos::setUso(key, "Funcion");
                                                             Ambito::add($2);
-                                                            InsideClass::setNivelValido(false);
+                                                            InsideClass::insideFuncionMethod(true);
                                                         }
                                                     }else{
                                                         yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                                     }
                                                 }else{ //Se trata de un metodo
-                                                    if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                                    if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                                         InsideClass::addMethod($2);
                                                         key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                         TablaDeSimbolos::setUso(key, "Metodo");
                                                         Ambito::add($2+"-"+InsideClass::getClassSinMain());
-                                                        InsideClass::setFuncInMethod(true);
+                                                        InsideClass::insideMethod(true);
                                                     }
                                                 }
                                                 TablaDeSimbolos::setClass(key,InsideClass::getClass());
@@ -154,24 +157,24 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                             }
               | VOID ID'('')'   {if (InsideClass::insideClass()){
                                         string key;
-                                        if ((InsideClass::getFuncInMethod()) ){ //Se trata de una funcion dentro de un metodo
-                                            if (InsideClass::getNivelValido()){
-                                                if (noReDeclarada($2, "Funcion")) {
+                                        if ((InsideClass::insideMethod())){ //Se trata de una funcion dentro de un metodo
+                                            if (!(InsideClass::insideFuncionMethod())){
+                                                if (noReDeclarada($2, "Funcion")) { 
                                                     key = TablaDeSimbolos::changeKey($2);
                                                     TablaDeSimbolos::setUso(key, "Funcion");
                                                     Ambito::add($2);
-                                                    InsideClass::setNivelValido(false);
+                                                    InsideClass::insideFuncionMethod(true);
                                                 }
                                             }else{
                                                 yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                             }
                                         }else{ //Se trata de un metodo
-                                            if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                            if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                                 InsideClass::addMethod($2);
                                                 key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                 TablaDeSimbolos::setUso(key, "Metodo");
                                                 Ambito::add($2+"-"+InsideClass::getClassSinMain());
-                                                InsideClass::setFuncInMethod(true);
+                                                InsideClass::insideMethod(true);
                                             }
                                         }
                                         TablaDeSimbolos::setClass(key,InsideClass::getClass());
@@ -206,6 +209,7 @@ functionCall: nesting'('')' {
                                     EstructuraTercetos::addTerceto("Call",name,"");
                                 }
                             }
+                            TablaDeSimbolos::del($1);
                             }
             | nesting'('realParameter')' {
                                             string name;
@@ -230,6 +234,7 @@ functionCall: nesting'('')' {
                                                     EstructuraTercetos::addTerceto("Call",name,"");
                                                 }
                                             }
+                                            TablaDeSimbolos::del($1);
                                          }
             ;
 
@@ -268,8 +273,8 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
 
 class: classHeader '{'sentenceList'}' { yymenssage("Clase");
                                         TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
-                                        InsideClass::outClass();
                                         InsideClass::unstackMethods();
+                                        InsideClass::outClass();
                                       }
      | classHeader '{'sentenceList heredity '}' {
                                                  yymenssage("Clase");
@@ -278,7 +283,10 @@ class: classHeader '{'sentenceList'}' { yymenssage("Clase");
                                                     yyerror("La clase ha excedido el nivel de herencia (maximo nivel = 3)");
                                                  }
                                                  TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
-                                                 ChequearSobrescritura();
+                                                 string clase = InsideClass::getClass();
+                                                 string herencia = TablaDeSimbolos::getHerencia(clase);
+                                                 int foward = TablaDeSimbolos::getForwDecl(herencia);
+                                                 ChequearSobrescritura(clase,herencia);
                                                  InsideClass::outClass();
                                                  }
      | classHeader {claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
@@ -649,18 +657,16 @@ bool noReDeclarada(string decl, string usoOriginal){
 
 // ============================== Sobrescritura de metodos ==============================
 
-void ChequearSobrescritura(){
-    string clase = InsideClass::getClass();
-    string herencia = TablaDeSimbolos::getHerencia(clase);
+void ChequearSobrescritura(string clase, string herencia){
     string metodoActual, uso;
     if (!(herencia == " ")){
         while (InsideClass::moreMethods()){
-            metodoActual = InsideClass::getMethod();
-            uso = TablaDeSimbolos::usoAsignado(metodoActual+"-"+herencia);
-            if (uso == "Metodo"){
-                yyerror("No es posible en la clase "+clase+" sobreescribir el metodo "+metodoActual+" de la clase "+herencia+" de la cual hereda");
-            }
-            InsideClass::outMethod();
+        metodoActual = InsideClass::getMethod();
+        uso = TablaDeSimbolos::usoAsignado(metodoActual+"-"+herencia);
+        if (uso == "Metodo"){
+            yyerror("No es posible en la clase "+clase+" sobreescribir el metodo "+metodoActual+" de la clase "+herencia+" de la cual hereda");
+        }
+        InsideClass::outMethod();
         }
     }
     InsideClass::unstackMethods(); //En el caso de no haber herencia se vacia la pila llena de metodos
