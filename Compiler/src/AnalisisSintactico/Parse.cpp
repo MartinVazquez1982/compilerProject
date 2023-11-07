@@ -809,7 +809,7 @@ string stepsFactor(string fact, bool lessLess = false){
     if (chequeoOK && lessLess) salida = "-"+salida;
     return salida;
 }
-#line 812 "y.tab.c"
+#line 813 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1054,7 +1054,7 @@ case 32:
                                                         yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                                     }
                                                 }else{ /*Se trata de un metodo*/
-                                                    if (noReDeclarada(yyvsp[-3]+"-"+InsideClass::getClass(), "Metodo")) {
+                                                    if (noReDeclarada(yyvsp[-3]+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                                         InsideClass::addMethod(yyvsp[-3]);
                                                         key = TablaDeSimbolos::changeKeyClass(yyvsp[-3],InsideClass::getClass());
                                                         TablaDeSimbolos::setUso(key, "Metodo");
@@ -1094,7 +1094,7 @@ case 33:
                                                 yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                             }
                                         }else{ /*Se trata de un metodo*/
-                                            if (noReDeclarada(yyvsp[-2]+"-"+InsideClass::getClass(), "Metodo")) {
+                                            if (noReDeclarada(yyvsp[-2]+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                                 InsideClass::addMethod(yyvsp[-2]);
                                                 key = TablaDeSimbolos::changeKeyClass(yyvsp[-2],InsideClass::getClass());
                                                 TablaDeSimbolos::setUso(key, "Metodo");
@@ -1388,7 +1388,7 @@ case 92:
 #line 358 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1391 "y.tab.c"
+#line 1392 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

@@ -129,7 +129,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                         yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                                     }
                                                 }else{ //Se trata de un metodo
-                                                    if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                                    if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                                         InsideClass::addMethod($2);
                                                         key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                         TablaDeSimbolos::setUso(key, "Metodo");
@@ -166,7 +166,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                 yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
                                             }
                                         }else{ //Se trata de un metodo
-                                            if (noReDeclarada($2+"-"+InsideClass::getClass(), "Metodo")) {
+                                            if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                                 InsideClass::addMethod($2);
                                                 key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                 TablaDeSimbolos::setUso(key, "Metodo");
