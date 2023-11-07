@@ -1,0 +1,17 @@
+{
+	CLASS a{
+		SHORT x,
+	},
+
+	CLASS b{
+		SHORT y,
+	},
+
+	a obj_a,
+	b obj_b,
+
+	obj_a.x = 1_s,
+	obj_a.y = 1_s, *{Error el atributo no existe}*
+	obj_b.x = 1_s, *{Error el atributo no existe}*
+	obj_b.y = 1_s,
+}

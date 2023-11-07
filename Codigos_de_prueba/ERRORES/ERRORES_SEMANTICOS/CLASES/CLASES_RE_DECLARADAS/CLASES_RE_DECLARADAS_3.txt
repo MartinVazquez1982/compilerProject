@@ -1,0 +1,22 @@
+{	
+	CLASS ddd {
+		SHORT d,
+	},
+	CLASS bbb {
+		ULONG h, 
+		VOID func1(SHORT hhh){
+			FLOAT lll,
+			lll = 12.0,
+			RETURN,
+		},
+	},
+	CLASS aaa {
+		FLOAT x,
+	},
+	CLASS bbb { *{ERROR: Se esta redeclarando la clase bbb}*
+		SHORT y,
+	},
+	CLASS aaa { *{ERROR: Se esta redeclarando la clase aaa}*
+		FLOAT z,
+	},
+}
