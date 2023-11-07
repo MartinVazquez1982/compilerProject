@@ -2,7 +2,7 @@
 	VOID func(){
 		RETURN,
 	},
-	VOID func(SHORT x){
+	VOID func(){
 		RETURN,
 	},
 }
