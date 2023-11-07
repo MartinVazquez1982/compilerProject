@@ -1,0 +1,5 @@
+{
+	SHORT x,
+
+	x = 12_s + w * 2_s, *{Variable w no encontrada}*
+}
