@@ -10,6 +10,7 @@
 #include "../ContErrWar/ContErrWar.h"
 #include "../AnalisisSemantico/Headers/Conversion.h"
 #include "../AnalisisSemantico/Headers/InsideClass.h"
+#include "../AnalisisSemantico/Headers/VarSinInic.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -23,7 +24,12 @@
 
 %%
 
-program: '{'sentenceList'}' {ChequearForwardDeclarations();}
+program: '{'sentenceList'}' {ChequearForwardDeclarations();
+                             list<string> varSinUsar = VarSinInic::listVarTop();
+                             for (const string& var : varSinUsar){
+                                yywarning("Variable/Objeto " + var + " Sin asignacion de un valor en el main");
+                             }
+                            }
         | '{''}' {yywarning("Programa vacio");}
         | sentenceList {yyerror("Falta llaves delimitadores de programa");}
         ;
@@ -83,15 +89,16 @@ variableList: variableList ';' ID {$$ = stepsDeclVarAndObj($3, "Var", $1);}
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
                                     string nomEncontrada, nomAtributo;
-                                    //$$ = EstructuraTercetos::nroActualTerceto();
                                     if (esObjeto($1) && (ChequearDeclObjeto($1,nomEncontrada, nomAtributo)) || !esObjeto($1) && (ChequearDeclaracion($1,nomEncontrada, "Var"))){
                                         string tipo;
                                         TablaDeSimbolos::del($1);
                                         bool conversion;
                                         if (esObjeto($1) ){
                                             conversion = converAsig(nomAtributo,$3,tipo);
+                                            VarSinInic::delVar(sigID($1));
                                         } else {
                                             conversion = converAsig(nomEncontrada,$3,tipo);
+                                            VarSinInic::delVar(nomEncontrada);
                                         } 
                                         if (!conversion){
                                             if ($3[0] == '['){
@@ -119,6 +126,11 @@ function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del()
                                                     InsideClass::insideMethod(false);
                                                 }
                                             }
+                                            list<string> varSinUsar = VarSinInic::listVarTop();
+                                            for (const string& var : varSinUsar){
+                                                yywarning("Variable/Objeto " + var + " Sin asignacion de un valor dentro de la funcion donde se declaro");
+                                            }
+                                            VarSinInic::delTop();
                                         ;}
         ;
 
@@ -126,7 +138,8 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                     string key; 
                                                     if ((InsideClass::insideMethod())){ //Se trata de una funcion dentro de un metodo
                                                         if (!(InsideClass::insideFuncionMethod())){
-                                                            if (noReDeclarada($2, "Funcion")) { 
+                                                            if (noReDeclarada($2, "Funcion")) {
+                                                                VarSinInic::addTop(); 
                                                                 key = TablaDeSimbolos::changeKey($2);
                                                                 TablaDeSimbolos::setUso(key, "Funcion");
                                                                 Ambito::add($2);
@@ -141,6 +154,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                         }else{
                                                             if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                                                 InsideClass::addMethod($2);
+                                                                VarSinInic::addTop();
                                                                 key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                                 TablaDeSimbolos::setUso(key, "Metodo");
                                                                 Ambito::add($2+"-"+InsideClass::getClassSinMain());
@@ -156,6 +170,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                 if (noReDeclarada($2, "Funcion")) {
                                                     string key = TablaDeSimbolos::changeKey($2);
                                                     TablaDeSimbolos::setUso(key, "Funcion");
+                                                    VarSinInic::addTop();
                                                     Ambito::add($2);
                                                     string keyFormal = TablaDeSimbolos::changeKey($4);
                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
@@ -169,6 +184,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                             if (!(InsideClass::insideFuncionMethod())){
                                                 if (noReDeclarada($2, "Funcion")) { 
                                                     key = TablaDeSimbolos::changeKey($2);
+                                                    VarSinInic::addTop();
                                                     TablaDeSimbolos::setUso(key, "Funcion");
                                                     Ambito::add($2);
                                                     InsideClass::insideFuncionMethod(true);
@@ -182,6 +198,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                             }else{
                                                 if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                                     InsideClass::addMethod($2);
+                                                    VarSinInic::addTop(); 
                                                     key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                     TablaDeSimbolos::setUso(key, "Metodo");
                                                     Ambito::add($2+"-"+InsideClass::getClassSinMain());
@@ -194,6 +211,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                 }else{ 
                                         if (noReDeclarada($2, "Funcion")) {
                                             string key = TablaDeSimbolos::changeKey($2);
+                                            VarSinInic::addTop();
                                             TablaDeSimbolos::setUso(key, "Funcion");
                                             Ambito::add($2);
                                             EstructuraTercetos::setAmbito(Ambito::get());
@@ -817,6 +835,7 @@ string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = "
     } else {
         if (noReDeclarada(declarado, uso)) {
             key = TablaDeSimbolos::changeKey(declarado);
+            VarSinInic::addVar(key);
             TablaDeSimbolos::setUso(key, uso);
         }
     }

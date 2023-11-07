@@ -1,7 +1,6 @@
 //============================================================================
 // Name        : Compilador
 // Authors     : Burckhardt, David | Benecier, Joaquin | Vazquez Arispe, Martin
-// Copyright   : Your copyright notice
 // Description : Compilador de lenguaje provisto por la catedra Diseño de Compiladores - FCEx - UNICEN
 //============================================================================
 
