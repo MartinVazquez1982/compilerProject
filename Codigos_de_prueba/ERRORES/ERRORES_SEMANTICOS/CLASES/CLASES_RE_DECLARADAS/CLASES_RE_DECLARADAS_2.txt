@@ -1,0 +1,8 @@
+{
+	CLASS aaa {
+		FLOAT x,
+	},
+	CLASS aaa { *{ERROR: Se esta redeclarando la clase aaa}*
+		FLOAT z,
+	},
+}

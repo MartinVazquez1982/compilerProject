@@ -11,6 +11,7 @@
 #include "./ContErrWar/ContErrWar.h"
 #include "./AnalisisSemantico/EstructuraTercetos.h"
 #include "./TablaDeSimbolos/TablaDeSimbolos.h"
+#include "./AnalisisSemantico/Headers/VarSinInic.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -56,6 +57,7 @@ int main(int argc, char *argv[]) {
         codigoFuente.close();
         codigoFuente.clear();
         codigoFuente.open(nombreArchivo);
+        VarSinInic::addTop();
         yyparse();
         codigoFuente.close();
         archivo_salida.close();
