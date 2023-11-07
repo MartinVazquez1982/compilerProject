@@ -117,13 +117,18 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
        | ID {$$ = $1;}
        ;
 
-function: functionHeader '{'functionBody'}' {yymenssage("Funcion");Ambito::del();
+function: functionHeader '{'functionBody'}' {Ambito::del();
                                             EstructuraTercetos::setAmbito(Ambito::get());
+                                            if (!(InsideClass::insideClass())){
+                                                yymenssage("Funcion");
+                                            }
                                             if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && (InsideClass::insideFuncionMethod())){
                                                 InsideClass::insideFuncionMethod(false);
+                                                yymenssage("Funcion");
                                             }else{
                                                 if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && !(InsideClass::insideFuncionMethod())){
                                                     InsideClass::insideMethod(false);
+                                                    yymenssage("Metodo");
                                                 }
                                             }
                                             list<string> varSinUsar = VarSinInic::listVarTop();
