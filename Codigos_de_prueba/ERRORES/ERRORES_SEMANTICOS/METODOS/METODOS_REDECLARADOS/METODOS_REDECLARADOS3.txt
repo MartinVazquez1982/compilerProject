@@ -1,0 +1,18 @@
+{
+	CLASS a{
+		VOID fun1(){
+			RETURN,
+		},
+		VOID fun1(){*{metodo redeclarado en el mismo ambito}*
+			RETURN,
+		},
+	},
+	CLASS b{
+		a obja,
+		VOID fun2(){
+			RETURN,
+		},
+	},
+	b objb,
+	objb.obja.fun1(),
+}

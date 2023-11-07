@@ -1,0 +1,17 @@
+{
+	CLASS a{
+		SHORT x,
+		VOID fun1(){
+			RETURN,
+		},
+	},
+	CLASS b{
+		SHORT x,
+		VOID fun2(){
+			RETURN,
+		},
+		a,
+	},
+	b obj,
+	obj.a.fun2(), *{da error porque fun2 se enceuntra declarada en la clase b pero no en a , entonces el objeto entra por la herencia de a y busca fun2 pero no la encuentra}*
+}

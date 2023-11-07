@@ -1,0 +1,10 @@
+{
+	CLASS a{
+		SHORT x,
+		VOID fun1(){
+			RETURN,
+		},
+	},
+	a obj,
+	obj.fun2(),*{no encuentra fun2() en la clase a y se produce el error}*
+}

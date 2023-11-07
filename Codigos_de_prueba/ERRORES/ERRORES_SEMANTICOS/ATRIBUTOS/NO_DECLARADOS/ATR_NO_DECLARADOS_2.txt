@@ -1,0 +1,21 @@
+{
+	CLASS a{
+		SHORT x,
+	},
+
+	CLASS b{
+		SHORT y,
+		a,
+	},
+
+	a obj_a,
+	b obj_b,
+
+	obj_a.x = 1_s,
+	obj_a.y = 1_s, *{Error atributo o clase no encontrada}*
+	obj_b.x = 1_s, *{Error atributo o clase no encontrada}*
+	obj_b.y = 1_s,
+	obj_b.a.x = 1_s,
+	obj_b.b.x = 1_s, *{Error atributo o clase no encontrada}*
+
+}

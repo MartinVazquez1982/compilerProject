@@ -95,7 +95,7 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         bool conversion;
                                         if (esObjeto($1) ){
                                             conversion = converAsig(nomAtributo,$3,tipo);
-                                            VarSinInic::delVar(sigID($1));
+                                            VarSinInic::delVar(sigID($1)+Ambito::get());
                                         } else {
                                             conversion = converAsig(nomEncontrada,$3,tipo);
                                             VarSinInic::delVar(nomEncontrada);
@@ -648,7 +648,11 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
         TablaDeSimbolos::del(check);
         if (TablaDeSimbolos::usoAsignado(check+":main") == "Clase"){
         	if (TablaDeSimbolos::getHerencia(antCheck) != check+":main"){
-        		yyerror("Clase " + antCheck + " No hereda de " + check);
+                if (check+":main" == antCheck){
+                    yyerror("Invocacion incorrecta de la clase " + check);
+                } else {
+                    yyerror("Clase " + antCheck + " No hereda de " + check);
+                }
         		final = true;
         	} else {
 				antCheck = check+":main";
