@@ -1,0 +1,14 @@
+{
+	CLASS a{
+		VOID fun1(){
+			RETURN,
+		},
+	},
+	CLASS b{
+		VOID fun1(){
+			RETURN,
+		},
+	},
+	b obj,
+	obj.fun2(),*{el objeto no encuentra fun2 dentro de la clase b}*
+}

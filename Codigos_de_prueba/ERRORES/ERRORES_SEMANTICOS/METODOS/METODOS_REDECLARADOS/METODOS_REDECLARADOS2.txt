@@ -1,0 +1,13 @@
+{
+	CLASS a{
+		VOID fun1(){
+			RETURN,
+		},
+	},
+	CLASS b{
+		VOID fun1(){*{error de redeclaracion ya que fun1 se encuentra en la clase a y b hereda de a}*
+			RETURN,
+		},
+		a,
+	},
+}

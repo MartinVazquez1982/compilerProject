@@ -1,0 +1,10 @@
+{
+	CLASS a{
+		VOID fun1(){
+			RETURN,
+		},
+		VOID fun1(){*{error de redeclaracion 2 metodos con el mismo nombre}*
+			RETURN,
+		},
+	},
+}
