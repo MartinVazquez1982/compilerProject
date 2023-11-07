@@ -1,4 +1,5 @@
 #include "../Headers/VarSinInic.h"
+#include <iostream>
 
 using namespace std;
 
@@ -9,7 +10,9 @@ void VarSinInic::addTop(){
 }
 
 void VarSinInic::delTop(){
-	varSinUsar.pop();
+	if (varSinUsar.size() > 1){
+		varSinUsar.pop();
+	}
 }
 
 void VarSinInic::addVar(string lexema){

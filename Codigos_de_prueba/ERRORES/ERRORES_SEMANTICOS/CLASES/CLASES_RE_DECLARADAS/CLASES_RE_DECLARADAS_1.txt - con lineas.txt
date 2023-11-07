@@ -1,0 +1,17 @@
+1 {
+2 	CLASS aaa {
+3 		FLOAT x,
+4 	},
+5 	CLASS aaa { *{ERROR: Se esta redeclarando la clase aaa}*
+6 		VOID func1(){
+7 			FLOAT y,
+8 			VOID func2(){
+9 				FLOAT c,
+10 				RETURN,
+11 			},
+12 			RETURN,
+13 		},
+14 	},
+15 	
+16 
+17 }
