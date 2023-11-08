@@ -1,0 +1,12 @@
+{
+	CLASS aaa {
+		SHORT x, 
+	},
+	CLASS bbb {
+		aaa x, 
+		aaa h,
+		aaa j;l;h;x, *{ERROR: No es posible redeclarar los atributos:  x , h}*
+		aaa xh,
+		aaa h,  *{ERROR: No es posible redeclarar el atributo h}*
+	},
+}

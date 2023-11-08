@@ -104,7 +104,13 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                             if ($3[0] == '['){
                                                 EstructuraTercetos::addTerceto("=",nomEncontrada,$3);
                                             } else {
-                                                EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
+                                                if (esObjeto($3)){
+                                                    string atributo, objeto;
+                                                    dividirStringPorArroba($3,objeto, atributo);
+                                                    EstructuraTercetos::addTerceto("=",nomEncontrada,objeto,tipo);
+                                                }else{
+                                                    EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
+                                                }
                                             }
                                         }else{
                                             EstructuraTercetos::addTerceto("=",nomEncontrada,EstructuraTercetos::nroActualTerceto(),tipo);
