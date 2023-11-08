@@ -837,7 +837,17 @@ string stepsFactor(string fact, bool lessLess = false){
     if (chequeoOK && lessLess) salida = "-"+salida;
     return salida;
 }
-#line 841 "y.tab.c"
+
+// ======================== Pasos cuando se reconoce una comparacion ========================
+
+/*string stepsComparasion(string comparador, string op1, string op2){
+    string 
+    bool lessLessOp1 = revisarLessLess(op1);
+    bool lessLessOp2 = revisarLessLess(op2);
+    EstructuraTercetos::addTerceto(comparador,$1,$3);
+    return EstructuraTercetos::nroActualTerceto();
+}*/
+#line 851 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1377,7 +1387,7 @@ case 63:
 break;
 case 64:
 #line 380 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = EstructuraTercetos::nroSigTerceto();EstructuraTercetos::addTerceto(yyvsp[-1],yyvsp[-2],yyvsp[0]);}
+{yyval = stepsOperation(yyvsp[-2], yyvsp[0], yyvsp[-1]);}
 break;
 case 65:
 #line 383 ".\Gramaticas\gramaticaLenguaje.y"
@@ -1487,7 +1497,7 @@ case 92:
 #line 426 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1491 "y.tab.c"
+#line 1501 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

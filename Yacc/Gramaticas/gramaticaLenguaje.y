@@ -377,7 +377,7 @@ heredity: ID',' { string name = "<NoExiste>";
                 }
         ;
 
-comparison: expression operatorsLogics expression {$$ = EstructuraTercetos::nroSigTerceto();EstructuraTercetos::addTerceto($2,$1,$3);}
+comparison: expression operatorsLogics expression {$$ = stepsOperation($1, $3, $2);}
          ;
 
 expression: expression'+'termino { $$ = stepsOperation($1, $3, "+"); }
@@ -886,3 +886,13 @@ string stepsFactor(string fact, bool lessLess = false){
     if (chequeoOK && lessLess) salida = "-"+salida;
     return salida;
 }
+
+// ======================== Pasos cuando se reconoce una comparacion ========================
+
+/*string stepsComparasion(string comparador, string op1, string op2){
+    string 
+    bool lessLessOp1 = revisarLessLess(op1);
+    bool lessLessOp2 = revisarLessLess(op2);
+    EstructuraTercetos::addTerceto(comparador,$1,$3);
+    return EstructuraTercetos::nroActualTerceto();
+}*/
