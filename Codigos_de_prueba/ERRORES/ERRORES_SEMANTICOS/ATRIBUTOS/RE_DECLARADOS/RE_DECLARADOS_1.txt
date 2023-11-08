@@ -1,0 +1,8 @@
+{
+	CLASS aaa {
+		SHORT x, 
+		ULONG x, *{ERROR: No es posible redeclarar el atributo x}*
+		SHORT x, *{ERROR: No es posible redeclarar el atributo x}*
+		FLOAT y;g;h;j;x;l, *{ERROR: No es posible redeclarar el atributo x}*
+	},
+}

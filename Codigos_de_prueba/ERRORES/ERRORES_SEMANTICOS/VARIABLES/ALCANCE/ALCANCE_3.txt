@@ -1,0 +1,41 @@
+{
+	FLOAT z,
+	CLASS aaa {
+		SHORT t,
+		VOID func5(SHORT y){
+			SHORT k,
+			k = 9_s,
+			k = y + k,
+			RETURN,
+		},
+	} ,
+	VOID func2(){
+		FLOAT x,
+		SHORT y,
+		FLOAT z,
+		y = 3_s,
+		x = y + 2_s,
+		VOID func3(){
+			x = y,
+			FLOAT g,
+			g = 9.0,
+			RETURN,	
+		},
+		z = x,
+		g = 4.0,  *{ERROR: La variable g pertenece al ambito de func3}*
+		VOID func4(){
+			g = 5.0, *{ERROR: La variable g pertenece al ambito de func3}*
+			RETURN,	
+		},
+		func3(),
+		func4(),
+		RETURN,
+	},
+	z = z + 56_ul, *{Aqui se utiliza la variable z del ambito global}*
+	g = 3.0,  *{ERROR: La variable g pertenece al ambito de func3}*
+	SHORT f,
+	f = 4_s,
+	aaa obj,
+	obj.func5(f),
+	z = k, *{ERROR: La variable k pertenece al ambito de func5 dentro de la clase aaa}*
+}

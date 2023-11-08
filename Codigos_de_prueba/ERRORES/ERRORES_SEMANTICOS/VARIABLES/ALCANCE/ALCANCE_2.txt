@@ -1,0 +1,28 @@
+{
+	FLOAT z,
+	VOID func1(){
+		FLOAT r,
+		SHORT w,
+		FLOAT z,
+		r = 3_s,
+		r = w + 2_s,
+		RETURN,
+	},
+	VOID func2(){
+		FLOAT x,
+		SHORT y,
+		y = 3_s,
+		x = y + 2_s,
+		w = 4_s, *{ERROR: La variable w pertenece al ambito de func1}*
+		VOID func3(){
+			x = y,
+			r = 4.0, *{ERROR: La variable r pertenece al ambito de func1}*
+			z = 5.0, *{Aqui se utiliza la variable z del ambito global}*
+			RETURN,	
+		},
+		func1(),
+		func3(),
+		RETURN,
+	},
+	func1(),
+}

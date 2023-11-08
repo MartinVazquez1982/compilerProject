@@ -1,0 +1,35 @@
+1 {
+2 	SHORT z,
+3 	z = 3_s,
+4 	VOID func2(SHORT y){
+5 		y = 4_s,
+6 		FLOAT z,
+7 		ULONG x,
+8 		y = x + z,
+9 		VOID func4(){
+10 			SHORT k, 
+11 			k = 80_s,
+12 			RETURN, 
+13 		},
+14 		func4(),
+15 		RETURN, 	
+16 	},
+17 	VOID func1(SHORT x){
+18 		x = 3_s,
+19 		z = x + 5_s,
+20 		VOID func3(){
+21 			PRINT %HOLA%,
+22 			SHORT j,
+23 			func2(j),
+24 			func4(), *{ERROR: La funcion func4 pertenece al ambito de func2}*
+25 			RETURN, 
+26 		},
+27 		func4(), *{ERROR: La funcion func4 pertenece al ambito de func2}*
+28 		func2(x),
+29 		RETURN,	
+30 	},
+31 	func1(z),
+32 	func2(z),
+33 	func4(), *{ERROR: La funcion func4 pertenece al ambito de func2}*
+34 	func3(), *{ERROR: La funcion func3 pertenece al ambito de func1}*
+35 }

@@ -89,7 +89,7 @@ variableList: variableList ';' ID {$$ = stepsDeclVarAndObj($3, "Var", $1);}
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
                                     string nomEncontrada, nomAtributo;
-                                    if (esObjeto($1) && (ChequearDeclObjeto($1,nomEncontrada, nomAtributo)) || !esObjeto($1) && (ChequearDeclaracion($1,nomEncontrada, "Var"))){
+                                    if (esObjeto($1) && (ChequearDeclObjeto($1,nomEncontrada, nomAtributo)) || !esObjeto($1) && (ChequearDeclaracion($1,nomEncontrada, "Var",true))){
                                         string tipo;
                                         TablaDeSimbolos::del($1);
                                         bool conversion;
@@ -104,7 +104,13 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                             if ($3[0] == '['){
                                                 EstructuraTercetos::addTerceto("=",nomEncontrada,$3);
                                             } else {
-                                                EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
+                                                if (esObjeto($3)){
+                                                    string atributo, objeto;
+                                                    dividirStringPorArroba($3,objeto, atributo);
+                                                    EstructuraTercetos::addTerceto("=",nomEncontrada,objeto,tipo);
+                                                }else{
+                                                    EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
+                                                }
                                             }
                                         }else{
                                             EstructuraTercetos::addTerceto("=",nomEncontrada,EstructuraTercetos::nroActualTerceto(),tipo);

@@ -1,0 +1,23 @@
+{
+	SHORT z,
+	z = 3_s,
+	VOID func1(SHORT x){
+		x = 3_s,
+		z = x + 5_s,
+		VOID func3(){
+			PRINT %HOLA%,
+			RETURN, 
+		},
+		RETURN, 	
+	},
+	VOID func2(SHORT y){
+		y = 4_s,
+		func1(y),
+		func2(y),
+		func3(), *{ERROR: La funcion func3 pertenece al ambito de func1}*
+		RETURN, 	
+	},
+	func1(z),
+	func2(z),
+	
+}
