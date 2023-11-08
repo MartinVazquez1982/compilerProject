@@ -89,7 +89,7 @@ variableList: variableList ';' ID {$$ = stepsDeclVarAndObj($3, "Var", $1);}
 
 assignment: nesting '=' expression {yymenssage("Asignacion");
                                     string nomEncontrada, nomAtributo;
-                                    if (esObjeto($1) && (ChequearDeclObjeto($1,nomEncontrada, nomAtributo)) || !esObjeto($1) && (ChequearDeclaracion($1,nomEncontrada, "Var"))){
+                                    if (esObjeto($1) && (ChequearDeclObjeto($1,nomEncontrada, nomAtributo)) || !esObjeto($1) && (ChequearDeclaracion($1,nomEncontrada, "Var",true))){
                                         string tipo;
                                         TablaDeSimbolos::del($1);
                                         bool conversion;

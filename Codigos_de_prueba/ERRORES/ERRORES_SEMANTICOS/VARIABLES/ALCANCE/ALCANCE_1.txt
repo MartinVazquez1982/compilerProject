@@ -1,0 +1,11 @@
+{
+	FLOAT z,
+	VOID func1(){
+		FLOAT x,
+		SHORT y,
+		y = 3_s,
+		x = y + 2_s,
+		RETURN,
+	},
+	z = x, *{ERROR: La variable x pertenece al ambito de func1}*
+}

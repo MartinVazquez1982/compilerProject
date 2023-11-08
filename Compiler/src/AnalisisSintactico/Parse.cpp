@@ -1039,7 +1039,7 @@ case 28:
 #line 90 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("Asignacion");
                                     string nomEncontrada, nomAtributo;
-                                    if (esObjeto(yyvsp[-2]) && (ChequearDeclObjeto(yyvsp[-2],nomEncontrada, nomAtributo)) || !esObjeto(yyvsp[-2]) && (ChequearDeclaracion(yyvsp[-2],nomEncontrada, "Var"))){
+                                    if (esObjeto(yyvsp[-2]) && (ChequearDeclObjeto(yyvsp[-2],nomEncontrada, nomAtributo)) || !esObjeto(yyvsp[-2]) && (ChequearDeclaracion(yyvsp[-2],nomEncontrada, "Var",true))){
                                         string tipo;
                                         TablaDeSimbolos::del(yyvsp[-2]);
                                         bool conversion;
