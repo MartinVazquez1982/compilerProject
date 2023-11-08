@@ -58,6 +58,7 @@ executable: ifStatement
           | print 
           | functionCall
           | assignment
+          | lessless {crearTerLessLess(obtenerUltimaParte($1, '-'));}
           ;
 
 declaration: variableDeclaration
@@ -393,8 +394,11 @@ termino: termino'*'factor { $$ = stepsOperation($1, $3, "*"); }
 
 factor: nesting          {$$ = stepsFactor($1);}
       | constant         {$$ = $1;}
-      | nesting LESSLESS {$$ = stepsFactor($1, true);}
+      | lessless         {$$ = $1;}
       ;
+
+lessless: nesting LESSLESS {$$ = stepsFactor($1, true);}
+        ;
 
 operatorsLogics: EQUAL {$$ = "==";}
                | NOTEQUAL {$$ = "!!";}
@@ -886,13 +890,3 @@ string stepsFactor(string fact, bool lessLess = false){
     if (chequeoOK && lessLess) salida = "-"+salida;
     return salida;
 }
-
-// ======================== Pasos cuando se reconoce una comparacion ========================
-
-/*string stepsComparasion(string comparador, string op1, string op2){
-    string 
-    bool lessLessOp1 = revisarLessLess(op1);
-    bool lessLessOp2 = revisarLessLess(op2);
-    EstructuraTercetos::addTerceto(comparador,$1,$3);
-    return EstructuraTercetos::nroActualTerceto();
-}*/

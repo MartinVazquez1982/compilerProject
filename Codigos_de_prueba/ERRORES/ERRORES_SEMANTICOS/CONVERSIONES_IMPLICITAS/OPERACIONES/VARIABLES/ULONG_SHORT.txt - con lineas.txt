@@ -1,6 +1,0 @@
-1 {
-2 	SHORT x,
-3 	ULONG y,
-4 	FLOAT z,
-5 	z = y + x,
-6 }
