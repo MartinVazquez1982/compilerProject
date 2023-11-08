@@ -94,28 +94,31 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         string tipo;
                                         TablaDeSimbolos::del($1);
                                         bool conversion;
+                                        string op = $3;
+                                        bool lessLessOp1 = revisarLessLess(op);
                                         if (esObjeto($1) ){
-                                            conversion = converAsig(nomAtributo,$3,tipo);
+                                            conversion = converAsig(nomAtributo,op,tipo);
                                             VarSinInic::delVar(sigID($1)+Ambito::get());
                                         } else {
-                                            conversion = converAsig(nomEncontrada,$3,tipo);
+                                            conversion = converAsig(nomEncontrada,op,tipo);
                                             VarSinInic::delVar(nomEncontrada);
                                         } 
                                         if (!conversion){
                                             if ($3[0] == '['){
-                                                EstructuraTercetos::addTerceto("=",nomEncontrada,$3);
+                                                EstructuraTercetos::addTerceto("=",nomEncontrada,op);
                                             } else {
                                                 if (esObjeto($3)){
                                                     string atributo, objeto;
-                                                    dividirStringPorArroba($3,objeto, atributo);
+                                                    dividirStringPorArroba(op,objeto, atributo);
                                                     EstructuraTercetos::addTerceto("=",nomEncontrada,objeto,tipo);
                                                 }else{
-                                                    EstructuraTercetos::addTerceto("=",nomEncontrada,$3,tipo);
+                                                    EstructuraTercetos::addTerceto("=",nomEncontrada,op,tipo);
                                                 }
                                             }
                                         }else{
                                             EstructuraTercetos::addTerceto("=",nomEncontrada,EstructuraTercetos::nroActualTerceto(),tipo);
                                         }
+                                        if (lessLessOp1) crearTerLessLess(op);
                                     }
                                     }
           ;
