@@ -98,7 +98,7 @@ MOV _name, EAX
 
 ```asm
 MOV EAX, _name
-CDQ
+CDQ - poner 0 a EDX
 DIV _name
 MOV _name, EAX
 ```

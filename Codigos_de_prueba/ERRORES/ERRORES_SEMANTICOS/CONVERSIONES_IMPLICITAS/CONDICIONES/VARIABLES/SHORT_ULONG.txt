@@ -1,0 +1,10 @@
+{
+	SHORT x,
+	ULONG y,
+
+	IF (x < y){
+	} END_IF,
+
+	WHILE (y < x) DO{
+	},
+}
