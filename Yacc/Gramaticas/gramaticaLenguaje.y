@@ -41,6 +41,7 @@ sentenceList: sentenceList sentence
 sentence: declarative','
         | executable','
         | ',' {yywarning("Sentencia vacia");}
+        | error ',' {yyerror("Sin coma");}
         ;
 
 declarative: function
@@ -121,6 +122,8 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         if (lessLessOp1) crearTerLessLess(op);
                                     }
                                     }
+          | nesting '=' {yyerror("Falta asignacion");}
+          | '=' expression {yyerror("Falta nesting");}
           ;
 
 nesting: nesting'.'ID {$$ = $1 + "." + $3;}

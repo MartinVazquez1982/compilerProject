@@ -10,14 +10,17 @@ using namespace std;
 
 class EstructuraTercetos {
 
-	private:
+	public:
 
 		struct terceto{
 			string operador;
 			string operando1;
 			string operando2;
 			string tipo="";
+			string varAux="";
 		};
+
+	private:
 
 		static unordered_map<string,vector<terceto>> listaTercetos;
 
@@ -50,6 +53,8 @@ class EstructuraTercetos {
 		static void setAmbito(string ambito);
 
 		static string getTipo(string terceto);
+
+		static unordered_map<string, vector<terceto>> getLista();
 };
 
 #endif /* ANALISISSEMANTICO_ESTRUCTURATERCETOS_H_ */

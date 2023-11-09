@@ -12,6 +12,7 @@
 #include "./AnalisisSemantico/EstructuraTercetos.h"
 #include "./TablaDeSimbolos/TablaDeSimbolos.h"
 #include "./AnalisisSemantico/Headers/VarSinInic.h"
+#include "./GeneracionDeCodigo/Assembler.h"
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
@@ -39,8 +40,12 @@ int main(int argc, char *argv[]) {
     string nombreArchivoEntrada = string(argv[1]);
     size_t found = nombreArchivoEntrada.find_last_of("/\\");
     string path = nombreArchivoEntrada.substr(0, found);
-
-    string nombreArchivoSalida = nombreArchivoEntrada.substr(found + 1) + " - con lineas.txt";
+    string nombreSinPath = nombreArchivoEntrada.substr(found + 1);
+    found = nombreSinPath.find_last_of(".");
+    string nombreArchivoAssembler = nombreSinPath.substr(0, found);
+    string nombreArchivoSalida = nombreArchivoAssembler + " - con lineas.txt";
+    
+    
 
     ofstream archivo_salida(path + "/" + nombreArchivoSalida);
 
@@ -65,6 +70,10 @@ int main(int argc, char *argv[]) {
         cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
         TablaDeSimbolos::imprimir();
         EstructuraTercetos::mostrarTercetos();
+        if (ContErrWar::getError() == 0){
+            generarCodigo(path, nombreArchivoAssembler);
+        }
+        
     } else {
         cout << "No se pudo abrir el archivo de salida." << endl;
     }
