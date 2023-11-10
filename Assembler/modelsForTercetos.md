@@ -207,11 +207,15 @@ FSTP aux#
 
 ## Comparaciones
 
+### SHORT y ULONG
+
 > var1 comp var2
 
 ```asm
 CMP var1, var2
 ```
+
+## Saltos
 
 ### SHORT
 
@@ -246,7 +250,7 @@ JG label#
 JL label#
 ```
 
-### ULONG
+### ULONG y FLOAT
 
 #### == 
 
@@ -276,5 +280,55 @@ JA label#
 #### >=
 
 ```asm
+JB label#
+```
+### FLOAT
+
+>FILMINAS
+
+```asm
+FLD dword [num1]    
+FCOM dword [num2]   
+FSTSW aux#
+MOV ax , aux#            
+SAHF                
+```
+>CHATGPT
+
+```asm
+FLD dword [num1]    
+FCOM dword [num2]   
+FSTSW ax            
+SAHF
+```    
+
+#### == 
+
+```asm
+JNE label#
+```
+#### !!
+
+```asm
 JE label#
+```
+#### <
+
+```asm
+JAE label#
+```
+#### > 
+
+```asm
+JBE label#
+```
+#### <=
+
+```asm
+JA label#
+```
+#### >=
+
+```asm
+JB label#
 ```

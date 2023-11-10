@@ -17,11 +17,23 @@ class EstructurasAssembler {
 
 	public:
 
+
+    	using FunctionType = function<string(string operando1, string operando2, string& varAux)>;
+
 		static string getSumaShort(string operando1, string operando2, string & varAux);
+
+		static FunctionType getFuntion(string clave);
+
 
 	private:
 
-		static unordered_map<tuple<string, string>,function<string(string, string, string&)>> codigos;
+		static int nroVar;
+
+
+
+		static string generarVariable();
+
+		static unordered_map<string,FunctionType> codigos;
 
 
 };
