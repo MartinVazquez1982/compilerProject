@@ -80,35 +80,35 @@ void AccionesSemanticas::AS2(char caracter){
 	cout << endl;
 	switch(Automata::getEstadoError()){
 		case 0:
-			cout << RED << "Linea " + to_string(nroLineas) + ": caracter '" + caracter + "' invalido" << RESET << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": Caracter '" + caracter + "' invalido" << RESET << endl;
 			habilitarLectura = true;
 			break;
 		case 1:
-			cout << RED << "Linea " + to_string(nroLineas) + ": falta sufijo en la definicion de la constante entera" << RESET << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": Falta sufijo en la definicion de la constante" << RESET << endl;
 			break;
 		case 2:
 		case 3:
-			cout << RED << "Linea " + to_string(nroLineas) + ": se encuetra mal definido o falta el subfijo a la contante entera" << RESET << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": Mal definido el sufijo de la constante" << RESET << endl;
 			break;
 		case 8:
 		case 9:
-			cout << RED << "Linea " + to_string(lineaInicioToken) + ": comentario sin finalizacion" << RESET << endl;
+			cout << RED << "Linea " + to_string(lineaInicioToken) + ": Comentario sin finalizacion" << RESET << endl;
 			break;
 		case 11:
-			cout << RED << "Linea " + to_string(nroLineas) + ": identificador distinto (!!) mal definido" << RESET << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": Identificador distinto (!!) mal definido" << RESET << endl;
 			break;
 		case 15:
 		case 16:
-			cout << RED << "Linea " + to_string(nroLineas) + ": constante flotante mal definida" << RESET << endl;
+			cout << RED << "Linea " + to_string(nroLineas) + ": Constante flotante mal definida" << RESET << endl;
 			break;
 		case 18:
-			cout << RED << "Linea " + to_string(lineaInicioToken) + ": cadena de texto mal definida" << RESET << endl;
+			cout << RED << "Linea " + to_string(lineaInicioToken) + ": Cadena de texto mal definida" << RESET << endl;
 			break;
 		case 19:
 			cout << RED << "Linea " + to_string(lineaInicioToken) + ": Constante numerica mal definida" << RESET << endl;
 			break;
 		default:
-			cout << RED << "Linea " + to_string(lineaInicioToken) + ": error lexico" << RESET << endl;
+			cout << RED << "Linea " + to_string(lineaInicioToken) + ": Error lexico" << RESET << endl;
 			break;
 	}
 	ContErrWar::sumErr();
@@ -362,7 +362,7 @@ void AccionesSemanticas::AS22(char caracter){
 		enviarWarning = true;
 	} else if (enviarWarning){
 		enviarWarning = false;
-		cout << YELLOW <<"Warning - Linea " + to_string(nroLineas) + ": El Identificador contiene mas de 20 caracteres" << RESET << endl;
+		cout << YELLOW <<"Warning - Linea " + to_string(nroLineas) + ": Identificador demasiado largo, se tuvieron en cuenta solo los primeros 20 caracteres" << RESET << endl;
 		ContErrWar::sumWar();
 	}
 }

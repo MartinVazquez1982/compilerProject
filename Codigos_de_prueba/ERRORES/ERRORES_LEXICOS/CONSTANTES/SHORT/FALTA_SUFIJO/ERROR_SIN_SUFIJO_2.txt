@@ -1,0 +1,8 @@
+{
+	CLASS aaa{
+		VOID funcion(){
+			SHORT x,
+			x = 2,
+		},
+	},
+}
