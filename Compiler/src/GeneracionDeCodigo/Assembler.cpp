@@ -1,5 +1,6 @@
 #include "Assembler.h"
 #include "../AnalisisSemantico/EstructuraTercetos.h"
+#include "./Headers/EstructurasAssembler.h"
 #include <fstream>
 #include <iostream>
 
@@ -46,11 +47,15 @@ void generarCodigo(string path, string nameFuente){
             	if (ter.operando2[0] == '['){
             		cout << getNro(ter.operando2) << " ";
             	}
-            	cout << ter.operador <<endl;
-            }
+            	if (ter.operador == "+"){
+            		string a;
+            		cout << EstructurasAssembler::getFuntion(ter.operador+"SHORT")(ter.operando1, ter.operando2, a) << endl;
+            		cout << a << endl;
 
-            if (clave == ":main"){
-                
+            	}
+            	if (clave == ":main"){
+
+            	}
             }
         }
 

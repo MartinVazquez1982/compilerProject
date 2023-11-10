@@ -12,8 +12,8 @@ class Conversion {
 	private:
 
 		// El orden de los tipos para las comparaciones es | SHORT | ULONG | FLOAT |
-		static const unordered_map<string, std::tuple<std::string, std::string, std::string>> asignaciones;
-		static const unordered_map<string, std::tuple<std::string, std::string, std::string>> operaciones;
+		static const unordered_map<string, tuple<string, string, string>> asignaciones;
+		static const unordered_map<string, tuple<string, string, string>> operaciones;
 
 	public:
 
