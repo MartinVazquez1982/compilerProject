@@ -54,7 +54,7 @@ MOV aux#, AL
 > var1 / var2
 
 ```asm
-MOV AL, var1
+MOV AL, var1  --PREGUNTAR SI SE HACE PRIMERO VAR 1 O ES VAR 2
 CBW
 IDIV var2
 MOV aux#, AL
@@ -96,7 +96,7 @@ MOV aux#, EAX
 ```asm
 MOV EAX, var1
 SUB EAX, var2
-MOV aux#, AL
+MOV aux#, EAX   --CORREGI DE MOV aux#, AL 
 ```
 > Primero se carga el *operando 1* y luego el *operando 2*
 
@@ -141,7 +141,7 @@ Estos tipos utilizan el co-procesdor matematico y son numeros de punto flotante 
 > var1 + var2
 
 ```asm
-FLD var1
+FLD var1  --DECIA FDL EN EL INSTRUCCIONES
 FADD var2
 FSTP aux#
 ```

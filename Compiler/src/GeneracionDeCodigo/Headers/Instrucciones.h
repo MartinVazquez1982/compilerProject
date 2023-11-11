@@ -39,7 +39,7 @@ const string EDX = "EDX ";
 
 // INSTRUCCIONES FLOTANTE
 
-const string FDL = "FDL ";
+const string FLD = "FLD ";
 const string FSTP = "FSTP ";
 const string FADD = "FADD ";
 const string FSUB = "FSUB ";

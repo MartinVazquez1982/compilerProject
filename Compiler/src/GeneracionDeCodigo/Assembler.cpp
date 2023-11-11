@@ -47,11 +47,16 @@ void generarCodigo(string path, string nameFuente){
             	if (ter.operando2[0] == '['){
             		cout << getNro(ter.operando2) << " ";
             	}
-            	if (ter.operador == "+"){
+            	if (ter.operador == "/"){
             		string a;
-            		cout << EstructurasAssembler::getFuntion(ter.operador+"SHORT")(ter.operando1, ter.operando2, a) << endl;
+            		cout << EstructurasAssembler::getFuntion(ter.operador+"FLOAT")(ter.operando1, ter.operando2, a) << endl;
             		cout << a << endl;
 
+            	}
+            	if (ter.operador == "="){
+            		string a;
+					cout << EstructurasAssembler::getFuntion(ter.operador+"FLOAT")(ter.operando1, ter.operando2, a) << endl;
+					cout << a << endl;
             	}
             	if (clave == ":main"){
 
