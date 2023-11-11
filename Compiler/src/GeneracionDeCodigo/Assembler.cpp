@@ -28,6 +28,13 @@ int getNro(string numeroTerceto){
 	return -1;
 }
 
+bool esComparacion(string op){
+	if(op == "==" || op == "!!" || op == "<" || op == ">" || op == "<=" || op == ">="){
+		return true;
+	}
+	return false;
+}
+
 void generarCodigo(string path, string nameFuente){
 
         ofstream archivoASM = generarArchivoASM(path,nameFuente+".asm");
@@ -37,30 +44,25 @@ void generarCodigo(string path, string nameFuente){
         for (auto it = listaTercetos.begin(); it != listaTercetos.end(); ++it) {
             const string clave = it->first;
             const vector<EstructuraTercetos::terceto> tercetos = it->second;
-
-            //nombreArchivo << clave << endl; // Etiqueta de inicio
-
+            string opComp, tipoComp;
             for (EstructuraTercetos::terceto  ter: tercetos){
+            	string ftOp = ter.operando1;
+            	string scOp = ter.operando2;
+            	if (esComparacion(ter.operador)){
+            		opComp = ter.operador;
+            		tipoComp = ter.tipo;
+            	}
             	if (ter.operando1[0] == '['){
-            		cout << getNro(ter.operando1) << " ";
+            		ftOp = tercetos[getNro(ter.operando1)].varAux;
             	}
             	if (ter.operando2[0] == '['){
-            		cout << getNro(ter.operando2) << " ";
+            		scOp = tercetos[getNro(ter.operando2)].varAux;
             	}
-            	if (ter.operador == "/"){
-            		string a;
-            		cout << EstructurasAssembler::getFuntion(ter.operador+"FLOAT")(ter.operando1, ter.operando2, a) << endl;
-            		cout << a << endl;
+            	string aux;
+            	cout << EstructurasAssembler::getFuntion(ter.operador+ter.tipo)(ftOp, scOp, aux) << endl;
+            }
+            if (clave == ":main"){
 
-            	}
-            	if (ter.operador == "="){
-            		string a;
-					cout << EstructurasAssembler::getFuntion(ter.operador+"FLOAT")(ter.operando1, ter.operando2, a) << endl;
-					cout << a << endl;
-            	}
-            	if (clave == ":main"){
-
-            	}
             }
         }
 
