@@ -157,7 +157,14 @@ void AccionesSemanticas::AS7(char caracter){
 	// 1.17549435E-38 < x < 3.40282347E+38 U -3.40282347E+38 < x < -1.17549435E-38 U 0.0
 	try{
 		float numero = stof(entrada);
-		AS25(caracter);
+		const float  minimo = 1.17549435E-38;
+		const float  maximo = 3.40282347E+38;
+		if (((minimo < numero) && ( numero < maximo)) || (numero == 0.0)){
+			AS25(caracter);
+		} else {
+			cout << RED << "Linea: " + to_string(nroLineas) + ": Constante FLOAT fuera del rango permitido" << RESET << endl;
+			ContErrWar::sumErr();
+		}
 	} catch(const out_of_range & exception){
 		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante FLOAT fuera del rango permitido" << RESET << endl;
 		ContErrWar::sumErr();
