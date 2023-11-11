@@ -55,6 +55,9 @@ class EstructurasAssembler {
 		static string getCompLessEqUF(string operando1, string operando2, string & varAux);
 		static string getCompGreaterEqUF(string operando1, string operando2, string & varAux);
 
+		static string getCompInt(string operando1, string operando2, string & varAux);
+		static string getCompFloat(string operando1, string operando2, string & varAux);
+
 		static FunctionType getFuntion(string clave);
 
 

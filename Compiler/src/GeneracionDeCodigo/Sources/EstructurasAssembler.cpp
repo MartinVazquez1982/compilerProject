@@ -7,7 +7,6 @@
 using namespace std;
 
 int EstructurasAssembler::nroVar = 0;
-int EstructurasAssembler::label = 0;
 
 // Inicializa el miembro estático "codigos" en el archivo .cpp
 unordered_map<string,EstructurasAssembler::FunctionType> EstructurasAssembler::codigos = {
@@ -46,7 +45,10 @@ unordered_map<string,EstructurasAssembler::FunctionType> EstructurasAssembler::c
 		{">FLOAT", EstructurasAssembler::getCompGreaterUF},
 		{"<=FLOAT", EstructurasAssembler::getCompLessEqUF},
 		{">=FLOAT", EstructurasAssembler::getCompGreaterEqUF},
-		{"BI", EstructurasAssembler::getJump}
+		{"BI", EstructurasAssembler::getJump},
+		{"compSHORT",EstructurasAssembler::getCompInt},
+		{"compULONG",EstructurasAssembler::getCompInt},
+		{"compFLOAT", EstructurasAssembler::getCompFloat}
 };
 
 
@@ -55,12 +57,6 @@ string EstructurasAssembler::generarVariable(){
 	string aux = "@aux"+to_string(EstructurasAssembler::nroVar);
 	EstructurasAssembler::nroVar++;
 	return aux;
-}
-
-string EstructurasAssembler::generarLabel(){
-	string label = "@label"+to_string(EstructurasAssembler::label);
-	EstructurasAssembler::label++;
-	return label;
 }
 
 EstructurasAssembler::FunctionType EstructurasAssembler::getFuntion(string clave){
@@ -191,77 +187,65 @@ string EstructurasAssembler::getConver(string operando1, string operando2, strin
 }
 
 string EstructurasAssembler::getCompEqualShort(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JNE+varAux;
-	return salida;
+	return JNE+operando1;
 }
 
 string EstructurasAssembler::getComDifShort(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JE+varAux;
-	return salida;
+	return JE+operando1;
 }
 
 string EstructurasAssembler::getCompLessShort(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JGE+varAux;
-	return salida;
+	return JGE+operando1;
 }
 
 string EstructurasAssembler::getCompGreaterShort(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JLE+varAux;
-	return salida;
+	return JLE+operando1;
 }
 
 string EstructurasAssembler::getCompLessEqShort(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JG+varAux;
-	return salida;
+	return JG+operando1;
 }
 
 string EstructurasAssembler::getCompGreaterEqShort(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JL+varAux;
-	return salida;
+	return JL+operando1;
 }
 
 string EstructurasAssembler::getCompEqualUF(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JNE+varAux;
-	return salida;
+	return JNE+operando1;
 }
 
 string EstructurasAssembler::getComDifUF(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JE+varAux;
-	return salida;
+	return JE+operando1;
 }
 
 string EstructurasAssembler::getCompLessUF(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JAE+varAux;
-	return salida;
+	return JAE+operando1;
 }
 
 string EstructurasAssembler::getCompGreaterUF(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JBE+varAux;
-	return salida;
+	return JBE+operando1;
 }
 
 string EstructurasAssembler::getCompLessEqUF(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JA+varAux;
-	return salida;
+	return JA+operando1;
 }
 
 string EstructurasAssembler::getCompGreaterEqUF(string operando1, string operando2, string & varAux){
-	varAux = generarLabel();
-	string salida = JB+varAux;
-	return salida;
+	return JB+operando1;
 }
 
 string EstructurasAssembler::getJump(string operando1, string operando2, string & varAux){
 	return JMP+operando1;
+}
+
+string EstructurasAssembler::getCompInt(string operando1, string operando2, string & varAux){
+	return CMP+operando1+" "+operando2;
+}
+
+string EstructurasAssembler::getCompFloat(string operando1, string operando2, string & varAux){
+	string salida = FLD+operando1;
+	salida = salida+"\n"+FCOM+operando2;
+	salida = salida+"\n"+FSTSW+AX;
+	salida = salida+"\n" + SAHF;
+	return salida;
 }

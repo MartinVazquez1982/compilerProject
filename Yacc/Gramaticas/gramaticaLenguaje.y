@@ -800,7 +800,7 @@ bool revisarLessLess(string & op){
 
 void crearTerLessLess(string op){
     EstructuraTercetos::addTerceto("-",op,TablaDeSimbolos::getUno(op),TablaDeSimbolos::getTipo(op));
-    EstructuraTercetos::addTerceto("=",op,EstructuraTercetos::nroActualTerceto());
+    EstructuraTercetos::addTerceto("=",op,EstructuraTercetos::nroActualTerceto(),TablaDeSimbolos::getTipo(op));
 }
 
 string stepsOperation(string op1, string op2, string operador){

@@ -35,6 +35,7 @@ const string JB = "JB ";
 
 const string AH = "AH ";
 const string AL = "AL ";
+const string AX = "AX ";
 const string EAX = "EAX ";
 const string EDX = "EDX ";
 
