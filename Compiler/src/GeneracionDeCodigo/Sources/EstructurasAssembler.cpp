@@ -26,19 +26,27 @@ unordered_map<string,EstructurasAssembler::FunctionType> EstructurasAssembler::c
 		{"*FLOAT", EstructurasAssembler::getMultFloat},
 		{"/FLOAT", EstructurasAssembler::getDivFloat},
 		{"=FLOAT", EstructurasAssembler::getEqualFloat},
-		{"CONVER", EstructurasAssembler::getConver},
+		{"StoFFLOAT", EstructurasAssembler::getConver},
+		{"UtoFFLOAT", EstructurasAssembler::getConver},
 		{"==SHORT", EstructurasAssembler::getCompEqualShort},
 		{"!!SHORT", EstructurasAssembler::getComDifShort},
 		{"<SHORT", EstructurasAssembler::getCompLessShort},
 		{">SHORT", EstructurasAssembler::getCompGreaterShort},
 		{"<=SHORT", EstructurasAssembler::getCompLessEqShort},
 		{">=SHORT", EstructurasAssembler::getCompGreaterEqShort},
-		{"==ULOFLT", EstructurasAssembler::getCompEqualUF},
-		{"!!ULOFLT", EstructurasAssembler::getComDifUF},
-		{"<ULOFLT", EstructurasAssembler::getCompLessUF},
-		{">ULOFLT", EstructurasAssembler::getCompGreaterUF},
-		{"<=ULOFLT", EstructurasAssembler::getCompLessEqUF},
-		{">=ULOFLT", EstructurasAssembler::getCompGreaterEqUF},
+		{"==ULONG", EstructurasAssembler::getCompEqualUF},
+		{"!!ULONG", EstructurasAssembler::getComDifUF},
+		{"<ULONG", EstructurasAssembler::getCompLessUF},
+		{">ULONG", EstructurasAssembler::getCompGreaterUF},
+		{"<=ULONG", EstructurasAssembler::getCompLessEqUF},
+		{">=ULONG", EstructurasAssembler::getCompGreaterEqUF},
+		{"==FLOAT", EstructurasAssembler::getCompEqualUF},
+		{"!!FLOAT", EstructurasAssembler::getComDifUF},
+		{"<FLOAT", EstructurasAssembler::getCompLessUF},
+		{">FLOAT", EstructurasAssembler::getCompGreaterUF},
+		{"<=FLOAT", EstructurasAssembler::getCompLessEqUF},
+		{">=FLOAT", EstructurasAssembler::getCompGreaterEqUF},
+		{"BI", EstructurasAssembler::getJump}
 };
 
 
@@ -60,31 +68,31 @@ EstructurasAssembler::FunctionType EstructurasAssembler::getFuntion(string clave
 }
 
 string EstructurasAssembler::getSumaShort(string operando1, string operando2, string & varAux){
-	string salida = MOV+AH+", _"+operando1;
-	salida = salida + "\n" + ADD+AH+", _"+operando2;
+	string salida = MOV+AH+", "+operando1;
+	salida = salida + "\n" + ADD+AH+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+AH;
 	return salida;
 }
 
 string EstructurasAssembler::getRestaShort(string operando1, string operando2, string & varAux){
-	string salida = MOV+AL+", _"+operando1;
-	salida = salida + "\n" + SUB+AL+", _"+operando2;
+	string salida = MOV+AL+", "+operando1;
+	salida = salida + "\n" + SUB+AL+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+AL;
 	return salida;
 }
 
 string EstructurasAssembler::getMultShort(string operando1, string operando2, string & varAux){
-	string salida = MOV+AL+", _"+operando1;
-	salida = salida + "\n" + IMUL+AL+", _"+operando2;
+	string salida = MOV+AL+", "+operando1;
+	salida = salida + "\n" + IMUL+AL+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+AL;
 	return salida;
 }
 
 string EstructurasAssembler::getDivShort(string operando1, string operando2, string & varAux){
-	string salida = MOV+AL+", _"+operando1;
+	string salida = MOV+AL+", "+operando1;
 	salida = salida + "\n" + CBW;
 	salida = salida + "\n" + IDIV+", "+operando2;
 	varAux = generarVariable();
@@ -93,37 +101,37 @@ string EstructurasAssembler::getDivShort(string operando1, string operando2, str
 }
 
 string EstructurasAssembler::getEqualShort(string operando1, string operando2, string & varAux){
-	string salida = MOV+AH+", _"+operando2;
+	string salida = MOV+AH+", "+operando2;
 	salida = salida + "\n" + MOV+operando1+", "+AH;
 	return salida;
 }
 
 string EstructurasAssembler::getSumaUlong(string operando1, string operando2, string & varAux){
-	string salida = MOV+EAX+", _"+operando1;
-	salida = salida + "\n" + ADD+EAX+", _"+operando2;
+	string salida = MOV+EAX+", "+operando1;
+	salida = salida + "\n" + ADD+EAX+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+EAX;
 	return salida;
 }
 
 string EstructurasAssembler::getRestaUlong(string operando1, string operando2, string & varAux){
-	string salida = MOV+EAX+", _"+operando1;
-	salida = salida + "\n" + SUB+EAX+", _"+operando2;
+	string salida = MOV+EAX+", "+operando1;
+	salida = salida + "\n" + SUB+EAX+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+EAX;
 	return salida;
 }
 
 string EstructurasAssembler::getMultUlong(string operando1, string operando2, string & varAux){
-	string salida = MOV+EAX+", _"+operando1;
-	salida = salida + "\n" + MUL+EAX+", _"+operando2;
+	string salida = MOV+EAX+", "+operando1;
+	salida = salida + "\n" + MUL+EAX+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+EAX;
 	return salida;
 }
 
 string EstructurasAssembler::getDivUlong(string operando1, string operando2, string & varAux){
-	string salida = MOV+EAX+", _"+operando2;
+	string salida = MOV+EAX+", "+operando2;
 	salida = salida + "\n" + XOR+EDX+", "+EDX;
 	salida = salida + "\n" + DIV+operando1;
 	varAux = generarVariable();
@@ -132,7 +140,7 @@ string EstructurasAssembler::getDivUlong(string operando1, string operando2, str
 }
 
 string EstructurasAssembler::getEqualUlong(string operando1, string operando2, string & varAux){
-	string salida = MOV+EAX+", _"+operando2;
+	string salida = MOV+EAX+", "+operando2;
 	salida = salida + "\n" + MOV+operando1+", "+EAX;
 	return salida;
 }
@@ -170,8 +178,8 @@ string EstructurasAssembler::getDivFloat(string operando1, string operando2, str
 }
 
 string EstructurasAssembler::getEqualFloat(string operando1, string operando2, string & varAux){
-	string salida = FLD+operando1;
-	salida = salida + "\n" + FSTP+operando2;
+	string salida = FLD+operando2;
+	salida = salida + "\n" + FSTP+operando1;
 	return salida;
 }
 
@@ -254,3 +262,6 @@ string EstructurasAssembler::getCompGreaterEqUF(string operando1, string operand
 	return salida;
 }
 
+string EstructurasAssembler::getJump(string operando1, string operando2, string & varAux){
+	return JMP+operando1;
+}

@@ -19,6 +19,7 @@ const string CMP = "CMP ";
 
 // SALTOS
 
+const string JMP = "JMP ";
 const string JNE = "JNE ";
 const string JE = "JE ";
 const string JGE = "JGE ";

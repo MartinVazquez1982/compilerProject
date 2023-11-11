@@ -109,6 +109,7 @@ void TablaDeSimbolos::chequearNegativos(string nro){
 			TablaDeSimbolos::table.erase(nro);
 		}
 		add(nroConSigno, "-"+info.valor, info.tipo, info.uso);
+		imprimir();
 	} else {
 		TablaDeSimbolos::table.erase(nro);
 	}
@@ -230,10 +231,13 @@ string TablaDeSimbolos::getTipo(string lexema){
 string TablaDeSimbolos::getUno(string lexema){
 	string dato =  TablaDeSimbolos::table[lexema].tipo;
 	if (dato == "SHORT"){
+		add("1_s", "1", "SHORT", "Const");
 		return "1_s";
 	}else if (dato == "ULONG"){
+		add("1_ul", "1", "ULONG", "Const");
 		return "1_ul";
 	}else if (dato == "FLOAT"){
+		add("1.0", "1.0", "FLOAT", "Const");
 		return "1.0";
 	}
 	return "otro tipo";
