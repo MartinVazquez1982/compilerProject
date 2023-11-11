@@ -47,16 +47,16 @@ int main(int argc, char *argv[]) {
     
     
 
-    ofstream archivo_salida(path + "/" + nombreArchivoSalida);
+    //ofstream archivo_salida(path + "/" + nombreArchivoSalida);
 
-    if (archivo_salida.is_open()) {
+    //if (archivo_salida.is_open()) {
         string linea;
         int numero_linea = 1;
 
-        while (getline(codigoFuente, linea)) {
+        /*while (getline(codigoFuente, linea)) {
             archivo_salida << numero_linea << " " << linea << "\n";
             numero_linea++;
-        }
+        }*/
 
         cout << "Se ha generado el archivo con las líneas numeradas como: " << path + "/" + nombreArchivoSalida << endl;
         codigoFuente.close();
@@ -65,18 +65,18 @@ int main(int argc, char *argv[]) {
         VarSinInic::addTop();
         yyparse();
         codigoFuente.close();
-        archivo_salida.close();
+        //archivo_salida.close();
 
         cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
         TablaDeSimbolos::imprimir();
         EstructuraTercetos::mostrarTercetos();
         if (ContErrWar::getError() == 0){
-            generarCodigo(path, nombreArchivoAssembler);
+            //generarCodigo(path, nombreArchivoAssembler);
         }
         
-    } else {
-        cout << "No se pudo abrir el archivo de salida." << endl;
-    }
+    //} else {
+    //    cout << "No se pudo abrir el archivo de salida." << endl;
+    //}
 
     return 0;
 }

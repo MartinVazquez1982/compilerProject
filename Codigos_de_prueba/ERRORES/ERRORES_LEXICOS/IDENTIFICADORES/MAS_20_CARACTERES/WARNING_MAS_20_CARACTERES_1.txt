@@ -1,0 +1,4 @@
+{
+	SHORT masdeveintecaracteres,
+	masdeveintecaractere = 1_s,
+}

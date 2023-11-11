@@ -1,0 +1,7 @@
+{
+	VOID funcion(SHORT y){
+		ULONG x,
+		x = 1,
+	}
+	funcion(2),
+}

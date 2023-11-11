@@ -1,0 +1,7 @@
+{
+	VOID masdeveintecaracteres(){
+		SHORT x,
+		RETURN,
+	},
+	
+}
