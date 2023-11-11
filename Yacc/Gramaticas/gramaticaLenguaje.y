@@ -59,7 +59,7 @@ executable: ifStatement
           | print 
           | functionCall
           | assignment
-          | lessless {crearTerLessLess(obtenerUltimaParte($1, '-'));}
+          | lessless {crearTerLessLess(obtenerUltimaParte($1, '#'));}
           ;
 
 declaration: variableDeclaration
@@ -106,7 +106,7 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         } 
                                         if (!conversion){
                                             if ($3[0] == '['){
-                                                EstructuraTercetos::addTerceto("=",nomEncontrada,op);
+                                                EstructuraTercetos::addTerceto("=",nomEncontrada,op,tipo);
                                             } else {
                                                 if (esObjeto($3)){
                                                     string atributo, objeto;
@@ -789,8 +789,8 @@ string obtenerUltimaParte(string cadena, char separador) {
 }
 
 bool revisarLessLess(string & op){
-    if (op[0] == '-'){
-        op = obtenerUltimaParte(op,'-');
+    if (op[0] == '#'){
+        op = obtenerUltimaParte(op,'#');
         
         return true;
     } else {
@@ -893,6 +893,6 @@ string stepsFactor(string fact, bool lessLess = false){
         if (chequeoOK) salida = nomEncontrada;
     }
     TablaDeSimbolos::del(fact);
-    if (chequeoOK && lessLess) salida = "-"+salida;
+    if (chequeoOK && lessLess) salida = "#"+salida;
     return salida;
 }

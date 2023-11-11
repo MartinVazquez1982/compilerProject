@@ -780,8 +780,8 @@ string obtenerUltimaParte(string cadena, char separador) {
 }
 
 bool revisarLessLess(string & op){
-    if (op[0] == '-'){
-        op = obtenerUltimaParte(op,'-');
+    if (op[0] == '#'){
+        op = obtenerUltimaParte(op,'#');
         
         return true;
     } else {
@@ -884,7 +884,7 @@ string stepsFactor(string fact, bool lessLess = false){
         if (chequeoOK) salida = nomEncontrada;
     }
     TablaDeSimbolos::del(fact);
-    if (chequeoOK && lessLess) salida = "-"+salida;
+    if (chequeoOK && lessLess) salida = "#"+salida;
     return salida;
 }
 #line 891 "y.tab.c"
@@ -1058,7 +1058,7 @@ case 15:
 break;
 case 21:
 #line 62 ".\Gramaticas\gramaticaLenguaje.y"
-{crearTerLessLess(obtenerUltimaParte(yyvsp[0], '-'));}
+{crearTerLessLess(obtenerUltimaParte(yyvsp[0], '#'));}
 break;
 case 24:
 #line 69 ".\Gramaticas\gramaticaLenguaje.y"
@@ -1112,7 +1112,7 @@ case 30:
                                         } 
                                         if (!conversion){
                                             if (yyvsp[0][0] == '['){
-                                                EstructuraTercetos::addTerceto("=",nomEncontrada,op);
+                                                EstructuraTercetos::addTerceto("=",nomEncontrada,op,tipo);
                                             } else {
                                                 if (esObjeto(yyvsp[0])){
                                                     string atributo, objeto;

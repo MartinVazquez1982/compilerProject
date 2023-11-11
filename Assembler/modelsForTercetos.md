@@ -176,8 +176,8 @@ FSTP aux#
 #### *Asignacion*
 > var1 = var2
 ```asm
-FLD var1
-FSTP var2
+FLD var2
+FSTP var1
 ```
 
 ## Conversiones

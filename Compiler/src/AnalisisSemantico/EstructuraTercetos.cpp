@@ -100,6 +100,11 @@ string EstructuraTercetos::getTipo(string terceto){
 	return info.tipo;
 }
 
-unordered_map<string, vector<EstructuraTercetos::terceto>> EstructuraTercetos::getLista(){
+unordered_map<string, vector<EstructuraTercetos::terceto>> & EstructuraTercetos::getLista(){
 	return EstructuraTercetos::listaTercetos;
+}
+
+string EstructuraTercetos::getVarAux(string ambito, string terceto){
+	cout << terceto << " " << ambito <<endl;
+	return listaTercetos[ambito][stoi(terceto)].varAux;
 }

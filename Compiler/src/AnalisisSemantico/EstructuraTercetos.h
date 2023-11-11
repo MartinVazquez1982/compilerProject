@@ -54,7 +54,9 @@ class EstructuraTercetos {
 
 		static string getTipo(string terceto);
 
-		static unordered_map<string, vector<terceto>> getLista();
+		static unordered_map<string, vector<terceto>>& getLista();
+
+		static string getVarAux(string ambito, string terceto);
 };
 
 #endif /* ANALISISSEMANTICO_ESTRUCTURATERCETOS_H_ */
