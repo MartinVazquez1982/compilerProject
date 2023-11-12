@@ -29,8 +29,15 @@ int getNro(string numeroTerceto){
 	return -1;
 }
 
+bool esComparacion(string op){
+	if (op == "==" || op == "!!" || op == "<" || op == ">" || op == "<=" || op == ">="){
+		return true;
+	}
+	return false;
+}
+
 bool esOperacion(string op){
-	if(op == "==" || op == "!!" || op == "<" || op == ">" || op == "<=" || op == ">=" || op == "+" || op == "-" || op == "*" || op == "/" || op == "="){
+	if( op == "+" || op == "-" || op == "*" || op == "/" || op == "="){
 		return true;
 	}
 	return false;
@@ -57,24 +64,31 @@ void generarCodigo(string path, string nameFuente){
             vector<EstructuraTercetos::terceto> tercetos = it->second;
             string opComp, tipoComp;
             for (int i=0; i < tercetos.size(); i++){
-            	string op;
-            	string ftOp;
-            	string scOp;
-            	if (esOperacion(tercetos[i].operador)){
-            		op = tercetos[i].operador+tercetos[i].tipo;
-            		ftOp = chequearOperando(tercetos, clave, tercetos[i].operando1);
-            		scOp = chequearOperando(tercetos, clave, tercetos[i].operando2);
-            	} else if (tercetos[i].operador == "BF"){
-            		op = tercetos[getNro(tercetos[i].operando1)].operador+tercetos[getNro(tercetos[i].operando1)].tipo;
-            		ftOp = tercetos[getNro(tercetos[i].operando2)].operador+clave;
-            	} else if (tercetos[i].operador == "BI"){
-            		op = tercetos[i].operador;
-            		ftOp = tercetos[getNro(tercetos[i].operando1)].operador+clave;
+            	if (tercetos[i].operador.find("label") == string::npos){
+            		string op;
+					string ftOp;
+					string scOp;
+					if (tercetos[i].operador == "BF"){
+						op = tercetos[getNro(tercetos[i].operando1)].operador+tercetos[getNro(tercetos[i].operando1)].tipo;
+						ftOp = tercetos[getNro(tercetos[i].operando2)].operador+clave;
+					} else if (tercetos[i].operador == "BI"){
+						op = tercetos[i].operador;
+						ftOp = tercetos[getNro(tercetos[i].operando1)].operador+clave;
+					} else {
+						if (esOperacion(tercetos[i].operador) || tercetos[i].operador == "StoF" || tercetos[i].operador == "UtoF"){
+							op = tercetos[i].operador+tercetos[i].tipo;
+						} else {
+							op = "comp"+tercetos[i].tipo;
+						}
+						ftOp = chequearOperando(tercetos, clave, tercetos[i].operando1);
+						scOp = chequearOperando(tercetos, clave, tercetos[i].operando2);
+					}
+					string aux;
+					cout << EstructurasAssembler::getFuntion(op)(ftOp, scOp, aux) << endl;
+					tercetos[i].varAux = aux;
+            	} else {
+            		cout << tercetos[i].operador+clave << endl;
             	}
-            	string aux;
-            	cout << EstructurasAssembler::getFuntion(op)(ftOp, scOp, aux) << endl;
-
-            	tercetos[i].varAux = aux;
             }
             if (clave == ":main"){
 
