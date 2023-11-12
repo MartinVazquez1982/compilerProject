@@ -109,7 +109,6 @@ void TablaDeSimbolos::chequearNegativos(string nro){
 			TablaDeSimbolos::table.erase(nro);
 		}
 		add(nroConSigno, "-"+info.valor, info.tipo, info.uso);
-		imprimir();
 	} else {
 		TablaDeSimbolos::table.erase(nro);
 	}
