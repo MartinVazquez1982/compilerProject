@@ -103,7 +103,7 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         } else {
                                             conversion = converAsig(nomEncontrada,op,tipo);
                                             VarSinInic::delVar(nomEncontrada);
-                                        } 
+                                        }
                                         if (!conversion){
                                             if ($3[0] == '['){
                                                 EstructuraTercetos::addTerceto("=",nomEncontrada,op,tipo);
@@ -277,7 +277,13 @@ functionCall: nesting'('')' {
                                                         if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)){
                                                             EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
                                                         } else {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
+                                                             if (esObjeto($3)){
+                                                                    string atributo, objeto;
+                                                                    dividirStringPorArroba($3,objeto, atributo);
+                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
+                                                             }else{
+                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
+                                                             }
                                                         }
                                                         EstructuraTercetos::addTerceto("Call",name,"");
                                                     } else {
@@ -292,7 +298,13 @@ functionCall: nesting'('')' {
                                                         if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)) {
                                                             EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
                                                         } else {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
+                                                            if (esObjeto($3)){
+                                                                    string atributo, objeto;
+                                                                    dividirStringPorArroba($3,objeto, atributo);
+                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
+                                                             }else{
+                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
+                                                             }
                                                         }
                                                         EstructuraTercetos::addTerceto("Call",name,"");
                                                     } else {
@@ -619,6 +631,7 @@ bool ChequearDeclaracion(string var, string & nomEncontrada, string uso, bool ch
     bool encontrada = false;
     if (chequeoFormal){
         if (TablaDeSimbolos::usoAsignado(var+ambito) == "PF"){
+            nomEncontrada = var+ambito;
             encontrada = true;
         }
     }
