@@ -8,9 +8,9 @@ using namespace std;
 void impresionToken(int token){
 
 	if ( token < 273 || token == 278 ){
-		cout << endl << "=> Token Reconocido: " << AccionesSemanticas::tokenAlmacenado << "  | Nro de Token: " << token << endl;
+		cout << endl << "=> Token: " << AccionesSemanticas::tokenAlmacenado << "  | Numero: " << token << endl;
 	} else {
-		cout << endl << "=> Token Reconocido: " << AccionesSemanticas::tokenAlmacenado << "  | Nro de Token: " << token << " |  Lexema: " << AccionesSemanticas::entrada << endl;
+		cout << endl << "=> Token: " << AccionesSemanticas::tokenAlmacenado << "  | Numero: " << token << " |  Lexema: " << AccionesSemanticas::entrada << endl;
 	}
 }
 

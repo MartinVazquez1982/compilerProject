@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
         yyparse();
         codigoFuente.close();
         //archivo_salida.close();
-
+        ContErrWar::mostrarMensajes();
         cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
         TablaDeSimbolos::imprimir();
         EstructuraTercetos::mostrarTercetos();

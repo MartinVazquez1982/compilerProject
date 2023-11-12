@@ -5,11 +5,11 @@
 #include "../../ContErrWar/ContErrWar.h"
 #include <iostream>
 #include <cfloat>
-using namespace std;
 
 #define RESET   "\x1B[0m"
 #define YELLOW  "\x1B[33m"
 #define RED "\x1B[31m"
+using namespace std;
 
 int AccionesSemanticas::nroLineas = 1;
 string AccionesSemanticas::entrada = "";
@@ -80,38 +80,37 @@ void AccionesSemanticas::AS2(char caracter){
 	cout << endl;
 	switch(Automata::getEstadoError()){
 		case 0:
-			cout << RED << "Linea " + to_string(nroLineas) + ": Caracter '" + caracter + "' invalido" << RESET << endl;
+			ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: Caracter " + caracter + "' invalido","ERROR");
 			habilitarLectura = true;
 			break;
 		case 1:
-			cout << RED << "Linea " + to_string(nroLineas) + ": Falta sufijo en la definicion de la constante" << RESET << endl;
+			ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: Falta sufijo en la definicion de la constante","ERROR");
 			break;
 		case 2:
 		case 3:
-			cout << RED << "Linea " + to_string(nroLineas) + ": Mal definido el sufijo de la constante" << RESET << endl;
+			ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: Mal definido el sufijo de la constante","ERROR");
 			break;
 		case 8:
 		case 9:
-			cout << RED << "Linea " + to_string(lineaInicioToken) + ": Comentario sin finalizacion" << RESET << endl;
+			ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " - ERROR: Comentario sin finalizacion","ERROR");
 			break;
 		case 11:
-			cout << RED << "Linea " + to_string(nroLineas) + ": Identificador distinto (!!) mal definido" << RESET << endl;
+			ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: Identificador distinto (!!) mal definido","ERROR");
 			break;
 		case 15:
 		case 16:
-			cout << RED << "Linea " + to_string(nroLineas) + ": Constante flotante mal definida" << RESET << endl;
+			ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: Constante flotante mal definida","ERROR");
 			break;
 		case 18:
-			cout << RED << "Linea " + to_string(lineaInicioToken) + ": Cadena de texto mal definida" << RESET << endl;
+			ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " - ERROR: Cadena de texto mal definida","ERROR");
 			break;
 		case 19:
-			cout << RED << "Linea " + to_string(lineaInicioToken) + ": Constante numerica mal definida" << RESET << endl;
+			ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " - ERROR: Constante numerica mal definida","ERROR");
 			break;
 		default:
-			cout << RED << "Linea " + to_string(lineaInicioToken) + ": Error lexico" << RESET << endl;
+			ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " - ERROR: Error lexico","ERROR");
 			break;
 	}
-	ContErrWar::sumErr();
 }
 
 /**
@@ -162,12 +161,10 @@ void AccionesSemanticas::AS7(char caracter){
 		if (((minimo < numero) && ( numero < maximo)) || (numero == 0.0)){
 			AS25(caracter);
 		} else {
-			cout << RED << "Linea: " + to_string(nroLineas) + ": Constante FLOAT fuera del rango permitido" << RESET << endl;
-			ContErrWar::sumErr();
+			ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: Constante FLOAT fuera del rango permitido","ERROR");
 		}
 	} catch(const out_of_range & exception){
-		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante FLOAT fuera del rango permitido" << RESET << endl;
-		ContErrWar::sumErr();
+		ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: Constante FLOAT fuera del rango permitido","ERROR");
 	}
 }
 
@@ -184,8 +181,7 @@ void AccionesSemanticas::AS8(char caracter){
 		AS23(caracter);
 		AS24(caracter);
 	}catch(const out_of_range & exception){
-		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante ULONG fuera del rango permitido" << RESET << endl;
-		ContErrWar::sumErr();
+		ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: Constante ULONG fuera del rango permitido","ERROR");
 	}
 }
 
@@ -205,8 +201,7 @@ void AccionesSemanticas::AS9(char caracter){
 		AS14(caracter);
 	}catch(const out_of_range & exception){
 		AS10(caracter);
-		cout << RED << "Linea: " + to_string(nroLineas) + ": Constante SHORT fuera del rango permitido" << RESET << endl;
-		ContErrWar::sumErr();
+		ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: Constante SHORT fuera del rango permitido","ERROR");
 	}
 }
 
@@ -313,8 +308,7 @@ void AccionesSemanticas::AS18(char caracter){
 void AccionesSemanticas::AS19(char caracter){
 	nroToken = TablaPalabrasReservadas::buscar(entrada);
 	if(nroToken == -1){
-        cout << RED << "Linea: " + to_string(nroLineas) + ": NO existe la palabra reservada " + entrada << RESET << endl;
-        ContErrWar::sumErr();
+		ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - ERROR: NO existe la palabra reservada " + entrada,"ERROR");
 	} else {
 		tokenAlmacenado = entrada;
 		tokenIdentificado = true;
@@ -369,8 +363,7 @@ void AccionesSemanticas::AS22(char caracter){
 		enviarWarning = true;
 	} else if (enviarWarning){
 		enviarWarning = false;
-		cout << YELLOW <<"Warning - Linea " + to_string(nroLineas) + ": Identificador demasiado largo, se tuvieron en cuenta solo los primeros 20 caracteres" << RESET << endl;
-		ContErrWar::sumWar();
+		ContErrWar::addMensaje("Linea " + to_string(nroLineas) + " - WARNING: Identificador demasiado largo, se tuvieron en cuenta solo los primeros 20 caracteres","WARNING");
 	}
 }
 
@@ -463,8 +456,7 @@ void AccionesSemanticas::AS28(char caracter){
 		tokenAlmacenado = "ID";
 		tokenIdentificado = true;
 	} else {
-		cout << RED << "Linea " + to_string(lineaInicioToken) + ": Identificador contiene mayuscula/s - " << entrada << RESET << endl;
-		ContErrWar::sumErr();
+		ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " -  ERROR: Identificador contiene mayuscula/s - "+entrada,"ERROR");
 		errorID = false;
 		AS13(caracter);
 	}
