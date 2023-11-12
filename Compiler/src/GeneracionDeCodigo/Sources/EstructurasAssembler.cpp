@@ -92,6 +92,8 @@ string EstructurasAssembler::getMultShort(string operando1, string operando2, st
 string EstructurasAssembler::getDivShort(string operando1, string operando2, string & varAux){
 	string salida = MOV+AL+", "+operando1;
 	salida = salida + "\n" + CBW;
+	salida = salida + "\n" + CMP + operando2 + ", " + 0;
+	salida = salida + "\n" + JE + "ERROR";
 	salida = salida + "\n" + IDIV+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+AL;
@@ -129,9 +131,11 @@ string EstructurasAssembler::getMultUlong(string operando1, string operando2, st
 }
 
 string EstructurasAssembler::getDivUlong(string operando1, string operando2, string & varAux){
-	string salida = MOV+EAX+", "+operando2;
+	string salida = MOV+EAX+", "+operando1;
 	salida = salida + "\n" + XOR+EDX+", "+EDX;
-	salida = salida + "\n" + DIV+operando1;
+	salida = salida + "\n" + CMP + operando2 + ", " + 0;
+	salida = salida + "\n" + JE + "ERROR";
+	salida = salida + "\n" + DIV+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+EAX;
 	return salida;
@@ -148,6 +152,9 @@ string EstructurasAssembler::getSumaFloat(string operando1, string operando2, st
 	salida = salida + "\n" + FADD+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + FSTP+varAux;
+	salida = salida + "\n" + FSTSW+AX;
+	salida = salida + "\n" + SAHF;
+	salida = salida + "\n" + JO + "ERROR";
 	return salida;
 }
 

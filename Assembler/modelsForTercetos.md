@@ -141,7 +141,7 @@ Estos tipos utilizan el co-procesdor matematico y son numeros de punto flotante 
 > var1 + var2
 
 ```asm
-FLD var1  --DECIA FDL EN EL INSTRUCCIONES
+FLD var1  
 FADD var2
 FSTP aux#
 ```
