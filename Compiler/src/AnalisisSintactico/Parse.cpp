@@ -436,13 +436,11 @@ void yymenssage(string menssage){
 }
 
 void yyerror(string menssage){
-	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
-    ContErrWar::sumErr();
+	ContErrWar::addMensaje("Linea " + to_string(AccionesSemanticas::lineaInicioToken) +" - ERROR: " + menssage,"ERROR");
 }
 
 void yywarning(string menssage){
-    cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
-    ContErrWar::sumWar();
+    ContErrWar::addMensaje("Linea " + to_string(AccionesSemanticas::lineaInicioToken) +" - WARNING: " + menssage,"WARNING");
 }
 
 // ============================== Chequeo Rango ==============================
@@ -901,7 +899,7 @@ string stepsFactor(string fact, bool lessLess = false){
     if (chequeoOK && lessLess) salida = "#"+salida;
     return salida;
 }
-#line 905 "y.tab.c"
+#line 903 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1600,7 +1598,7 @@ case 97:
 #line 461 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1604 "y.tab.c"
+#line 1602 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

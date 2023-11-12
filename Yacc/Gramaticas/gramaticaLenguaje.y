@@ -470,13 +470,11 @@ void yymenssage(string menssage){
 }
 
 void yyerror(string menssage){
-	cout << endl  << RED << "Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
-    ContErrWar::sumErr();
+	ContErrWar::addMensaje("Linea " + to_string(AccionesSemanticas::lineaInicioToken) +" - ERROR: " + menssage,"ERROR");
 }
 
 void yywarning(string menssage){
-    cout << endl << YELLOW << "Warning - Linea " << AccionesSemanticas::lineaInicioToken <<": " << menssage << RESET << endl;
-    ContErrWar::sumWar();
+    ContErrWar::addMensaje("Linea " + to_string(AccionesSemanticas::lineaInicioToken) +" - WARNING: " + menssage,"WARNING");
 }
 
 // ============================== Chequeo Rango ==============================

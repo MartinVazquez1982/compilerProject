@@ -1,0 +1,4 @@
+{
+	SHORT x;y,
+	x A= y,
+}
