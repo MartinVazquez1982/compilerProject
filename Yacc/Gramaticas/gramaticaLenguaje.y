@@ -275,9 +275,9 @@ functionCall: nesting'('')' {
                                                     string tipo;
                                                     if (TablaDeSimbolos::tieneParametros(name)){
                                                         if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)){
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto());
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
                                                         } else {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
                                                         }
                                                         EstructuraTercetos::addTerceto("Call",name,"");
                                                     } else {
@@ -290,9 +290,9 @@ functionCall: nesting'('')' {
                                                     string tipo;
                                                     if (TablaDeSimbolos::tieneParametros(name)){
                                                         if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)) {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto());
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
                                                         } else {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3);
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
                                                         }
                                                         EstructuraTercetos::addTerceto("Call",name,"");
                                                     } else {

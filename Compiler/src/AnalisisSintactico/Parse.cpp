@@ -1301,9 +1301,9 @@ case 42:
                                                     string tipo;
                                                     if (TablaDeSimbolos::tieneParametros(name)){
                                                         if (converAsig(TablaDeSimbolos::getParametroFormal(name), yyvsp[-1], tipo)){
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto());
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
                                                         } else {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),yyvsp[-1]);
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),yyvsp[-1],tipo);
                                                         }
                                                         EstructuraTercetos::addTerceto("Call",name,"");
                                                     } else {
@@ -1316,9 +1316,9 @@ case 42:
                                                     string tipo;
                                                     if (TablaDeSimbolos::tieneParametros(name)){
                                                         if (converAsig(TablaDeSimbolos::getParametroFormal(name), yyvsp[-1], tipo)) {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto());
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
                                                         } else {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),yyvsp[-1]);
+                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),yyvsp[-1],tipo);
                                                         }
                                                         EstructuraTercetos::addTerceto("Call",name,"");
                                                     } else {

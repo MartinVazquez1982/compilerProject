@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
         TablaDeSimbolos::imprimir();
         EstructuraTercetos::mostrarTercetos();
         if (ContErrWar::getError() == 0){
-            //generarCodigo(path, nombreArchivoAssembler);
+            generarCodigo(path, nombreArchivoAssembler);
         }
         
     //} else {
