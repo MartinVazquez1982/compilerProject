@@ -86,15 +86,16 @@ string EstructurasAssembler::getMultShort(string operando1, string operando2, st
 	salida = salida + "\n" + IMUL+AL+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+AL;
+	salida = salida + "\n" + JO + "ERROR";
 	return salida;
 }
 
 string EstructurasAssembler::getDivShort(string operando1, string operando2, string & varAux){
 	string salida = MOV+AL+", "+operando1;
 	salida = salida + "\n" + CBW;
-	salida = salida + "\n" + CMP + operando2 + ", " + 0;
+	salida = salida + "\n" + CMP + operando2 + ", " + "0";
 	salida = salida + "\n" + JE + "ERROR";
-	salida = salida + "\n" + IDIV+", "+operando2;
+	salida = salida + "\n" + IDIV+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+AL;
 	return salida;
@@ -127,13 +128,14 @@ string EstructurasAssembler::getMultUlong(string operando1, string operando2, st
 	salida = salida + "\n" + MUL+EAX+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+EAX;
+	salida = salida + "\n" + JO + "ERROR";
 	return salida;
 }
 
 string EstructurasAssembler::getDivUlong(string operando1, string operando2, string & varAux){
 	string salida = MOV+EAX+", "+operando1;
 	salida = salida + "\n" + XOR+EDX+", "+EDX;
-	salida = salida + "\n" + CMP + operando2 + ", " + 0;
+	salida = salida + "\n" + CMP + operando2 + ", " + "0";
 	salida = salida + "\n" + JE + "ERROR";
 	salida = salida + "\n" + DIV+operando2;
 	varAux = generarVariable();
@@ -176,6 +178,8 @@ string EstructurasAssembler::getMultFloat(string operando1, string operando2, st
 
 string EstructurasAssembler::getDivFloat(string operando1, string operando2, string & varAux){
 	string salida = FLD+operando1;
+	salida = getCompFloat(operando2,"0.0",varAux);
+	salida = salida + "\n" + JE + "ERROR";
 	salida = salida + "\n" + FDIV+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + FSTP+varAux;

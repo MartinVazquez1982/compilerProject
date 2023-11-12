@@ -132,9 +132,11 @@ void generarCodigo(string path, string nameFuente){
 						ftOp = chequearOperando(tercetos, clave, tercetos[i].operando1);
 						scOp = chequearOperando(tercetos, clave, tercetos[i].operando2);
 					}
-					string aux;
+					string aux="nada";
 					cout << EstructurasAssembler::getFuntion(op)(ftOp, scOp, aux) << endl;
 					tercetos[i].varAux = aux;
+					if (aux!="nada")
+						TablaDeSimbolos::add(aux," ",EstructuraTercetos::getTipo(to_string(i)),"Var");
             	} else {
             		cout << tercetos[i].operador+clave << endl;
             	}
@@ -144,7 +146,7 @@ void generarCodigo(string path, string nameFuente){
             }
             cout << "\n";
         }
-
+        TablaDeSimbolos::imprimir();
         archivoASM.close();
 
 }
