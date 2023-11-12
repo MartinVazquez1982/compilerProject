@@ -30,6 +30,7 @@ const string JAE = "JAE ";
 const string JBE = "JBE ";
 const string JA = "JA ";
 const string JB = "JB ";
+const string JO = "JO ";
 
 // REGISTROS
 

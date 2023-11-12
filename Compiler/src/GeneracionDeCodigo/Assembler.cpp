@@ -14,7 +14,28 @@ ofstream generarArchivoASM(string path,const string& nombreArchivo) {
     ofstream archivoASM(path+"/"+nombreArchivo);
 
     if (archivoASM.is_open()) {
-        archivoASM << ".CODE" << endl;
+    	archivoASM << ".586" << std::endl;
+		archivoASM << ".model flat, stdcall" << std::endl;
+		archivoASM << "option casemap :none" << std::endl;
+		archivoASM << "include \\masm32\\include\\windows.inc" << std::endl;
+		archivoASM << "include \\masm32\\include\\kernel32.inc" << std::endl;
+		archivoASM << "include \\masm32\\include\\user32.inc" << std::endl;
+		archivoASM << "includelib \\masm32\\lib\\kernel32.lib" << std::endl;
+		archivoASM << "includelib \\masm32\\lib\\user32.lib" << std::endl;
+        archivoASM << ".data" << endl;
+        cout << "Se ha generado el archivo " << nombreArchivo << " exitosamente." << endl;
+    } else {
+        cout << "No se pudo abrir el archivo " << nombreArchivo << endl;
+    }
+
+    return archivoASM;
+}
+
+ofstream generarASM(string path,const string& nombreArchivo) {
+    ofstream archivoASM(path+"/"+nombreArchivo);
+
+    if (archivoASM.is_open()) {
+        archivoASM << ".code" << endl;
         cout << "Se ha generado el archivo " << nombreArchivo << " exitosamente." << endl;
     } else {
         cout << "No se pudo abrir el archivo " << nombreArchivo << endl;
@@ -94,6 +115,7 @@ string extraerPorcentajes(string cadena) {
 void generarCodigo(string path, string nameFuente){
 
         ofstream archivoASM = generarArchivoASM(path,nameFuente+".asm");
+        ofstream archivoASMCODE = generarASM(path,"code.asm");
         const auto listaTercetos = EstructuraTercetos::getLista();
 
         // Iterar sobre el unordered_map
@@ -102,7 +124,7 @@ void generarCodigo(string path, string nameFuente){
             vector<EstructuraTercetos::terceto> tercetos = it->second;
             string opComp, tipoComp;
             clave = invertirCadena(clave);
-            cout << clave << endl;
+            archivoASMCODE << clave << endl;
             for (int i=0; i < tercetos.size(); i++){
             	if (tercetos[i].operador.find("label") == string::npos){
             		string op;
@@ -132,19 +154,21 @@ void generarCodigo(string path, string nameFuente){
 						ftOp = chequearOperando(tercetos, clave, tercetos[i].operando1);
 						scOp = chequearOperando(tercetos, clave, tercetos[i].operando2);
 					}
-					string aux;
-					cout << EstructurasAssembler::getFuntion(op)(ftOp, scOp, aux) << endl;
+					string aux="nada";
+					archivoASMCODE << EstructurasAssembler::getFuntion(op)(ftOp, scOp, aux) << endl;
 					tercetos[i].varAux = aux;
+					if (aux!="nada")
+						TablaDeSimbolos::add(aux," ",EstructuraTercetos::getTipo(to_string(i)),"Var");
             	} else {
-            		cout << tercetos[i].operador+clave << endl;
+            		archivoASMCODE << tercetos[i].operador+clave << endl;
             	}
             }
             if (clave == "main:"){
-            	cout << "main_end" << endl;
+            	archivoASMCODE << "main_end" << endl;
             }
-            cout << "\n";
+            archivoASMCODE << "\n";
         }
-
+        TablaDeSimbolos::imprimir();
         archivoASM.close();
 
 }
