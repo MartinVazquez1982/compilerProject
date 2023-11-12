@@ -12,6 +12,7 @@
 #include <string>
 #include <iomanip>
 #include <set>
+#include <list>
 
 using namespace std;
 
@@ -44,6 +45,8 @@ class TablaDeSimbolos {
 		static void fueConsultado(string lexema);
 
 		static void addConsultado(string lexema, string atributo, string valor);
+
+		static unordered_map<string, Datos>::iterator it;
 
 	public:
 		static void add(string lexema, string valor, string tipo, string uso);
@@ -107,6 +110,16 @@ class TablaDeSimbolos {
 		static bool forwDeclAll();
 
 		static string nextForwDecl();
+
+		// Recorrer
+
+		static void inic();
+
+		static string getClave();
+
+		static void avanzar();
+
+		static bool fin();
 };
 
 #endif /* TABLADESIMBOLOS_TABLADESIMBOLOS_H_ */

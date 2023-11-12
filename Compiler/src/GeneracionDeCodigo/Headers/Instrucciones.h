@@ -64,3 +64,8 @@ const string CALL = "CALL ";
 // PRINT
 
 const string INVOKE = "invoke ";
+
+// DECLARACION
+
+const string DB = " DB ?";
+const string DD = " DD ?";

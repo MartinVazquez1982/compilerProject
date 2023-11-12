@@ -2,6 +2,8 @@
 #include "../AnalisisSemantico/EstructuraTercetos.h"
 #include "./Headers/EstructurasAssembler.h"
 #include "../TablaDeSimbolos/TablaDeSimbolos.h"
+#include "./Headers/Instrucciones.h"
+#include "./Headers/EstrDeclObj.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -120,10 +122,10 @@ void generarCodigo(string path, string nameFuente){
 
         // Iterar sobre el unordered_map
         for (auto it = listaTercetos.begin(); it != listaTercetos.end(); ++it) {
-            string clave = it->first;
+            string claveTS = it->first;
             vector<EstructuraTercetos::terceto> tercetos = it->second;
             string opComp, tipoComp;
-            clave = invertirCadena(clave);
+            string clave = invertirCadena(claveTS);
             archivoASMCODE << clave << endl;
             for (int i=0; i < tercetos.size(); i++){
             	if (tercetos[i].operador.find("label") == string::npos){
@@ -157,8 +159,9 @@ void generarCodigo(string path, string nameFuente){
 					string aux="nada";
 					archivoASMCODE << EstructurasAssembler::getFuntion(op)(ftOp, scOp, aux) << endl;
 					tercetos[i].varAux = aux;
-					if (aux!="nada")
-						TablaDeSimbolos::add(aux," ",EstructuraTercetos::getTipo(to_string(i)),"Var");
+					if (aux!="nada"){
+						TablaDeSimbolos::add(aux," ",EstructuraTercetos::getTipo(claveTS,i),"Var");
+					}
             	} else {
             		archivoASMCODE << tercetos[i].operador+clave << endl;
             	}
@@ -168,7 +171,47 @@ void generarCodigo(string path, string nameFuente){
             }
             archivoASMCODE << "\n";
         }
-        TablaDeSimbolos::imprimir();
+        TablaDeSimbolos::inic();
+        while(!TablaDeSimbolos::fin()){
+        	string clave = TablaDeSimbolos::getClave();
+        	string uso = TablaDeSimbolos::usoAsignado(clave);
+        	if (uso == "Var" || uso == "PF"){
+        		if(TablaDeSimbolos::getTipo(clave)=="SHORT"){
+					cout << clave+DB << endl;
+				} else {
+					cout << clave+DD << endl;
+				}
+        	} else if(uso == "Obj"){
+        		string clase1 = TablaDeSimbolos::getTipo(clave)+":main";
+				string clase2 = "", clase3 = "";
+        		if(TablaDeSimbolos::nivelHerencia(clase1) > 1){
+        			clase2 = TablaDeSimbolos::getHerencia(clase1);
+        			if(TablaDeSimbolos::nivelHerencia(clase2) > 1){
+        				clase3 = TablaDeSimbolos::getHerencia(clase2);
+        			}
+        		}
+        		EstrDeclObj::addObj(clave,clase1,clase2,clase3);
+        	} else if (uso == "Atr"){
+        		EstrDeclObj::addAtr(TablaDeSimbolos::getClass(clave),clave);
+        	} else if(uso == "Clase"){
+        		EstrDeclObj::addClase(clave);
+        	} else if(uso =="Const"){
+        		//falta constantes string
+        	}
+        	TablaDeSimbolos::avanzar();
+        }
+        EstrDeclObj::inic();
+        while(!EstrDeclObj::fin()){
+        	string atr = EstrDeclObj::getObjeto();
+        	vector<string> clases = EstrDeclObj::getClases();
+        	for(int i=0; i < clases.size(); i++){
+        		if (i > 0){size_t indicePunto = var.find(':');
+        		if (indicePunto != std::string::npos) {
+        		         string primeraParte = var.substr(0, indicePunto);
+        		}}
+        		vector<string> atributos = EstrDeclObj::getAtributos(clases[i]);
+        	}
+        }
         archivoASM.close();
 
 }

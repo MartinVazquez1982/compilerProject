@@ -54,6 +54,8 @@ class EstructuraTercetos {
 
 		static string getTipo(string terceto);
 
+		static string getTipo(string ambito, int terceto);
+
 		static unordered_map<string, vector<terceto>>& getLista();
 
 		static string getVarAux(string ambito, string terceto);

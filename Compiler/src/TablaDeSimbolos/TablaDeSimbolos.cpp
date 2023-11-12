@@ -7,6 +7,7 @@ using namespace std;
 
 unordered_map<string, TablaDeSimbolos::Datos> TablaDeSimbolos::table;
 set<string> TablaDeSimbolos::forwardDeclaration;
+unordered_map<string, TablaDeSimbolos::Datos>::iterator TablaDeSimbolos::it;
 
 /**
  * Agrega una entrada a la tabla de simbolos
@@ -293,4 +294,20 @@ string TablaDeSimbolos::nextForwDecl(){
 	string eliminado = *elemento;
 	TablaDeSimbolos::forwardDeclaration.erase(elemento);
 	return eliminado;
+}
+
+void TablaDeSimbolos::inic(){
+	it = table.begin();
+}
+
+string TablaDeSimbolos::getClave(){
+	return it->first;
+}
+
+void TablaDeSimbolos::avanzar(){
+	it++;
+}
+
+bool TablaDeSimbolos::fin(){
+	return (it == table.end());
 }
