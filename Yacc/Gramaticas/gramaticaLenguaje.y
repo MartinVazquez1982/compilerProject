@@ -59,9 +59,16 @@ executable: ifStatement
           | print 
           | functionCall
           | assignment
-          | lessless {crearTerLessLess(obtenerUltimaParte($1, '#'));}
-          ;
-
+          | lessless {
+                        if (esObjeto($1)){
+                            string atributo, objeto;
+                            dividirStringPorArroba($1,objeto, atributo);
+                            crearTerLessLessObjeto(obtenerUltimaParte(objeto, '#'),atributo);
+                        }else{
+                            crearTerLessLess(obtenerUltimaParte($1, '#'));
+                        }
+                    }
+                        
 declaration: variableDeclaration
            | objectDeclaration
            ;
@@ -119,7 +126,13 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         }else{
                                             EstructuraTercetos::addTerceto("=",nomEncontrada,EstructuraTercetos::nroActualTerceto(),tipo);
                                         }
-                                        if (lessLessOp1) crearTerLessLess(op);
+                                        if (esObjeto($3)){
+                                                    string atributo, objeto;
+                                                    dividirStringPorArroba(op,objeto, atributo);
+                                                    if (lessLessOp1) crearTerLessLessObjeto(objeto,atributo);
+                                        }else{
+                                            if (lessLessOp1) crearTerLessLess(op);
+                                        }
                                     }
                                     }
           | nesting '=' {yyerror("Falta asignacion");}
@@ -816,6 +829,11 @@ void crearTerLessLess(string op){
     EstructuraTercetos::addTerceto("=",op,EstructuraTercetos::nroActualTerceto(),TablaDeSimbolos::getTipo(op));
 }
 
+void crearTerLessLessObjeto(string objeto, string atributo){
+    EstructuraTercetos::addTerceto("-",objeto,TablaDeSimbolos::getUno(atributo),TablaDeSimbolos::getTipo(atributo));
+    EstructuraTercetos::addTerceto("=",objeto,EstructuraTercetos::nroActualTerceto(),TablaDeSimbolos::getTipo(atributo));
+}
+
 string stepsOperation(string op1, string op2, string operador){
     string op, tipo, salida; //Aca se almacena el operando a convertir en caso de ser necesario
     
@@ -833,8 +851,16 @@ string stepsOperation(string op1, string op2, string operador){
     } else {
         EstructuraTercetos::addTerceto(operador,nom1,EstructuraTercetos::nroActualTerceto(),tipo);
     }
-    if (lessLessOp1) crearTerLessLess(nom1);
-    if (lessLessOp2) crearTerLessLess(nom2);
+    if (esObjeto(op1)){
+        if (lessLessOp1) crearTerLessLessObjeto(nom1,tip1);
+    }else{
+        if (lessLessOp1) crearTerLessLess(nom1);
+    }
+    if (esObjeto(op2)){
+        if (lessLessOp2) crearTerLessLessObjeto(nom2,tip2);
+    }else{
+        if (lessLessOp2) crearTerLessLess(nom2);
+    }
     return salida;
 }
 
