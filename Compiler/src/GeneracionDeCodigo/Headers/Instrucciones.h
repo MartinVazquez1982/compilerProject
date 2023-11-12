@@ -51,3 +51,15 @@ const string FILD = "FILD ";
 const string FCOM = "FCOM ";
 const string FSTSW = "FSTSW ";
 const string SAHF = "SAHF ";
+
+// RETURN
+
+const string RET = "RET ";
+
+// FUNCIONES
+
+const string CALL = "CALL ";
+
+// PRINT
+
+const string INVOKE = "invoke ";

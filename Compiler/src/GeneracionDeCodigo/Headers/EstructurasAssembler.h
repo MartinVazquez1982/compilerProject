@@ -58,6 +58,10 @@ class EstructurasAssembler {
 		static string getCompInt(string operando1, string operando2, string & varAux);
 		static string getCompFloat(string operando1, string operando2, string & varAux);
 
+		static string getCall(string operando1, string operando2, string & varAux);
+		static string getReturn(string operando1, string operando2, string & varAux);
+		static string getPrint(string operando1, string operando2, string & varAux);
+
 		static FunctionType getFuntion(string clave);
 
 
