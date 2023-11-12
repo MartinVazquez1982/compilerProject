@@ -332,3 +332,29 @@ JA label#
 ```asm
 JB label#
 ```
+
+## Declaraciones
+
+### SHORT
+
+```asm
+[nombreVar] DB ?
+```
+
+### ULONG
+
+```asm
+[nombreVar] DD ?
+```
+
+### FLOAT
+
+```asm
+[nombreVar] DD ?
+```
+
+### STRING
+
+```asm
+%nombreString% DD "string",0
+```
