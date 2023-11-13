@@ -33,8 +33,8 @@ ofstream generarArchivoASM(string path,const string& nombreArchivo) {
     return archivoASM;
 }
 
-ofstream generarASM(string path,const string& nombreArchivo) {
-    ofstream archivoASM(path+"/"+nombreArchivo);
+fstream generarASM(string path,const string& nombreArchivo) {
+    fstream archivoASM(path+"/"+nombreArchivo, ios::out | ios::in | ios::app);
 
     if (archivoASM.is_open()) {
         archivoASM << ".code" << endl;
@@ -117,7 +117,7 @@ string extraerPorcentajes(string cadena) {
 void generarCodigo(string path, string nameFuente){
 
         ofstream archivoASM = generarArchivoASM(path,nameFuente+".asm");
-        ofstream archivoASMCODE = generarASM(path,"code.asm");
+        fstream archivoASMCODE = generarASM(path,"code.asm");
         const auto listaTercetos = EstructuraTercetos::getLista();
 
         // Iterar sobre el unordered_map
@@ -177,9 +177,9 @@ void generarCodigo(string path, string nameFuente){
         	string uso = TablaDeSimbolos::usoAsignado(clave);
         	if (uso == "Var" || uso == "PF"){
         		if(TablaDeSimbolos::getTipo(clave)=="SHORT"){
-					cout << clave+DB << endl;
+        			archivoASM << clave+DB << endl;
 				} else {
-					cout << clave+DD << endl;
+					archivoASM << clave+DD << endl;
 				}
         	} else if(uso == "Obj"){
         		string clase1 = TablaDeSimbolos::getTipo(clave)+":main";
@@ -205,13 +205,25 @@ void generarCodigo(string path, string nameFuente){
         	string atr = EstrDeclObj::getObjeto();
         	vector<string> clases = EstrDeclObj::getClases();
         	for(int i=0; i < clases.size(); i++){
-        		if (i > 0){size_t indicePunto = var.find(':');
-        		if (indicePunto != std::string::npos) {
-        		         string primeraParte = var.substr(0, indicePunto);
-        		}}
+        		string clase = clases[i];
+        		if (i > 0){ atr = clase.substr(0,clase.find(':'))+"."+atr;}
         		vector<string> atributos = EstrDeclObj::getAtributos(clases[i]);
+        		for(string & atributo: atributos){
+        			string nuevoObj = atributo.substr(0,atributo.find('-'))+"."+atr;
+        			if (TablaDeSimbolos::getTipo(atributo) == "SHORT"){
+        				archivoASM << nuevoObj+DB << endl;
+        			} else {
+        				archivoASM << nuevoObj+DD << endl;
+        			}
+        		}
         	}
+        	EstrDeclObj::avanzar();
         }
+		string linea;
+		archivoASMCODE.seekg(0, ios::beg);
+		while (getline(archivoASMCODE, linea)) {
+			archivoASM << linea << endl;
+		}
         archivoASM.close();
 
 }

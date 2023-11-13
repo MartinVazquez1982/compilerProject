@@ -8,6 +8,8 @@ vector<tuple<string, vector<string>>> EstrDeclObj::objetos = vector<tuple<string
 
 unordered_map<string, vector<string>> EstrDeclObj::atributos;
 
+int EstrDeclObj::i;
+
 void EstrDeclObj::addAtr(string clase, string atr){
 	atributos[clase].push_back(atr);
 }
