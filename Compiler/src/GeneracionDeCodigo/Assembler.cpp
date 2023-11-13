@@ -12,6 +12,19 @@
 
 using namespace std;
 
+string reemplazarDosPuntos(const std::string cadena) {
+    std::string resultado = cadena;
+
+    // Iterar sobre la cadena y reemplazar ':' por '_'
+    for (char& caracter : resultado) {
+        if (caracter == ':') {
+            caracter = '_';
+        }
+    }
+
+    return resultado;
+}
+
 ofstream generarArchivoASM(string path,const string& nombreArchivo) {
     ofstream archivoASM(path+"/"+nombreArchivo);
 
@@ -119,7 +132,7 @@ void generarCodigo(string path, string nameFuente){
         ofstream archivoASM = generarArchivoASM(path,nameFuente+".asm");
         fstream archivoASMCODE = generarASM(path,"code.asm");
         const auto listaTercetos = EstructuraTercetos::getLista();
-
+		bool error=false;
         // Iterar sobre el unordered_map
         for (auto it = listaTercetos.begin(); it != listaTercetos.end(); ++it) {
             string claveTS = it->first;
@@ -157,7 +170,7 @@ void generarCodigo(string path, string nameFuente){
 						scOp = chequearOperando(tercetos, clave, tercetos[i].operando2);
 					}
 					string aux="nada";
-					archivoASMCODE << EstructurasAssembler::getFuntion(op)(ftOp, scOp, aux) << endl;
+					archivoASMCODE << EstructurasAssembler::getFuntion(op)(reemplazarDosPuntos(ftOp), reemplazarDosPuntos(scOp), aux,error) << endl;
 					tercetos[i].varAux = aux;
 					if (aux!="nada"){
 						TablaDeSimbolos::add(aux," ",EstructuraTercetos::getTipo(claveTS,i),"Var");
@@ -167,7 +180,11 @@ void generarCodigo(string path, string nameFuente){
             	}
             }
             if (clave == "main:"){
-            	archivoASMCODE << "main_end" << endl;
+				if (error){
+					archivoASMCODE << "ERROR:" << endl;
+					archivoASMCODE << "ret" << endl;
+				}
+            	archivoASMCODE << "end main" << endl;
             }
             archivoASMCODE << "\n";
         }
@@ -176,10 +193,11 @@ void generarCodigo(string path, string nameFuente){
         	string clave = TablaDeSimbolos::getClave();
         	string uso = TablaDeSimbolos::usoAsignado(clave);
         	if (uso == "Var" || uso == "PF"){
+				string reemplazo="_"+reemplazarDosPuntos(clave);
         		if(TablaDeSimbolos::getTipo(clave)=="SHORT"){
-        			archivoASM << clave+DB << endl;
+        			archivoASM << reemplazo+DB << endl;
 				} else {
-					archivoASM << clave+DD << endl;
+        			archivoASM << reemplazo+DD << endl;
 				}
         	} else if(uso == "Obj"){
         		string clase1 = TablaDeSimbolos::getTipo(clave)+":main";
@@ -210,10 +228,11 @@ void generarCodigo(string path, string nameFuente){
         		vector<string> atributos = EstrDeclObj::getAtributos(clases[i]);
         		for(string & atributo: atributos){
         			string nuevoObj = atributo.substr(0,atributo.find('-'))+"."+atr;
+        			string reemplazo="_"+reemplazarDosPuntos(nuevoObj);
         			if (TablaDeSimbolos::getTipo(atributo) == "SHORT"){
-        				archivoASM << nuevoObj+DB << endl;
+        				archivoASM << reemplazo+DB << endl;
         			} else {
-        				archivoASM << nuevoObj+DD << endl;
+        				archivoASM << reemplazo+DD << endl;
         			}
         		}
         	}
@@ -221,10 +240,12 @@ void generarCodigo(string path, string nameFuente){
         }
 		string linea;
 		archivoASMCODE.seekg(0, ios::beg);
+		//archivoASM << " " << endl;
 		while (getline(archivoASMCODE, linea)) {
 			archivoASM << linea << endl;
 		}
         archivoASM.close();
-
+        archivoASMCODE.close();
+        remove((path+"\\code.asm").c_str());
 }
 

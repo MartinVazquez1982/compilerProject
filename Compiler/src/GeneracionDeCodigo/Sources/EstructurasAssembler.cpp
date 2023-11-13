@@ -65,7 +65,7 @@ EstructurasAssembler::FunctionType EstructurasAssembler::getFuntion(string clave
 	return EstructurasAssembler::codigos.at(clave);
 }
 
-string EstructurasAssembler::getSumaShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getSumaShort(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+AH+", "+operando1;
 	salida = salida + "\n" + ADD+AH+", "+operando2;
 	varAux = generarVariable();
@@ -73,7 +73,7 @@ string EstructurasAssembler::getSumaShort(string operando1, string operando2, st
 	return salida;
 }
 
-string EstructurasAssembler::getRestaShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getRestaShort(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+AL+", "+operando1;
 	salida = salida + "\n" + SUB+AL+", "+operando2;
 	varAux = generarVariable();
@@ -81,16 +81,17 @@ string EstructurasAssembler::getRestaShort(string operando1, string operando2, s
 	return salida;
 }
 
-string EstructurasAssembler::getMultShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getMultShort(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+AL+", "+operando1;
 	salida = salida + "\n" + IMUL+AL+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+AL;
 	salida = salida + "\n" + JO + "ERROR";
+	error=true;
 	return salida;
 }
 
-string EstructurasAssembler::getDivShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getDivShort(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+AL+", "+operando1;
 	salida = salida + "\n" + CBW;
 	salida = salida + "\n" + CMP + operando2 + ", " + "0";
@@ -98,16 +99,17 @@ string EstructurasAssembler::getDivShort(string operando1, string operando2, str
 	salida = salida + "\n" + IDIV+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+AL;
+	error=true;
 	return salida;
 }
 
-string EstructurasAssembler::getEqualShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getEqualShort(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+AH+", "+operando2;
 	salida = salida + "\n" + MOV+operando1+", "+AH;
 	return salida;
 }
 
-string EstructurasAssembler::getSumaUlong(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getSumaUlong(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+EAX+", "+operando1;
 	salida = salida + "\n" + ADD+EAX+", "+operando2;
 	varAux = generarVariable();
@@ -115,7 +117,7 @@ string EstructurasAssembler::getSumaUlong(string operando1, string operando2, st
 	return salida;
 }
 
-string EstructurasAssembler::getRestaUlong(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getRestaUlong(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+EAX+", "+operando1;
 	salida = salida + "\n" + SUB+EAX+", "+operando2;
 	varAux = generarVariable();
@@ -123,16 +125,17 @@ string EstructurasAssembler::getRestaUlong(string operando1, string operando2, s
 	return salida;
 }
 
-string EstructurasAssembler::getMultUlong(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getMultUlong(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+EAX+", "+operando1;
 	salida = salida + "\n" + MUL+EAX+", "+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+EAX;
 	salida = salida + "\n" + JO + "ERROR";
+	error=true;
 	return salida;
 }
 
-string EstructurasAssembler::getDivUlong(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getDivUlong(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+EAX+", "+operando1;
 	salida = salida + "\n" + XOR+EDX+", "+EDX;
 	salida = salida + "\n" + CMP + operando2 + ", " + "0";
@@ -140,16 +143,17 @@ string EstructurasAssembler::getDivUlong(string operando1, string operando2, str
 	salida = salida + "\n" + DIV+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+EAX;
+	error=true;
 	return salida;
 }
 
-string EstructurasAssembler::getEqualUlong(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getEqualUlong(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+EAX+", "+operando2;
 	salida = salida + "\n" + MOV+operando1+", "+EAX;
 	return salida;
 }
 
-string EstructurasAssembler::getSumaFloat(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getSumaFloat(string operando1, string operando2, string & varAux, bool & error){
 	string salida = FLD+operando1;
 	salida = salida + "\n" + FADD+operando2;
 	varAux = generarVariable();
@@ -157,10 +161,11 @@ string EstructurasAssembler::getSumaFloat(string operando1, string operando2, st
 	salida = salida + "\n" + FSTSW+AX;
 	salida = salida + "\n" + SAHF;
 	salida = salida + "\n" + JO + "ERROR";
+	error=true;
 	return salida;
 }
 
-string EstructurasAssembler::getRestaFloat(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getRestaFloat(string operando1, string operando2, string & varAux, bool & error){
 	string salida = FLD+operando1;
 	salida = salida + "\n" + FSUB+operando2;
 	varAux = generarVariable();
@@ -168,7 +173,7 @@ string EstructurasAssembler::getRestaFloat(string operando1, string operando2, s
 	return salida;
 }
 
-string EstructurasAssembler::getMultFloat(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getMultFloat(string operando1, string operando2, string & varAux, bool & error){
 	string salida = FLD+operando1;
 	salida = salida + "\n" + FMUL+operando2;
 	varAux = generarVariable();
@@ -176,86 +181,87 @@ string EstructurasAssembler::getMultFloat(string operando1, string operando2, st
 	return salida;
 }
 
-string EstructurasAssembler::getDivFloat(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getDivFloat(string operando1, string operando2, string & varAux, bool & error){
 	string salida = FLD+operando1;
-	salida = getCompFloat(operando2,"0.0",varAux);
+	salida = getCompFloat(operando2,"0.0",varAux,error);
 	salida = salida + "\n" + JE + "ERROR";
 	salida = salida + "\n" + FDIV+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + FSTP+varAux;
+	error=true;
 	return salida;
 }
 
-string EstructurasAssembler::getEqualFloat(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getEqualFloat(string operando1, string operando2, string & varAux, bool & error){
 	string salida = FLD+operando2;
 	salida = salida + "\n" + FSTP+operando1;
 	return salida;
 }
 
-string EstructurasAssembler::getConver(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getConver(string operando1, string operando2, string & varAux, bool & error){
 	string salida = FILD+operando1;
 	varAux = generarVariable();
 	salida = salida + "\n" + FSTP+varAux;
 	return salida;
 }
 
-string EstructurasAssembler::getCompEqualShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompEqualShort(string operando1, string operando2, string & varAux, bool & error){
 	return JNE+operando1;
 }
 
-string EstructurasAssembler::getComDifShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getComDifShort(string operando1, string operando2, string & varAux, bool & error){
 	return JE+operando1;
 }
 
-string EstructurasAssembler::getCompLessShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompLessShort(string operando1, string operando2, string & varAux, bool & error){
 	return JGE+operando1;
 }
 
-string EstructurasAssembler::getCompGreaterShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompGreaterShort(string operando1, string operando2, string & varAux, bool & error){
 	return JLE+operando1;
 }
 
-string EstructurasAssembler::getCompLessEqShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompLessEqShort(string operando1, string operando2, string & varAux, bool & error){
 	return JG+operando1;
 }
 
-string EstructurasAssembler::getCompGreaterEqShort(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompGreaterEqShort(string operando1, string operando2, string & varAux, bool & error){
 	return JL+operando1;
 }
 
-string EstructurasAssembler::getCompEqualUF(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompEqualUF(string operando1, string operando2, string & varAux, bool & error){
 	return JNE+operando1;
 }
 
-string EstructurasAssembler::getComDifUF(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getComDifUF(string operando1, string operando2, string & varAux,bool & error){
 	return JE+operando1;
 }
 
-string EstructurasAssembler::getCompLessUF(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompLessUF(string operando1, string operando2, string & varAux,bool & error){
 	return JAE+operando1;
 }
 
-string EstructurasAssembler::getCompGreaterUF(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompGreaterUF(string operando1, string operando2, string & varAux,bool & error){
 	return JBE+operando1;
 }
 
-string EstructurasAssembler::getCompLessEqUF(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompLessEqUF(string operando1, string operando2, string & varAux,bool & error){
 	return JA+operando1;
 }
 
-string EstructurasAssembler::getCompGreaterEqUF(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompGreaterEqUF(string operando1, string operando2, string & varAux,bool & error){
 	return JB+operando1;
 }
 
-string EstructurasAssembler::getJump(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getJump(string operando1, string operando2, string & varAux,bool & error){
 	return JMP+operando1;
 }
 
-string EstructurasAssembler::getCompInt(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompInt(string operando1, string operando2, string & varAux,bool & error){
 	return CMP+operando1+" "+operando2;
 }
 
-string EstructurasAssembler::getCompFloat(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCompFloat(string operando1, string operando2, string & varAux,bool & error){
 	string salida = FLD+operando1;
 	salida = salida+"\n"+FCOM+operando2;
 	salida = salida+"\n"+FSTSW+AX;
@@ -263,15 +269,15 @@ string EstructurasAssembler::getCompFloat(string operando1, string operando2, st
 	return salida;
 }
 
-string EstructurasAssembler::getCall(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getCall(string operando1, string operando2, string & varAux,bool & error){
 	return CALL+operando1;
 }
 
-string EstructurasAssembler::getReturn(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getReturn(string operando1, string operando2, string & varAux,bool & error){
 	return RET;
 }
 
-string EstructurasAssembler::getPrint(string operando1, string operando2, string & varAux){
+string EstructurasAssembler::getPrint(string operando1, string operando2, string & varAux,bool & error){
 	string varMensaje = operando1; //Esta variable se debe agregar a la tabla de simbolos y su valor es la cadena
     string varTitulo = "PRINT"; //Esta variable se debe agregar a la tabla de simbolos, es el titulo del cuadro de texto
 	return INVOKE+"MessageBox, NULL, addr varTitulo, addr varMensaje, MB_OK";
