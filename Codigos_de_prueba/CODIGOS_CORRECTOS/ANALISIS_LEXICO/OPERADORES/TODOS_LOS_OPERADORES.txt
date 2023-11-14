@@ -1,0 +1,4 @@
+{
+	SHORT x,
+	x = x + x - x / x * x,
+}

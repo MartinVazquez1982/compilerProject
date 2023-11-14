@@ -1,0 +1,8 @@
+{
+	SHORT x;y,
+	x = y,
+	y = x,
+	IF ( x A> y) {
+		PRINT %HOLA%,
+	}END_IF,
+}

@@ -108,7 +108,7 @@ void AccionesSemanticas::AS2(char caracter){
 			ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " - ERROR: Constante numerica mal definida","ERROR");
 			break;
 		default:
-			ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " - ERROR: Error lexico","ERROR");
+			//ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " - ERROR: Error lexico","ERROR");
 			break;
 	}
 }
@@ -456,7 +456,7 @@ void AccionesSemanticas::AS28(char caracter){
 		tokenAlmacenado = "ID";
 		tokenIdentificado = true;
 	} else {
-		ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " -  ERROR: Identificador contiene mayuscula/s - "+entrada,"ERROR");
+		ContErrWar::addMensaje("Linea " + to_string(lineaInicioToken) + " - ERROR: Identificador contiene mayuscula/s - "+entrada,"ERROR");
 		errorID = false;
 		AS13(caracter);
 	}

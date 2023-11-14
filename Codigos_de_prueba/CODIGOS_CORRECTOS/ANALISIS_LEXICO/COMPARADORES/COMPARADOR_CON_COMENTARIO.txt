@@ -1,0 +1,8 @@
+{
+	SHORT x;y,
+	x = y,
+	y = x,
+	IF ( x *{GHG}*> y) {
+		PRINT %HOLA%,
+	}END_IF,
+}

@@ -1,0 +1,25 @@
+{	
+	SHORT x,
+	FLOAT y,
+	ULONG z,
+	VOID funcion(){
+		x = x,
+		y = y,
+		z = z,
+		RETURN,
+	},
+	
+	IF ( x == x ){
+		PRINT %HOLA%,
+	} ELSE {
+		PRINT %HOLA%,
+	}END_IF,
+	
+	WHILE ( x == y ) DO{
+		PRINT %HOLA%,
+	},
+
+	CLASS clase {
+		SHORT x,
+	},
+}

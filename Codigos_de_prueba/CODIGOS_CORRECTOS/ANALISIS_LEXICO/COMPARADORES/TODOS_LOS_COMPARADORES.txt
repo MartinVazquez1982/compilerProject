@@ -1,0 +1,23 @@
+{
+	SHORT x;y,
+	x = y,
+	y = x,
+	IF ( x > y ) {
+		PRINT %PRUEBA OPERADOR%,
+	}END_IF,
+	IF ( x < y ) {
+		PRINT %PRUEBA OPERADOR%,
+	}END_IF,
+	IF ( x <= y ) {
+		PRINT %PRUEBA OPERADOR%,
+	}END_IF,
+	IF ( x >= y ) {
+		PRINT %PRUEBA OPERADOR%,
+	}END_IF,
+	IF ( x !! y ) {
+		PRINT %PRUEBA OPERADOR%,
+	}END_IF,
+	IF ( x == y ) {
+		PRINT %PRUEBA OPERADOR%,
+	}END_IF,
+}
