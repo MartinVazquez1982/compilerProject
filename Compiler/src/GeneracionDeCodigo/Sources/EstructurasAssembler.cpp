@@ -1,5 +1,6 @@
 #include "../Headers/EstructurasAssembler.h"
 #include "../Headers/Instrucciones.h"
+#include "../../TablaDeSimbolos/TablaDeSimbolos.h"
 #include <unordered_map>
 #include <string>
 #include <functional>
@@ -148,9 +149,19 @@ string EstructurasAssembler::getMultUlong(string operando1, string operando2, st
 string EstructurasAssembler::getDivUlong(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+EAX+", "+operando1;
 	salida = salida + "\n" + XOR+EDX+", "+EDX;
-	salida = salida + "\n" + CMP + operando2 + ", " + "0";
-	salida = salida + "\n" + JE + "ERROR";
-	salida = salida + "\n" + DIV+operando2;
+	if (isdigit(operando2[0])){
+		salida = salida + "\n" + MOV+EBX+", "+operando2;
+		salida = salida + "\n" + CMP + EBX + ", " + "0";
+	}else{
+		salida = salida + "\n" + CMP + operando2 + ", " + "0";
+	}
+	salida = salida + "\n" + JE + "etiqueta_divcero";
+	if (isdigit(operando2[0])){
+		salida = salida + "\n" + MOV+ECX+", "+operando2;
+		salida = salida + "\n" + DIV+ECX;
+	} else {
+		salida = salida + "\n" + DIV+operando2;
+	}
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+EAX;
 	error=true;
@@ -193,10 +204,11 @@ string EstructurasAssembler::getMultFloat(string operando1, string operando2, st
 
 string EstructurasAssembler::getDivFloat(string operando1, string operando2, string & varAux, bool & error){
 	string salida = FLD+operando1;
-	salida = getCompFloat(operando2,"0.0",varAux,error);
-	salida = salida + "\n" + JE + "ERROR";
-	salida = salida + "\n" + FDIV+operando2;
+	string varAuxComp;
+	salida = salida + "\n" + getCompFloat(operando2,"000",varAuxComp,error);
+	salida = salida + "\n" + JE + "etiqueta_divcero";
 	varAux = generarVariable();
+	salida = salida + "\n" + FDIV+operando2;
 	salida = salida + "\n" + FSTP+varAux;
 	error=true;
 	return salida;
@@ -273,7 +285,11 @@ string EstructurasAssembler::getCompInt(string operando1, string operando2, stri
 
 string EstructurasAssembler::getCompFloat(string operando1, string operando2, string & varAux,bool & error){
 	string salida = FLD+operando1;
-	salida = salida+"\n"+FCOM+operando2;
+	if (operando2=="000"){
+		salida = salida+"\n"+FLDZ+"\n"+FCOM;
+	} else {
+		salida = salida+"\n"+FCOM+operando2;
+	}
 	salida = salida+"\n"+FSTSW+AX;
 	salida = salida+"\n" + SAHF;
 	return salida;
@@ -288,12 +304,5 @@ string EstructurasAssembler::getReturn(string operando1, string operando2, strin
 }
 
 string EstructurasAssembler::getPrint(string operando1, string operando2, string & varAux,bool & error){
-	string varMensaje = operando1; //Esta variable se debe agregar a la tabla de simbolos y su valor es la cadena
-    string varTitulo = "PRINT"; //Esta variable se debe agregar a la tabla de simbolos, es el titulo del cuadro de texto
-	return INVOKE+"MessageBox, NULL, addr varTitulo, addr varMensaje, MB_OK";
-	/*invoke MessageBox: Llama a la función MessageBox de la WinAPI. Esta función muestra un cuadro de mensaje en la pantalla.
-	NULL: Es el identificador de la ventana principal para el cuadro de mensaje. En este caso, se usa NULL para indicar que no hay una ventana principal específica.
-	addr varTitulo: Es la dirección de la cadena de caracteres que se mostrará en el titulo del cuadro de mensaje.
-	addr varMensaje: Es la dirección de la cadena de caracteres que se mostrará en el cuadro de mensaje. En este caso, parece ser una cadena llamada "HelloWorld".
-	MB_OK: Es una constante que indica que el cuadro de mensaje debe contener solo un botón "Aceptar" (OK).*/
+	return INVOKE+"MessageBox, NULL,addr "+operando1+", addr SPRINTS, MB_OK";
 }

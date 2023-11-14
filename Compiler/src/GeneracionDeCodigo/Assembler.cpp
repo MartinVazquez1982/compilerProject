@@ -12,12 +12,12 @@
 
 using namespace std;
 
-string reemplazarDosPuntos(const std::string cadena) {
-    std::string resultado = cadena;
+string reemplazarCaracter(const string cadena, char reemplazo) {
+    string resultado = cadena;
 
     // Iterar sobre la cadena y reemplazar ':' por '_'
     for (char& caracter : resultado) {
-        if (caracter == ':') {
+        if (caracter == reemplazo) {
             caracter = '_';
         }
     }
@@ -82,11 +82,33 @@ bool esOperacion(string op){
 	return false;
 }
 
+void replaceCharsFloat(string & number){
+	for (char &c : number) {
+		switch (c) {
+			case '.':
+				c = 'D';
+				break;
+			case '-':
+				c = 'N';
+				break;
+			case '+':
+				c = 'P';
+				break;
+		}
+	}
+}
+
 string chequearOperando(vector<EstructuraTercetos::terceto> tercetos,string clave, string op){
 	if (op[0] == '['){
 		return tercetos[stoi(op.substr(1, op.length()-2))].varAux;
-	} else if (isdigit(op[0])){
-		return TablaDeSimbolos::getValor(op);
+	} else if (isdigit(op[0]) || op[0]=='-'){
+		if (TablaDeSimbolos::getTipo(op) == "FLOAT"){
+			string valor = TablaDeSimbolos::getValor(op);
+			replaceCharsFloat(valor);
+			return "_"+valor;
+		} else {
+			return TablaDeSimbolos::getValor(op);
+		}
 	} else {
 		return "_"+op;
 	}
@@ -116,23 +138,13 @@ string invertirCadena(string cadena) {
     return resultado;
 }
 
-string extraerPorcentajes(string cadena) {
-	    size_t inicio = cadena.find('%');
-	    size_t fin = cadena.rfind('%');
-	    if (inicio != std::string::npos && fin != std::string::npos && inicio < fin) {
-	        return cadena.substr(inicio + 1, fin - inicio - 1);
-	    } else {
-	        // Si no se encuentra el par de porcentajes, o están en el orden incorrecto, devuelve una cadena vacía.
-	        return "";
-	    }
-	}
-
 void generarCodigo(string path, string nameFuente){
 
         ofstream archivoASM = generarArchivoASM(path,nameFuente+".asm");
         fstream archivoASMCODE = generarASM(path,"code.asm");
         const auto listaTercetos = EstructuraTercetos::getLista();
 		bool error=false;
+		bool print=false;
         // Iterar sobre el unordered_map
         for (auto it = listaTercetos.begin(); it != listaTercetos.end(); ++it) {
             string claveTS = it->first;
@@ -157,9 +169,10 @@ void generarCodigo(string path, string nameFuente){
 					}else if (tercetos[i].operador == "Return"){
 						op = "RETURN";
 					}else if (tercetos[i].operador == "Print"){
+						print=true;
 						op = "PRINT";
 						ftOp = tercetos[i].operando1;
-						ftOp = extraerPorcentajes(ftOp);
+						ftOp = "S"+reemplazarCaracter(TablaDeSimbolos::getValor(ftOp),' ')+"S";
 					} else {
 						if (esOperacion(tercetos[i].operador) || tercetos[i].operador == "StoF" || tercetos[i].operador == "UtoF"){
 							op = tercetos[i].operador+tercetos[i].tipo;
@@ -170,7 +183,7 @@ void generarCodigo(string path, string nameFuente){
 						scOp = chequearOperando(tercetos, clave, tercetos[i].operando2);
 					}
 					string aux="nada";
-					archivoASMCODE << EstructurasAssembler::getFuntion(op)(reemplazarDosPuntos(ftOp), reemplazarDosPuntos(scOp), aux,error) << endl;
+					archivoASMCODE << EstructurasAssembler::getFuntion(op)(reemplazarCaracter(ftOp,':'), reemplazarCaracter(scOp,':'), aux,error) << endl;
 					tercetos[i].varAux = aux;
 					if (aux!="nada"){
 						TablaDeSimbolos::add(aux," ",EstructuraTercetos::getTipo(claveTS,i),"Var");
@@ -180,24 +193,29 @@ void generarCodigo(string path, string nameFuente){
             	}
             }
             if (clave == "main:"){
-				if (error){
+            	if (error){
+            		archivoASMCODE << FINEJEC << endl;
 					archivoASMCODE << "etiqueta_divcero:" << endl;
+					archivoASMCODE << "invoke MessageBox, NULL, addr msj_f1, addr msj_f1, MB_OK" << endl;
+					archivoASM << "msj_f1 db \"Error: Division por cero\", 0" << endl;
 				}
+            	archivoASMCODE << FINEJEC << endl;
             	archivoASMCODE << "end main" << endl;
             }
             archivoASMCODE << "\n";
+        }
+        if (print){
+        	archivoASM << "SPRINTS DB \"PRINT\", 0" << endl;
         }
         TablaDeSimbolos::inic();
         while(!TablaDeSimbolos::fin()){
         	string clave = TablaDeSimbolos::getClave();
         	string uso = TablaDeSimbolos::usoAsignado(clave);
         	if (uso == "Var" || uso == "PF"){
-        		string reemplazo;
-        		if (clave[0]=='@'){
-        			reemplazo=reemplazarDosPuntos(clave);
-				}else{
-					reemplazo="_"+reemplazarDosPuntos(clave);
-        		}
+        		string reemplazo = clave;
+        		if (clave[0]!='@'){
+        			reemplazo="_"+reemplazarCaracter(clave,':');
+				}
         		if(TablaDeSimbolos::getTipo(clave)=="SHORT"){
         			archivoASM << reemplazo+DB << endl;
 				} else {
@@ -218,7 +236,16 @@ void generarCodigo(string path, string nameFuente){
         	} else if(uso == "Clase"){
         		EstrDeclObj::addClase(clave);
         	} else if(uso =="Const"){
-        		//falta constantes string
+        		if (TablaDeSimbolos::getTipo(clave)=="FLOAT"){
+        			string number = clave;
+        			replaceCharsFloat(number);
+        			archivoASM << "_"+number+DDFloat+TablaDeSimbolos::getValor(clave) << endl;
+        		} else if (TablaDeSimbolos::getTipo(clave)=="STRING"){
+        			string nomString = clave;
+        			nomString[0]='S';
+        			nomString[nomString.length()-1]='S';
+        			archivoASM << reemplazarCaracter(nomString,' ')+DBString+"\""+TablaDeSimbolos::getValor(clave)+"\", 0" << endl;
+        		}
         	}
         	TablaDeSimbolos::avanzar();
         }
@@ -232,7 +259,7 @@ void generarCodigo(string path, string nameFuente){
         		vector<string> atributos = EstrDeclObj::getAtributos(clases[i]);
         		for(string & atributo: atributos){
         			string nuevoObj = atributo.substr(0,atributo.find('-'))+"."+atr;
-        			string reemplazo="_"+reemplazarDosPuntos(nuevoObj);
+        			string reemplazo="_"+reemplazarCaracter(nuevoObj,':');
         			if (TablaDeSimbolos::getTipo(atributo) == "SHORT"){
         				archivoASM << reemplazo+DB << endl;
         			} else {

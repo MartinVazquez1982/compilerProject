@@ -39,6 +39,8 @@ const string AL = "AL ";
 const string AX = "AX ";
 const string EAX = "EAX ";
 const string EDX = "EDX ";
+const string EBX = "EBX ";
+const string ECX = "ECX ";
 const string BL = "BL ";
 const string CL = "CL ";
 
@@ -54,6 +56,7 @@ const string FILD = "FILD ";
 const string FCOM = "FCOM ";
 const string FSTSW = "FSTSW ";
 const string SAHF = "SAHF ";
+const string FLDZ = "FLDZ ";
 
 // RETURN
 
@@ -71,3 +74,9 @@ const string INVOKE = "invoke ";
 
 const string DB = " DB ?";
 const string DD = " DD ?";
+const string DDFloat = " DD ";
+const string DBString = " DB ";
+
+// FIN DE EJECUCION
+
+const string FINEJEC = "invoke ExitProcess, 0";
