@@ -94,9 +94,19 @@ string EstructurasAssembler::getMultShort(string operando1, string operando2, st
 string EstructurasAssembler::getDivShort(string operando1, string operando2, string & varAux, bool & error){
 	string salida = MOV+AL+", "+operando1;
 	salida = salida + "\n" + CBW;
-	salida = salida + "\n" + CMP + operando2 + ", " + "0";
-	salida = salida + "\n" + JE + "ERROR";
-	salida = salida + "\n" + IDIV+operando2;
+	if (isdigit(operando2[0])){
+		salida = salida + "\n" + MOV+BL+", "+operando2;
+		salida = salida + "\n" + CMP + BL + ", " + "0";
+	}else{
+		salida = salida + "\n" + CMP + operando2 + ", " + "0";
+	}
+	salida = salida + "\n" + JE + "etiqueta_divcero";
+	if (isdigit(operando2[0])){
+			salida = salida + "\n" + MOV+CL+", "+operando2;
+			salida = salida + "\n" + IDIV + CL;
+	}else{
+			salida = salida + "\n" + IDIV+operando2;
+	}
 	varAux = generarVariable();
 	salida = salida + "\n" + MOV+varAux+", "+AL;
 	error=true;

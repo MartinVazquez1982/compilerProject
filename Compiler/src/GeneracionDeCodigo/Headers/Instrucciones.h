@@ -39,6 +39,8 @@ const string AL = "AL ";
 const string AX = "AX ";
 const string EAX = "EAX ";
 const string EDX = "EDX ";
+const string BL = "BL ";
+const string CL = "CL ";
 
 // INSTRUCCIONES FLOTANTE
 

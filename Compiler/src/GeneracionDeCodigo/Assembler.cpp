@@ -181,8 +181,7 @@ void generarCodigo(string path, string nameFuente){
             }
             if (clave == "main:"){
 				if (error){
-					archivoASMCODE << "ERROR:" << endl;
-					archivoASMCODE << "ret" << endl;
+					archivoASMCODE << "etiqueta_divcero:" << endl;
 				}
             	archivoASMCODE << "end main" << endl;
             }
@@ -193,7 +192,12 @@ void generarCodigo(string path, string nameFuente){
         	string clave = TablaDeSimbolos::getClave();
         	string uso = TablaDeSimbolos::usoAsignado(clave);
         	if (uso == "Var" || uso == "PF"){
-				string reemplazo="_"+reemplazarDosPuntos(clave);
+        		string reemplazo;
+        		if (clave[0]=='@'){
+        			reemplazo=reemplazarDosPuntos(clave);
+				}else{
+					reemplazo="_"+reemplazarDosPuntos(clave);
+        		}
         		if(TablaDeSimbolos::getTipo(clave)=="SHORT"){
         			archivoASM << reemplazo+DB << endl;
 				} else {
