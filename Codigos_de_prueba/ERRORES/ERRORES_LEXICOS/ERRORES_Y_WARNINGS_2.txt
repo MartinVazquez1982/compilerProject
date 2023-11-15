@@ -1,9 +1,0 @@
-{
-	qwe.qwe = 123_s, *{ERROR: COMENTARIO SIN CERRAR}*
-	*{
-	PRUEBA DE COMENTARIO SIN CERRAR
-	PRINT %123%,
-	IF (ass < sdd) {
-		ass = (3_s+3_s),
-	} END_IF,
-}

@@ -427,7 +427,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 465 ".\Gramaticas\gramaticaLenguaje.y"
+#line 481 ".\Gramaticas\gramaticaLenguaje.y"
 
 // ============================== Mensajes ==============================
 
@@ -613,7 +613,7 @@ bool ChequearDeclaracion(string var, string & nomEncontrada, string uso, bool ch
         }
     }
     while(! final && ! encontrada){
-        if (TablaDeSimbolos::usoAsignado(var+ambito) == uso){
+        if ((TablaDeSimbolos::usoAsignado(var+ambito) == uso) || (TablaDeSimbolos::usoAsignado(var+ambito) == "PF")){
             nomEncontrada = var+ambito;
             encontrada = true;
         }else{
@@ -899,7 +899,21 @@ string stepsFactor(string fact, bool lessLess = false){
     if (chequeoOK && lessLess) salida = "#"+salida;
     return salida;
 }
-#line 903 "y.tab.c"
+
+// ======================== Recursion ========================
+
+bool ChequearRecursion(string funcion, bool esMetodo){
+    string ambito = obtenerUltimaParte(Ambito::get(),':');
+    if(esMetodo){
+        funcion = obtenerUltimaParte(funcion,'.');
+        size_t indicePunto = ambito.find('-');       
+        if (indicePunto != std::string::npos) {
+            ambito = ambito.substr(0, indicePunto);
+        }
+    }
+    return !(ambito == funcion);
+}
+#line 917 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1299,18 +1313,26 @@ case 41:
                             string tipo;
                             if (esObjeto(yyvsp[-2])){
                                 if (ChequearDeclObjeto(yyvsp[-2],name,tipo,false)){
-                                    if (!TablaDeSimbolos::tieneParametros(name)){
-                                        EstructuraTercetos::addTerceto("Call",name,"");
-                                    } else {
-                                        yyerror("El metodo " + name + " requiere parametro");
+                                    if (ChequearRecursion(yyvsp[-2],true)){
+                                        if (!TablaDeSimbolos::tieneParametros(name)){
+                                            EstructuraTercetos::addTerceto("Call",name,"");
+                                        } else {
+                                            yyerror("El metodo " + name + " requiere parametro");
+                                        }
+                                    }else{
+                                        yyerror("Se esta haciendo un llamado recursivo del metodo: "+yyvsp[-2]);
                                     }
                                 }
                             } else {
                                 if (ChequearDeclaracion(yyvsp[-2],name,"Funcion")){
-                                    if (!TablaDeSimbolos::tieneParametros(name)){
-                                        EstructuraTercetos::addTerceto("Call",name,"");
-                                    } else {
-                                        yyerror("La funcion " + name + " requiere parametro");
+                                    if (ChequearRecursion(yyvsp[-2],false)){
+                                        if (!TablaDeSimbolos::tieneParametros(name)){
+                                            EstructuraTercetos::addTerceto("Call",name,"");
+                                        } else {
+                                            yyerror("La funcion " + name + " requiere parametro");
+                                        }
+                                    }else{
+                                        yyerror("Se esta haciendo un llamado recursivo a la funcion: "+yyvsp[-2]);
                                     }
                                 }
                             }
@@ -1318,113 +1340,121 @@ case 41:
                             }
 break;
 case 42:
-#line 283 ".\Gramaticas\gramaticaLenguaje.y"
+#line 291 ".\Gramaticas\gramaticaLenguaje.y"
 {
                                             string name;
                                             string tipo;
                                             if (esObjeto(yyvsp[-3])){
                                                 if (ChequearDeclObjeto(yyvsp[-3],name,tipo,false)){
-                                                    string tipo;
-                                                    if (TablaDeSimbolos::tieneParametros(name)){
-                                                        if (converAsig(TablaDeSimbolos::getParametroFormal(name), yyvsp[-1], tipo)){
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
-                                                        } else {
-                                                             if (esObjeto(yyvsp[-1])){
-                                                                    string atributo, objeto;
-                                                                    dividirStringPorArroba(yyvsp[-1],objeto, atributo);
-                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
-                                                             }else{
-                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),yyvsp[-1],tipo);
-                                                             }
+                                                    if (ChequearRecursion(yyvsp[-3],true)){
+                                                        string tipo;
+                                                        if (TablaDeSimbolos::tieneParametros(name)){
+                                                            if (converAsig(TablaDeSimbolos::getParametroFormal(name), yyvsp[-1], tipo)){
+                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
+                                                            } else {
+                                                                if (esObjeto(yyvsp[-1])){
+                                                                        string atributo, objeto;
+                                                                        dividirStringPorArroba(yyvsp[-1],objeto, atributo);
+                                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
+                                                                }else{
+                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),yyvsp[-1],tipo);
+                                                                }
+                                                            }
+                                                            EstructuraTercetos::addTerceto("Call",name,"");
                                                         }
-                                                        EstructuraTercetos::addTerceto("Call",name,"");
-                                                    } else {
-                                                        yyerror("El metodo " + name + " NO requiere parametro");
+                                                    }else{
+                                                        yyerror("Se esta haciendo un llamado recursivo del metodo: "+yyvsp[-3]);
                                                     }
+                                                } else {
+                                                    yyerror("El metodo " + name + " NO requiere parametro");
                                                 }
                                             }else{
                                                 if (ChequearDeclaracion(yyvsp[-3],name,"Funcion")){
-                                                    TablaDeSimbolos::del(yyvsp[-3]);
-                                                    string tipo;
-                                                    if (TablaDeSimbolos::tieneParametros(name)){
-                                                        if (converAsig(TablaDeSimbolos::getParametroFormal(name), yyvsp[-1], tipo)) {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
-                                                        } else {
-                                                            if (esObjeto(yyvsp[-1])){
-                                                                    string atributo, objeto;
-                                                                    dividirStringPorArroba(yyvsp[-1],objeto, atributo);
-                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
-                                                             }else{
-                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),yyvsp[-1],tipo);
-                                                             }
+                                                    if (ChequearRecursion(yyvsp[-3],false)){
+                                                        TablaDeSimbolos::del(yyvsp[-3]);
+                                                        string tipo;
+                                                        if (TablaDeSimbolos::tieneParametros(name)){
+                                                            if (converAsig(TablaDeSimbolos::getParametroFormal(name), yyvsp[-1], tipo)) {
+                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
+                                                            } else {
+                                                                if (esObjeto(yyvsp[-1])){
+                                                                        string atributo, objeto;
+                                                                        dividirStringPorArroba(yyvsp[-1],objeto, atributo);
+                                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
+                                                                }else{
+                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),yyvsp[-1],tipo);
+                                                                }
+                                                            }
+                                                            EstructuraTercetos::addTerceto("Call",name,"");
                                                         }
-                                                        EstructuraTercetos::addTerceto("Call",name,"");
-                                                    } else {
-                                                        yyerror("La funcion " + name + " NO requiere parametro");
+                                                    }else{
+                                                        yyerror("Se esta haciendo un llamado recursivo a la funcion: "+yyvsp[-3]);
                                                     }
+                                                } else {
+                                                    yyerror("La funcion " + name + " NO requiere parametro");
                                                 }
-                                            }
+                                                }
                                             TablaDeSimbolos::del(yyvsp[-3]);
                                          }
 break;
 case 44:
-#line 335 ".\Gramaticas\gramaticaLenguaje.y"
+#line 351 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("IF");jumpEndIf();}
 break;
 case 45:
-#line 336 ".\Gramaticas\gramaticaLenguaje.y"
+#line 352 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("IF");jumpEndIf();}
 break;
 case 46:
-#line 337 ".\Gramaticas\gramaticaLenguaje.y"
+#line 353 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("If vacio");yymenssage("IF");jumpEndIf();}
 break;
 case 47:
-#line 338 ".\Gramaticas\gramaticaLenguaje.y"
+#line 354 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Else vacio");yymenssage("IF");jumpEndIf();}
 break;
 case 48:
-#line 339 ".\Gramaticas\gramaticaLenguaje.y"
+#line 355 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("If vacio");yymenssage("IF");jumpEndIf();}
 break;
 case 49:
-#line 342 ".\Gramaticas\gramaticaLenguaje.y"
+#line 358 ".\Gramaticas\gramaticaLenguaje.y"
 {jumpEndThen();}
 break;
 case 50:
-#line 345 ".\Gramaticas\gramaticaLenguaje.y"
+#line 361 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("While");jumpEndWhile();}
 break;
 case 51:
-#line 346 ".\Gramaticas\gramaticaLenguaje.y"
+#line 362 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("While vacio");yymenssage("While");jumpEndWhile();}
 break;
 case 52:
-#line 349 ".\Gramaticas\gramaticaLenguaje.y"
+#line 365 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::apilar();EstructuraTercetos::addLabel();}
 break;
 case 57:
-#line 356 ".\Gramaticas\gramaticaLenguaje.y"
+#line 372 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Bloque vacio");}
 break;
 case 58:
-#line 359 ".\Gramaticas\gramaticaLenguaje.y"
+#line 375 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",yyvsp[-1],"");}
 break;
 case 59:
-#line 360 ".\Gramaticas\gramaticaLenguaje.y"
+#line 376 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta segundo parentesis en la condicion");}
 break;
 case 60:
-#line 361 ".\Gramaticas\gramaticaLenguaje.y"
+#line 377 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta primer parentesis en la condicion");}
 break;
 case 61:
-#line 362 ".\Gramaticas\gramaticaLenguaje.y"
+#line 378 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Faltan  parentesis en la condicion");}
 break;
 case 62:
-#line 365 ".\Gramaticas\gramaticaLenguaje.y"
+#line 381 ".\Gramaticas\gramaticaLenguaje.y"
 { yymenssage("Clase");
                                         TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
                                         InsideClass::unstackMethods();
@@ -1432,7 +1462,7 @@ case 62:
                                       }
 break;
 case 63:
-#line 370 ".\Gramaticas\gramaticaLenguaje.y"
+#line 386 ".\Gramaticas\gramaticaLenguaje.y"
 {
                                                  yymenssage("Clase");
                                                  TablaDeSimbolos::setHerencia(InsideClass::getClass(),yyvsp[-1]);
@@ -1448,15 +1478,15 @@ case 63:
                                                  }
 break;
 case 64:
-#line 383 ".\Gramaticas\gramaticaLenguaje.y"
+#line 399 ".\Gramaticas\gramaticaLenguaje.y"
 {claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
 break;
 case 65:
-#line 384 ".\Gramaticas\gramaticaLenguaje.y"
+#line 400 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("La herencia debe ir al final de la declaracion de la clase");}
 break;
 case 66:
-#line 387 ".\Gramaticas\gramaticaLenguaje.y"
+#line 403 ".\Gramaticas\gramaticaLenguaje.y"
 { if ((!classInFunction(yyvsp[0])) && !classInClass(yyvsp[0])){
                             if (noReDeclarada(yyvsp[0], "Clase")){
                                 string name =  TablaDeSimbolos::changeKey(yyvsp[0]);
@@ -1471,7 +1501,7 @@ case 66:
                       }
 break;
 case 67:
-#line 401 ".\Gramaticas\gramaticaLenguaje.y"
+#line 417 ".\Gramaticas\gramaticaLenguaje.y"
 { string name = "<NoExiste>";
                 ChequearDeclaracion(yyvsp[-1],name,"Clase");
                 TablaDeSimbolos::del(yyvsp[-1]);
@@ -1483,122 +1513,122 @@ case 67:
                 }
 break;
 case 68:
-#line 412 ".\Gramaticas\gramaticaLenguaje.y"
+#line 428 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = stepsOperation(yyvsp[-2], yyvsp[0], yyvsp[-1]);}
 break;
 case 69:
-#line 415 ".\Gramaticas\gramaticaLenguaje.y"
+#line 431 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "+"); }
 break;
 case 70:
-#line 416 ".\Gramaticas\gramaticaLenguaje.y"
+#line 432 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "-"); }
 break;
 case 71:
-#line 417 ".\Gramaticas\gramaticaLenguaje.y"
+#line 433 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 72:
-#line 418 ".\Gramaticas\gramaticaLenguaje.y"
+#line 434 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Expresion no puede ir entre parentesis");}
 break;
 case 73:
-#line 421 ".\Gramaticas\gramaticaLenguaje.y"
+#line 437 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "*"); }
 break;
 case 74:
-#line 422 ".\Gramaticas\gramaticaLenguaje.y"
+#line 438 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "/"); }
 break;
 case 75:
-#line 423 ".\Gramaticas\gramaticaLenguaje.y"
+#line 439 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 76:
-#line 426 ".\Gramaticas\gramaticaLenguaje.y"
+#line 442 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = stepsFactor(yyvsp[0]);}
 break;
 case 77:
-#line 427 ".\Gramaticas\gramaticaLenguaje.y"
+#line 443 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 78:
-#line 428 ".\Gramaticas\gramaticaLenguaje.y"
+#line 444 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 79:
-#line 431 ".\Gramaticas\gramaticaLenguaje.y"
+#line 447 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = stepsFactor(yyvsp[-1], true);}
 break;
 case 80:
-#line 434 ".\Gramaticas\gramaticaLenguaje.y"
+#line 450 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "==";}
 break;
 case 81:
-#line 435 ".\Gramaticas\gramaticaLenguaje.y"
+#line 451 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "!!";}
 break;
 case 82:
-#line 436 ".\Gramaticas\gramaticaLenguaje.y"
+#line 452 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">=";}
 break;
 case 83:
-#line 437 ".\Gramaticas\gramaticaLenguaje.y"
+#line 453 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<=";}
 break;
 case 84:
-#line 438 ".\Gramaticas\gramaticaLenguaje.y"
+#line 454 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<";}
 break;
 case 85:
-#line 439 ".\Gramaticas\gramaticaLenguaje.y"
+#line 455 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">";}
 break;
 case 86:
-#line 442 ".\Gramaticas\gramaticaLenguaje.y"
+#line 458 ".\Gramaticas\gramaticaLenguaje.y"
 {chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 87:
-#line 443 ".\Gramaticas\gramaticaLenguaje.y"
+#line 459 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = "-"+yyvsp[0];}
 break;
 case 88:
-#line 444 ".\Gramaticas\gramaticaLenguaje.y"
+#line 460 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 89:
-#line 445 ".\Gramaticas\gramaticaLenguaje.y"
+#line 461 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = "-"+yyvsp[0];}
 break;
 case 90:
-#line 446 ".\Gramaticas\gramaticaLenguaje.y"
+#line 462 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 91:
-#line 447 ".\Gramaticas\gramaticaLenguaje.y"
+#line 463 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Una constante ULONG no puede ser negativa");}
 break;
 case 92:
-#line 450 ".\Gramaticas\gramaticaLenguaje.y"
+#line 466 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="SHORT";}
 break;
 case 93:
-#line 451 ".\Gramaticas\gramaticaLenguaje.y"
+#line 467 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="ULONG";}
 break;
 case 94:
-#line 452 ".\Gramaticas\gramaticaLenguaje.y"
+#line 468 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="FLOAT";}
 break;
 case 95:
-#line 455 ".\Gramaticas\gramaticaLenguaje.y"
+#line 471 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Print",yyvsp[0],"");}
 break;
 case 97:
-#line 461 ".\Gramaticas\gramaticaLenguaje.y"
+#line 477 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1602 "y.tab.c"
+#line 1632 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

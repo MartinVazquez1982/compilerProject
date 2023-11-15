@@ -263,18 +263,26 @@ functionCall: nesting'('')' {
                             string tipo;
                             if (esObjeto($1)){
                                 if (ChequearDeclObjeto($1,name,tipo,false)){
-                                    if (!TablaDeSimbolos::tieneParametros(name)){
-                                        EstructuraTercetos::addTerceto("Call",name,"");
-                                    } else {
-                                        yyerror("El metodo " + name + " requiere parametro");
+                                    if (ChequearRecursion($1,true)){
+                                        if (!TablaDeSimbolos::tieneParametros(name)){
+                                            EstructuraTercetos::addTerceto("Call",name,"");
+                                        } else {
+                                            yyerror("El metodo " + name + " requiere parametro");
+                                        }
+                                    }else{
+                                        yyerror("Se esta haciendo un llamado recursivo del metodo: "+$1);
                                     }
                                 }
                             } else {
                                 if (ChequearDeclaracion($1,name,"Funcion")){
-                                    if (!TablaDeSimbolos::tieneParametros(name)){
-                                        EstructuraTercetos::addTerceto("Call",name,"");
-                                    } else {
-                                        yyerror("La funcion " + name + " requiere parametro");
+                                    if (ChequearRecursion($1,false)){
+                                        if (!TablaDeSimbolos::tieneParametros(name)){
+                                            EstructuraTercetos::addTerceto("Call",name,"");
+                                        } else {
+                                            yyerror("La funcion " + name + " requiere parametro");
+                                        }
+                                    }else{
+                                        yyerror("Se esta haciendo un llamado recursivo a la funcion: "+$1);
                                     }
                                 }
                             }
@@ -285,46 +293,54 @@ functionCall: nesting'('')' {
                                             string tipo;
                                             if (esObjeto($1)){
                                                 if (ChequearDeclObjeto($1,name,tipo,false)){
-                                                    string tipo;
-                                                    if (TablaDeSimbolos::tieneParametros(name)){
-                                                        if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)){
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
-                                                        } else {
-                                                             if (esObjeto($3)){
-                                                                    string atributo, objeto;
-                                                                    dividirStringPorArroba($3,objeto, atributo);
-                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
-                                                             }else{
-                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
-                                                             }
+                                                    if (ChequearRecursion($1,true)){
+                                                        string tipo;
+                                                        if (TablaDeSimbolos::tieneParametros(name)){
+                                                            if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)){
+                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
+                                                            } else {
+                                                                if (esObjeto($3)){
+                                                                        string atributo, objeto;
+                                                                        dividirStringPorArroba($3,objeto, atributo);
+                                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
+                                                                }else{
+                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
+                                                                }
+                                                            }
+                                                            EstructuraTercetos::addTerceto("Call",name,"");
                                                         }
-                                                        EstructuraTercetos::addTerceto("Call",name,"");
-                                                    } else {
-                                                        yyerror("El metodo " + name + " NO requiere parametro");
+                                                    }else{
+                                                        yyerror("Se esta haciendo un llamado recursivo del metodo: "+$1);
                                                     }
+                                                } else {
+                                                    yyerror("El metodo " + name + " NO requiere parametro");
                                                 }
                                             }else{
                                                 if (ChequearDeclaracion($1,name,"Funcion")){
-                                                    TablaDeSimbolos::del($1);
-                                                    string tipo;
-                                                    if (TablaDeSimbolos::tieneParametros(name)){
-                                                        if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)) {
-                                                            EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
-                                                        } else {
-                                                            if (esObjeto($3)){
-                                                                    string atributo, objeto;
-                                                                    dividirStringPorArroba($3,objeto, atributo);
-                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
-                                                             }else{
-                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
-                                                             }
+                                                    if (ChequearRecursion($1,false)){
+                                                        TablaDeSimbolos::del($1);
+                                                        string tipo;
+                                                        if (TablaDeSimbolos::tieneParametros(name)){
+                                                            if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)) {
+                                                                EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
+                                                            } else {
+                                                                if (esObjeto($3)){
+                                                                        string atributo, objeto;
+                                                                        dividirStringPorArroba($3,objeto, atributo);
+                                                                        EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),objeto,tipo);
+                                                                }else{
+                                                                    EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),$3,tipo);
+                                                                }
+                                                            }
+                                                            EstructuraTercetos::addTerceto("Call",name,"");
                                                         }
-                                                        EstructuraTercetos::addTerceto("Call",name,"");
-                                                    } else {
-                                                        yyerror("La funcion " + name + " NO requiere parametro");
+                                                    }else{
+                                                        yyerror("Se esta haciendo un llamado recursivo a la funcion: "+$1);
                                                     }
+                                                } else {
+                                                    yyerror("La funcion " + name + " NO requiere parametro");
                                                 }
-                                            }
+                                                }
                                             TablaDeSimbolos::del($1);
                                          }
             ;
@@ -647,7 +663,7 @@ bool ChequearDeclaracion(string var, string & nomEncontrada, string uso, bool ch
         }
     }
     while(! final && ! encontrada){
-        if (TablaDeSimbolos::usoAsignado(var+ambito) == uso){
+        if ((TablaDeSimbolos::usoAsignado(var+ambito) == uso) || (TablaDeSimbolos::usoAsignado(var+ambito) == "PF")){
             nomEncontrada = var+ambito;
             encontrada = true;
         }else{
@@ -932,4 +948,18 @@ string stepsFactor(string fact, bool lessLess = false){
     TablaDeSimbolos::del(fact);
     if (chequeoOK && lessLess) salida = "#"+salida;
     return salida;
+}
+
+// ======================== Recursion ========================
+
+bool ChequearRecursion(string funcion, bool esMetodo){
+    string ambito = obtenerUltimaParte(Ambito::get(),':');
+    if(esMetodo){
+        funcion = obtenerUltimaParte(funcion,'.');
+        size_t indicePunto = ambito.find('-');       
+        if (indicePunto != std::string::npos) {
+            ambito = ambito.substr(0, indicePunto);
+        }
+    }
+    return !(ambito == funcion);
 }

@@ -1,0 +1,1 @@
+{ 	SHORT 	x 	, 	SHORT 	y 	, 	y 	= 	4_s 	,	x	 = 	0_s	 ,	 VOID funcion1 	( 	) 	{ 	x 	=	 y 	,	 RETURN	 ,	 }	 ,	 }
