@@ -138,7 +138,7 @@ string invertirCadena(string cadena) {
     return resultado;
 }
 
-void crearAssembler(vector<EstructuraTercetos::terceto> tercetos, string clave, string claveTS, bool error[], bool & print,fstream & archivoASMCODE){
+void crearAssembler(vector<EstructuraTercetos::terceto> tercetos, string claveTS, bool error[], bool & print,fstream & archivoASMCODE){
 	for (int i=0; i < tercetos.size(); i++){
 		if (tercetos[i].operador.find("label") == string::npos){
 			string op;
@@ -146,10 +146,10 @@ void crearAssembler(vector<EstructuraTercetos::terceto> tercetos, string clave, 
 			string scOp;
 			if (tercetos[i].operador == "BF"){
 				op = tercetos[getNro(tercetos[i].operando1)].operador+tercetos[getNro(tercetos[i].operando1)].tipo;
-				ftOp = reemplazarCaracter(tercetos[getNro(tercetos[i].operando2)].operador+clave,':','_');
+				ftOp = reemplazarCaracter(tercetos[getNro(tercetos[i].operando2)].operador+claveTS,':','_');
 			} else if (tercetos[i].operador == "BI"){
 				op = tercetos[i].operador;
-				ftOp = reemplazarCaracter(tercetos[getNro(tercetos[i].operando1)].operador+clave,':','_');
+				ftOp = reemplazarCaracter(tercetos[getNro(tercetos[i].operando1)].operador+claveTS,':','_');
 			}else if (tercetos[i].operador == "Call"){
 				op = "CALL";
 				ftOp = reemplazarCaracter(tercetos[i].operando1,':','@');
@@ -166,8 +166,8 @@ void crearAssembler(vector<EstructuraTercetos::terceto> tercetos, string clave, 
 				} else {
 					op = "comp"+tercetos[i].tipo;
 				}
-				ftOp = reemplazarCaracter(chequearOperando(tercetos, clave, tercetos[i].operando1),':','_');
-				scOp = reemplazarCaracter(chequearOperando(tercetos, clave, tercetos[i].operando2),':','_');
+				ftOp = reemplazarCaracter(chequearOperando(tercetos, claveTS, tercetos[i].operando1),':','_');
+				scOp = reemplazarCaracter(chequearOperando(tercetos, claveTS, tercetos[i].operando2),':','_');
 			}
 			string aux="nada";
 			archivoASMCODE << EstructurasAssembler::getFuntion(op)(ftOp, scOp, aux,error) << endl;
@@ -176,7 +176,7 @@ void crearAssembler(vector<EstructuraTercetos::terceto> tercetos, string clave, 
 				TablaDeSimbolos::add(aux," ",EstructuraTercetos::getTipo(claveTS,i),"Var");
 			}
 		} else {
-			archivoASMCODE << reemplazarCaracter(tercetos[i].operador+clave,':','_')+":" << endl;
+			archivoASMCODE << reemplazarCaracter(tercetos[i].operador+claveTS,':','_')+":" << endl;
 		}
 	}
 }
@@ -193,15 +193,14 @@ void generarCodigo(string path, string nameFuente){
         	if(it->first != ":main"){
 				string claveTS = it->first;
 				vector<EstructuraTercetos::terceto> tercetos = it->second;
-				string clave = invertirCadena(claveTS);
-				archivoASMCODE << reemplazarCaracter(clave,':','@')+":" << endl;
-				crearAssembler(tercetos,clave,claveTS,error, print,archivoASMCODE);
+				archivoASMCODE << reemplazarCaracter(claveTS,':','@')+":" << endl;
+				crearAssembler(tercetos,claveTS,error, print,archivoASMCODE);
         	}
             archivoASMCODE << "\n";
         }
         archivoASMCODE << "main:" << endl;
         vector<EstructuraTercetos::terceto> tercetos = listaTercetos.find(":main")->second;
-        crearAssembler(tercetos,"main:",":main",error, print,archivoASMCODE);
+        crearAssembler(tercetos,":main",error, print,archivoASMCODE);
 		if (error[0]){
 			archivoASMCODE << FINEJEC << endl;
 			archivoASMCODE << "etiqueta_divcero:" << endl;

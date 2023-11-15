@@ -144,7 +144,7 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
        ;
 
 function: functionHeader '{'functionBody'}' {Ambito::del();
-                                            EstructuraTercetos::setAmbito(Ambito::get());
+                                            EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                             if (!(InsideClass::insideClass())){
                                                 yymenssage("Funcion");
                                             }
@@ -196,7 +196,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                     TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                                     string keyFormal = TablaDeSimbolos::changeKey($4);
                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
-                                                    EstructuraTercetos::setAmbito(Ambito::get()); 
+                                                    EstructuraTercetos::setAmbito(Ambito::getTercetos()); 
                                             }else{
                                                 if (noReDeclarada($2, "Funcion")) {
                                                     string key = TablaDeSimbolos::changeKey($2);
@@ -205,7 +205,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                     Ambito::add($2);
                                                     string keyFormal = TablaDeSimbolos::changeKey($4);
                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
-                                                    EstructuraTercetos::setAmbito(Ambito::get());
+                                                    EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                                 }
                                               }
                                             }
@@ -238,14 +238,14 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                             }
                                         }
                                         TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                        EstructuraTercetos::setAmbito(Ambito::get());
+                                        EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                 }else{ 
                                         if (noReDeclarada($2, "Funcion")) {
                                             string key = TablaDeSimbolos::changeKey($2);
                                             VarSinInic::addTop();
                                             TablaDeSimbolos::setUso(key, "Funcion");
                                             Ambito::add($2);
-                                            EstructuraTercetos::setAmbito(Ambito::get());
+                                            EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                         }
                                     }
                                 }

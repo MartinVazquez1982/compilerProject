@@ -11,6 +11,8 @@ class Ambito {
 
 		static string ambito;
 
+		static string ambito_inverso;
+
 	public:
 
 		static void add(string);
@@ -18,6 +20,8 @@ class Ambito {
 		static void del();
 
 		static string get();
+
+		static string getTercetos();
 
 		static bool insideMethod();
 };

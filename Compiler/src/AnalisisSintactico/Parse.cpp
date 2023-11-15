@@ -1188,7 +1188,7 @@ break;
 case 35:
 #line 146 ".\Gramaticas\gramaticaLenguaje.y"
 {Ambito::del();
-                                            EstructuraTercetos::setAmbito(Ambito::get());
+                                            EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                             if (!(InsideClass::insideClass())){
                                                 yymenssage("Funcion");
                                             }
@@ -1241,7 +1241,7 @@ case 36:
                                                     TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                                     string keyFormal = TablaDeSimbolos::changeKey(yyvsp[-1]);
                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
-                                                    EstructuraTercetos::setAmbito(Ambito::get()); 
+                                                    EstructuraTercetos::setAmbito(Ambito::getTercetos()); 
                                             }else{
                                                 if (noReDeclarada(yyvsp[-3], "Funcion")) {
                                                     string key = TablaDeSimbolos::changeKey(yyvsp[-3]);
@@ -1250,7 +1250,7 @@ case 36:
                                                     Ambito::add(yyvsp[-3]);
                                                     string keyFormal = TablaDeSimbolos::changeKey(yyvsp[-1]);
                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
-                                                    EstructuraTercetos::setAmbito(Ambito::get());
+                                                    EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                                 }
                                               }
                                             }
@@ -1286,14 +1286,14 @@ case 37:
                                             }
                                         }
                                         TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                        EstructuraTercetos::setAmbito(Ambito::get());
+                                        EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                 }else{ 
                                         if (noReDeclarada(yyvsp[-2], "Funcion")) {
                                             string key = TablaDeSimbolos::changeKey(yyvsp[-2]);
                                             VarSinInic::addTop();
                                             TablaDeSimbolos::setUso(key, "Funcion");
                                             Ambito::add(yyvsp[-2]);
-                                            EstructuraTercetos::setAmbito(Ambito::get());
+                                            EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                         }
                                     }
                                 }
