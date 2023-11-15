@@ -1,7 +1,0 @@
-.CODE
-( =, x:main, 1_s )
-( =, y:main, 2_s )
-( =, z:main, 3_s )
-( *, y:main, z:main )
-( +, x:main, [3] )
-( =, x:main, [4] )

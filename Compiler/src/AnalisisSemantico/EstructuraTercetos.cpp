@@ -87,11 +87,7 @@ void EstructuraTercetos::setAmbito(string ambito){
 	EstructuraTercetos::ambito = ambito;
 	auto it = listaTercetos.find(EstructuraTercetos::ambito);
 	if (it == listaTercetos.end()){
-		if (ambito == ""){
-			EstructuraTercetos::ambito = "main";
-		} else {
-			listaTercetos[ambito] = vector<EstructuraTercetos::terceto>();
-		}
+		listaTercetos[ambito] = vector<EstructuraTercetos::terceto>();
 	}
 }
 

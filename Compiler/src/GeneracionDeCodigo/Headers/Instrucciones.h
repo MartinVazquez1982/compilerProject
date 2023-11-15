@@ -16,6 +16,7 @@ const string MUL = "MUL ";
 const string DIV = "DIV ";
 const string XOR = "XOR ";
 const string CMP = "CMP ";
+const string TEST = "TEST ";
 
 // SALTOS
 
@@ -31,6 +32,7 @@ const string JBE = "JBE ";
 const string JA = "JA ";
 const string JB = "JB ";
 const string JO = "JO ";
+const string JNZ = "JNZ ";
 
 // REGISTROS
 
@@ -57,6 +59,7 @@ const string FCOM = "FCOM ";
 const string FSTSW = "FSTSW ";
 const string SAHF = "SAHF ";
 const string FLDZ = "FLDZ ";
+const string FNSTSW = "FNSTSW ";
 
 // RETURN
 

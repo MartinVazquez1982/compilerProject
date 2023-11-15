@@ -12,13 +12,13 @@
 
 using namespace std;
 
-string reemplazarCaracter(const string cadena, char reemplazo) {
+string reemplazarCaracter(const string cadena, char reemplazo, char cambio) {
     string resultado = cadena;
 
     // Iterar sobre la cadena y reemplazar ':' por '_'
     for (char& caracter : resultado) {
         if (caracter == reemplazo) {
-            caracter = '_';
+            caracter = cambio;
         }
     }
 
@@ -138,72 +138,90 @@ string invertirCadena(string cadena) {
     return resultado;
 }
 
+void crearAssembler(vector<EstructuraTercetos::terceto> tercetos, string clave, string claveTS, bool error[], bool & print,fstream & archivoASMCODE){
+	for (int i=0; i < tercetos.size(); i++){
+		if (tercetos[i].operador.find("label") == string::npos){
+			string op;
+			string ftOp;
+			string scOp;
+			if (tercetos[i].operador == "BF"){
+				op = tercetos[getNro(tercetos[i].operando1)].operador+tercetos[getNro(tercetos[i].operando1)].tipo;
+				ftOp = reemplazarCaracter(tercetos[getNro(tercetos[i].operando2)].operador+clave,':','_');
+			} else if (tercetos[i].operador == "BI"){
+				op = tercetos[i].operador;
+				ftOp = reemplazarCaracter(tercetos[getNro(tercetos[i].operando1)].operador+clave,':','_');
+			}else if (tercetos[i].operador == "Call"){
+				op = "CALL";
+				ftOp = reemplazarCaracter(tercetos[i].operando1,':','@');
+			}else if (tercetos[i].operador == "Return"){
+				op = "RETURN";
+			}else if (tercetos[i].operador == "Print"){
+				print=true;
+				op = "PRINT";
+				ftOp = tercetos[i].operando1;
+				ftOp = "S"+reemplazarCaracter(TablaDeSimbolos::getValor(ftOp),' ','_')+"S";
+			} else {
+				if (esOperacion(tercetos[i].operador) || tercetos[i].operador == "StoF" || tercetos[i].operador == "UtoF"){
+					op = tercetos[i].operador+tercetos[i].tipo;
+				} else {
+					op = "comp"+tercetos[i].tipo;
+				}
+				ftOp = reemplazarCaracter(chequearOperando(tercetos, clave, tercetos[i].operando1),':','_');
+				scOp = reemplazarCaracter(chequearOperando(tercetos, clave, tercetos[i].operando2),':','_');
+			}
+			string aux="nada";
+			archivoASMCODE << EstructurasAssembler::getFuntion(op)(ftOp, scOp, aux,error) << endl;
+			tercetos[i].varAux = aux;
+			if (aux!="nada"){
+				TablaDeSimbolos::add(aux," ",EstructuraTercetos::getTipo(claveTS,i),"Var");
+			}
+		} else {
+			archivoASMCODE << reemplazarCaracter(tercetos[i].operador+clave,':','_')+":" << endl;
+		}
+	}
+}
+
 void generarCodigo(string path, string nameFuente){
 
         ofstream archivoASM = generarArchivoASM(path,nameFuente+".asm");
         fstream archivoASMCODE = generarASM(path,"code.asm");
         const auto listaTercetos = EstructuraTercetos::getLista();
-		bool error=false;
+		bool error[3]={false, false, false};
 		bool print=false;
         // Iterar sobre el unordered_map
         for (auto it = listaTercetos.begin(); it != listaTercetos.end(); ++it) {
-            string claveTS = it->first;
-            vector<EstructuraTercetos::terceto> tercetos = it->second;
-            string opComp, tipoComp;
-            string clave = invertirCadena(claveTS);
-            archivoASMCODE << clave << endl;
-            for (int i=0; i < tercetos.size(); i++){
-            	if (tercetos[i].operador.find("label") == string::npos){
-            		string op;
-					string ftOp;
-					string scOp;
-					if (tercetos[i].operador == "BF"){
-						op = tercetos[getNro(tercetos[i].operando1)].operador+tercetos[getNro(tercetos[i].operando1)].tipo;
-						ftOp = tercetos[getNro(tercetos[i].operando2)].operador+clave;
-					} else if (tercetos[i].operador == "BI"){
-						op = tercetos[i].operador;
-						ftOp = tercetos[getNro(tercetos[i].operando1)].operador+clave;
-					}else if (tercetos[i].operador == "Call"){
-						op = "CALL";
-						ftOp = tercetos[i].operando1;
-					}else if (tercetos[i].operador == "Return"){
-						op = "RETURN";
-					}else if (tercetos[i].operador == "Print"){
-						print=true;
-						op = "PRINT";
-						ftOp = tercetos[i].operando1;
-						ftOp = "S"+reemplazarCaracter(TablaDeSimbolos::getValor(ftOp),' ')+"S";
-					} else {
-						if (esOperacion(tercetos[i].operador) || tercetos[i].operador == "StoF" || tercetos[i].operador == "UtoF"){
-							op = tercetos[i].operador+tercetos[i].tipo;
-						} else {
-							op = "comp"+tercetos[i].tipo;
-						}
-						ftOp = chequearOperando(tercetos, clave, tercetos[i].operando1);
-						scOp = chequearOperando(tercetos, clave, tercetos[i].operando2);
-					}
-					string aux="nada";
-					archivoASMCODE << EstructurasAssembler::getFuntion(op)(reemplazarCaracter(ftOp,':'), reemplazarCaracter(scOp,':'), aux,error) << endl;
-					tercetos[i].varAux = aux;
-					if (aux!="nada"){
-						TablaDeSimbolos::add(aux," ",EstructuraTercetos::getTipo(claveTS,i),"Var");
-					}
-            	} else {
-            		archivoASMCODE << tercetos[i].operador+clave << endl;
-            	}
-            }
-            if (clave == "main:"){
-            	if (error){
-            		archivoASMCODE << FINEJEC << endl;
-					archivoASMCODE << "etiqueta_divcero:" << endl;
-					archivoASMCODE << "invoke MessageBox, NULL, addr msj_f1, addr msj_f1, MB_OK" << endl;
-					archivoASM << "msj_f1 db \"Error: Division por cero\", 0" << endl;
-				}
-            	archivoASMCODE << FINEJEC << endl;
-            	archivoASMCODE << "end main" << endl;
-            }
+        	if(it->first != ":main"){
+				string claveTS = it->first;
+				vector<EstructuraTercetos::terceto> tercetos = it->second;
+				string clave = invertirCadena(claveTS);
+				archivoASMCODE << reemplazarCaracter(clave,':','@')+":" << endl;
+				crearAssembler(tercetos,clave,claveTS,error, print,archivoASMCODE);
+        	}
             archivoASMCODE << "\n";
         }
+        archivoASMCODE << "main:" << endl;
+        vector<EstructuraTercetos::terceto> tercetos = listaTercetos.find(":main")->second;
+        crearAssembler(tercetos,"main:",":main",error, print,archivoASMCODE);
+		if (error[0]){
+			archivoASMCODE << FINEJEC << endl;
+			archivoASMCODE << "etiqueta_divcero:" << endl;
+			archivoASMCODE << "invoke MessageBox, NULL, addr msj_div0, addr msj_div0, MB_OK" << endl;
+			archivoASM << "msj_div0 db \"Error: Division por cero\", 0" << endl;
+		}
+		if (error[1]){
+			archivoASMCODE << FINEJEC << endl;
+			archivoASMCODE << "overflow_add_float:" << endl;
+			archivoASMCODE << "invoke MessageBox, NULL, addr msj_addfloat, addr msj_addfloat, MB_OK" << endl;
+			archivoASM << "msj_addfloat db \"Error: Overflow suma entre flotantes\", 0" << endl;
+		}
+		if (error[2]){
+			archivoASMCODE << FINEJEC << endl;
+			archivoASMCODE << "overflow_mulEnt:" << endl;
+			archivoASMCODE << "invoke MessageBox, NULL, addr msj_addEnt, addr msj_addEnt, MB_OK" << endl;
+			archivoASM << "msj_addEnt db \"Error: Overflow en producto de enteros\", 0" << endl;
+		}
+		archivoASMCODE << FINEJEC << endl;
+		archivoASMCODE << "end main" << endl;
         if (print){
         	archivoASM << "SPRINTS DB \"PRINT\", 0" << endl;
         }
@@ -214,7 +232,7 @@ void generarCodigo(string path, string nameFuente){
         	if (uso == "Var" || uso == "PF"){
         		string reemplazo = clave;
         		if (clave[0]!='@'){
-        			reemplazo="_"+reemplazarCaracter(clave,':');
+        			reemplazo="_"+reemplazarCaracter(clave,':','_');
 				}
         		if(TablaDeSimbolos::getTipo(clave)=="SHORT"){
         			archivoASM << reemplazo+DB << endl;
@@ -244,7 +262,7 @@ void generarCodigo(string path, string nameFuente){
         			string nomString = clave;
         			nomString[0]='S';
         			nomString[nomString.length()-1]='S';
-        			archivoASM << reemplazarCaracter(nomString,' ')+DBString+"\""+TablaDeSimbolos::getValor(clave)+"\", 0" << endl;
+        			archivoASM << reemplazarCaracter(nomString,' ','_')+DBString+"\""+TablaDeSimbolos::getValor(clave)+"\", 0" << endl;
         		}
         	}
         	TablaDeSimbolos::avanzar();
@@ -259,7 +277,7 @@ void generarCodigo(string path, string nameFuente){
         		vector<string> atributos = EstrDeclObj::getAtributos(clases[i]);
         		for(string & atributo: atributos){
         			string nuevoObj = atributo.substr(0,atributo.find('-'))+"."+atr;
-        			string reemplazo="_"+reemplazarCaracter(nuevoObj,':');
+        			string reemplazo="_"+reemplazarCaracter(nuevoObj,':','_');
         			if (TablaDeSimbolos::getTipo(atributo) == "SHORT"){
         				archivoASM << reemplazo+DB << endl;
         			} else {

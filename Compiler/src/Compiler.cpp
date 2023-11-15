@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
         cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
         EstructuraTercetos::mostrarTercetos();
         if (ContErrWar::getError() == 0){
-            //generarCodigo(path, nombreArchivoAssembler);
+            generarCodigo(path, nombreArchivoAssembler);
         }
         TablaDeSimbolos::imprimir();
     //} else {
