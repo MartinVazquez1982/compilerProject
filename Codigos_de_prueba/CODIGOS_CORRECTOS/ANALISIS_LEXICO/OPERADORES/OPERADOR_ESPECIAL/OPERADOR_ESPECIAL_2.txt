@@ -1,0 +1,13 @@
+{		
+	CLASS _a1{
+		SHORT x,
+		FLOAT y,
+	},
+	_a1 obj,
+	obj.y = 1000.0e-2,
+	obj.y--,
+	obj.y = obj.y-- + obj.y--,
+	obj.y = obj.y-- - obj.y--,
+	obj.y = obj.y-- * obj.y--,
+	obj.y = obj.y-- / obj.y-- - obj.y + obj.y--,
+}

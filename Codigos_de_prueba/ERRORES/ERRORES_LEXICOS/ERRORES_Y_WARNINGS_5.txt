@@ -1,9 +1,0 @@
-{
-	var = 1.,
-	var = -1.1,
-	var = 1.1e+2,
-	var = -1.1E-2,
-	ass = 3.40282347E+38,
-	ass = 3.40282347E+39,
-	*{ERROR: CONSTANTE FLOAT FUERA DEL RANGO PERMITIDO}*
-}

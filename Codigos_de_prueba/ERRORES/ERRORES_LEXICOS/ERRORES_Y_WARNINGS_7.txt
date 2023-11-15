@@ -1,6 +1,0 @@
-{
-	ass = -128_s,
-	ass = 127_s,
-	ass = 128_s,
-	*{ERROR: CONSTANTE SHORT FUERA DEL RANGO PERMITIDO}*
-}
