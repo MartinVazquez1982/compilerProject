@@ -1,0 +1,5 @@
+{
+	SHORT x,
+	SHORT y,
+	IF x !! y { x = 45_s, }END_IF, *{ERROR: FALTAN PARENTESIS EN LA CONDICION DEL IF}*
+}

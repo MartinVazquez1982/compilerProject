@@ -41,7 +41,7 @@ sentenceList: sentenceList sentence
 sentence: declarative','
         | executable','
         | ',' {yywarning("Sentencia vacia");}
-        | error ',' {yyerror("Sin coma");}
+        | error',' {yyerror("Sin coma");}
         ;
 
 declarative: function
@@ -51,6 +51,7 @@ declarative: function
 
 executableList: executableList executable','
               | executable','
+              | executableList declarative',' {yyerror("Sentencia declarativa en lugar de una ejecutable");}
               | declarative',' {yyerror("Sentencia declarativa en lugar de una ejecutable");}
               ;
 
@@ -135,8 +136,6 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         }
                                     }
                                     }
-          | nesting '=' {yyerror("Falta asignacion");}
-          | '=' expression {yyerror("Falta nesting");}
           ;
 
 nesting: nesting'.'ID {$$ = $1 + "." + $3;}
@@ -373,9 +372,9 @@ iterativeBody: '{' executableList '}'
             ;
 
 condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",$2,"");}
-         | '('comparison  {yyerror("Falta segundo parentesis en la condicion");}
-         | comparison')'  {yyerror("Falta primer parentesis en la condicion");}
-         | comparison     {yyerror("Faltan  parentesis en la condicion");}
+         | '('comparison  {yyerror("Falta segundo parentesis en la condicion");EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",$2,"");}
+         | comparison')'  {yyerror("Falta primer parentesis en la condicion");EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",$1,"");}
+         | comparison     {yyerror("Faltan  parentesis en la condicion");EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",$1,"");}
          ;
 
 class: classHeader '{'sentenceList'}' { yymenssage("Clase");

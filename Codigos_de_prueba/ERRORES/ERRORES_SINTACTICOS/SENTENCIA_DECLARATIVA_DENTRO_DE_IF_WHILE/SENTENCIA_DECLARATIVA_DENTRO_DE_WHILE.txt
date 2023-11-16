@@ -1,0 +1,12 @@
+{
+	SHORT x,
+	SHORT y,
+
+	WHILE (x !! y) DO {
+		x = 13_s,
+		y = 34_s,
+		VOID a() {
+			RETURN,
+		},	
+	},
+}

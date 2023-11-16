@@ -1,0 +1,12 @@
+{
+	SHORT x,
+	ULONG z,
+
+	IF (x == x) {
+		x = 12_s,
+		SHORT y,
+		z = 100_ul,
+	} ELSE {
+		ULONG c,
+	}END_IF,
+}

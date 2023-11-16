@@ -1,0 +1,46 @@
+{
+	VOID func1(ULONG x){
+		SHORT y,
+		IF (y !! 12_s) {
+			y = 12_s,
+			FLOAT c,
+		} END_IF,
+		RETURN,
+	},
+
+	VOID func2(FLOAT y){
+		WHILE (y-- > 0.0) DO {
+			VOID func23(){RETURN,},
+			y = 34_s + 35.0,
+		},
+		RETURN,
+	},
+
+	SHORT y,
+	
+	CLASS a{
+		FLOAT k,
+
+		VOID met1(){
+			SHORT var1,
+			SHORT var2,
+			IF (var1 == var2){
+				ULONG v,
+			} END_IF,
+			RETURN,
+		},
+	},
+
+	a obj,
+
+	IF (y >= obj.k) {
+		IF (obj.k < 3.0) {
+			obj.k = 23.98e-5,
+			VOID func5(){RETURN,},
+		}END_IF,
+	} ELSE {
+		WHILE (obj.k !! y) DO {
+			SHORT x,
+		},
+	} END_IF,
+}

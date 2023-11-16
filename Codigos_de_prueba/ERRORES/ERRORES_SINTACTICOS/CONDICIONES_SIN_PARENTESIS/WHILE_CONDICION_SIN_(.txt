@@ -1,0 +1,5 @@
+{
+	ULONG x,
+	ULONG y,
+	WHILE x !! y) DO { x = 45_ul, }, *{ERROR: FALTA PRIMER PARENTESIS EN LA CONDICION DEL WHILE}*
+}

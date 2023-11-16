@@ -1,8 +1,0 @@
-{
-	FLOAT x;y,
-		,  	             *{WARNING: SENTENCIA VACIA}*
-	IF(x > y){ }END_IF,          *{WARNING: BLOQUE VACIO}*
-	WHILE(x > y)DO ,             *{WARNING: WHILE VACIO}*
-	WHILE(x > y)DO{ ULONG z, },  *{ERROR: SENTENCIA DECLARATIVA EN VEZ DE EJECUTABLE}*
-	x = (y + 6.7e-1),	     *{ERROR: EXPRESION NO PUEDE IR ENTRE PARENTESIS}*
-}

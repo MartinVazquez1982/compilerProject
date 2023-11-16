@@ -1,0 +1,5 @@
+{
+	ULONG x,
+	ULONG y,
+	IF x !! y) { x = 45_ul, }END_IF, *{ERROR: FALTA PRIMER PARENTESIS EN LA CONDICION DEL IF}*
+}

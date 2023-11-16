@@ -1,0 +1,5 @@
+{
+	SHORT x,
+	SHORT y,
+	WHILE x !! y DO { x = 45_s, }, *{ERROR: FALTAN PARENTESIS EN LA CONDICION DEL WHILE}*
+}
