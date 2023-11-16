@@ -169,7 +169,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                     string key; 
                                                     if ((InsideClass::insideMethod())){ //Se trata de una funcion dentro de un metodo
                                                         if (!(InsideClass::insideFuncionMethod())){
-                                                            if (noReDeclarada($2, "Funcion")) {
+                                                            if (noReDeclarada($2, "Funcion") && chequearNomPF($2,$4)) {
                                                                 VarSinInic::addTop(); 
                                                                 key = TablaDeSimbolos::changeKey($2);
                                                                 TablaDeSimbolos::setUso(key, "Funcion");
@@ -183,7 +183,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                         if ($2 == InsideClass::getClassSinMain()){
                                                             yyerror("No es posible declarar un metodo con el mismo nombre al de la clase a la que pertenece");
                                                         }else{
-                                                            if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
+                                                            if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo") && chequearNomPF($2,$4)) {
                                                                 InsideClass::addMethod($2);
                                                                 VarSinInic::addTop();
                                                                 key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
@@ -198,7 +198,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                     EstructuraTercetos::setAmbito(Ambito::getTercetos()); 
                                             }else{
-                                                if (noReDeclarada($2, "Funcion")) {
+                                                if (noReDeclarada($2, "Funcion") && chequearNomPF($2,$4)) {
                                                     string key = TablaDeSimbolos::changeKey($2);
                                                     TablaDeSimbolos::setUso(key, "Funcion");
                                                     VarSinInic::addTop();
@@ -962,4 +962,14 @@ bool ChequearRecursion(string funcion, bool esMetodo){
         }
     }
     return !(ambito == funcion);
+}
+
+// ======================== Chequeo parametro Formal mismo nombre que la funcion ========================
+
+bool chequearNomPF(string function, string pf){
+    if (function == pf){
+        yyerror("Mismo funcion " + function + " tiene el mismo nombre que el parametro formal");
+        return false;
+    }
+    return true;
 }

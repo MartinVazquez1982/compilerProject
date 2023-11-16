@@ -1,0 +1,12 @@
+
+	SHORT x,
+	SHORT y,
+
+	IF (x == y) {
+		PRINT %iguales%
+	} END_IF,
+
+	x = 12_ul,
+	y = 34_ul,
+
+	y = x + x,

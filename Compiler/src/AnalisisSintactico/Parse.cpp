@@ -913,7 +913,17 @@ bool ChequearRecursion(string funcion, bool esMetodo){
     }
     return !(ambito == funcion);
 }
-#line 917 "y.tab.c"
+
+// ======================== Chequeo parametro Formal mismo nombre que la funcion ========================
+
+bool chequearNomPF(string function, string pf){
+    if (function == pf){
+        yyerror("Mismo funcion " + function + " tiene el mismo nombre que el parametro formal");
+        return false;
+    }
+    return true;
+}
+#line 927 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1214,7 +1224,7 @@ case 36:
                                                     string key; 
                                                     if ((InsideClass::insideMethod())){ /*Se trata de una funcion dentro de un metodo*/
                                                         if (!(InsideClass::insideFuncionMethod())){
-                                                            if (noReDeclarada(yyvsp[-3], "Funcion")) {
+                                                            if (noReDeclarada(yyvsp[-3], "Funcion") && chequearNomPF(yyvsp[-3],yyvsp[-1])) {
                                                                 VarSinInic::addTop(); 
                                                                 key = TablaDeSimbolos::changeKey(yyvsp[-3]);
                                                                 TablaDeSimbolos::setUso(key, "Funcion");
@@ -1228,7 +1238,7 @@ case 36:
                                                         if (yyvsp[-3] == InsideClass::getClassSinMain()){
                                                             yyerror("No es posible declarar un metodo con el mismo nombre al de la clase a la que pertenece");
                                                         }else{
-                                                            if (noReDeclarada(yyvsp[-3]+"-"+InsideClass::getClassSinMain(), "Metodo")) {
+                                                            if (noReDeclarada(yyvsp[-3]+"-"+InsideClass::getClassSinMain(), "Metodo") && chequearNomPF(yyvsp[-3],yyvsp[-1])) {
                                                                 InsideClass::addMethod(yyvsp[-3]);
                                                                 VarSinInic::addTop();
                                                                 key = TablaDeSimbolos::changeKeyClass(yyvsp[-3],InsideClass::getClass());
@@ -1243,7 +1253,7 @@ case 36:
                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                     EstructuraTercetos::setAmbito(Ambito::getTercetos()); 
                                             }else{
-                                                if (noReDeclarada(yyvsp[-3], "Funcion")) {
+                                                if (noReDeclarada(yyvsp[-3], "Funcion") && chequearNomPF(yyvsp[-3],yyvsp[-1])) {
                                                     string key = TablaDeSimbolos::changeKey(yyvsp[-3]);
                                                     TablaDeSimbolos::setUso(key, "Funcion");
                                                     VarSinInic::addTop();
@@ -1628,7 +1638,7 @@ case 97:
 #line 477 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1632 "y.tab.c"
+#line 1642 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
