@@ -6,7 +6,6 @@
 using namespace std;
 
 unordered_map<string, TablaDeSimbolos::Datos> TablaDeSimbolos::table;
-set<string> TablaDeSimbolos::forwardDeclaration;
 unordered_map<string, TablaDeSimbolos::Datos>::iterator TablaDeSimbolos::it;
 
 /**
@@ -177,13 +176,8 @@ void TablaDeSimbolos::setHerencia(string lexema, string clase){
 	TablaDeSimbolos::table[lexema].nivelHerencia = TablaDeSimbolos::table[clase].nivelHerencia + 1;
 }
 
-bool TablaDeSimbolos::forwDeclAll(){ //Indica si todas las forward declarations se han completado
-	return TablaDeSimbolos::forwardDeclaration.empty();
-}
-
 void TablaDeSimbolos::forwDeclComp(string lexema){
 	TablaDeSimbolos::table[lexema].forwDecl = 1;
-	TablaDeSimbolos::forwardDeclaration.erase(lexema);
 }
 
 // Inicializaciones
@@ -194,7 +188,6 @@ void TablaDeSimbolos::inicNivelHer(string lexema){
 
 void TablaDeSimbolos::inicForwDecl(string lexema){
 	TablaDeSimbolos::table[lexema].forwDecl = 0;
-	TablaDeSimbolos::forwardDeclaration.insert(lexema);
 }
 
 // Getters
@@ -287,13 +280,6 @@ bool TablaDeSimbolos::tieneParametros(string lexema){
 		} else {
 			return true;
 		}
-}
-
-string TablaDeSimbolos::nextForwDecl(){
-	auto elemento = TablaDeSimbolos::forwardDeclaration.begin();
-	string eliminado = *elemento;
-	TablaDeSimbolos::forwardDeclaration.erase(elemento);
-	return eliminado;
 }
 
 void TablaDeSimbolos::inic(){

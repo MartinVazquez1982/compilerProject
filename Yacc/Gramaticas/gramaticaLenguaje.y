@@ -162,14 +162,21 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                         if ($2 == InsideClass::getClassSinMain()){
                                                             yyerror("No es posible declarar un metodo con el mismo nombre al de la clase a la que pertenece");
                                                         }else{
-                                                            if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo") && chequearNomPF($2,$4)) {
-                                                                InsideClass::addMethod($2);
-                                                                VarSinInic::addTop();
-                                                                key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
-                                                                TablaDeSimbolos::setUso(key, "Metodo");
-                                                                Ambito::add($2+"-"+InsideClass::getClassSinMain());
-                                                                InsideClass::insideMethod(true);
-                                                        }
+                                                            bool hayForward = TablaDeSimbolos::getForwDecl(InsideClass::getClass()) == 0;
+                                                            if (! hayForward){
+                                                                if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo") && chequearNomPF($2,$4)) {
+                                                                    InsideClass::addMethod($2);
+                                                                    VarSinInic::addTop();
+                                                                    key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                                                    TablaDeSimbolos::setUso(key, "Metodo");
+                                                                    Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                                                    InsideClass::insideMethod(true);
+                                                                }
+                                                            }else{ //Si no esta redeclarada se marca en 1 la columna de forward para ese metodo
+                                                               if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")){
+                                                                    TablaDeSimbolos::forwDeclComp($2+"-"+InsideClass::getClass());
+                                                                } 
+                                                            }     
                                                         }
                                                     }
                                                     TablaDeSimbolos::setClass(key,InsideClass::getClass());
@@ -206,14 +213,21 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                             if ($2 == InsideClass::getClassSinMain()){
                                                 yyerror("No es posible declarar un metodo con el mismo nombre al de la clase a la que pertenece");
                                             }else{
-                                                if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
-                                                    InsideClass::addMethod($2);
-                                                    VarSinInic::addTop(); 
-                                                    key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
-                                                    TablaDeSimbolos::setUso(key, "Metodo");
-                                                    Ambito::add($2+"-"+InsideClass::getClassSinMain());
-                                                    InsideClass::insideMethod(true);
-                                            }
+                                                bool hayForward = TablaDeSimbolos::getForwDecl(InsideClass::getClass()) == 0;
+                                                if (! hayForward){
+                                                    if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
+                                                        InsideClass::addMethod($2);
+                                                        VarSinInic::addTop();
+                                                        key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
+                                                        TablaDeSimbolos::setUso(key, "Metodo");
+                                                        Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                                        InsideClass::insideMethod(true);
+                                                    }
+                                                }else{ //Si no esta redeclarada se marca en 1 la columna de forward para ese metodo
+                                                    if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")){
+                                                        TablaDeSimbolos::forwDeclComp($2+"-"+InsideClass::getClass());
+                                                    } 
+                                                }  
                                             }
                                         }
                                         TablaDeSimbolos::setClass(key,InsideClass::getClass());
@@ -673,31 +687,65 @@ bool esObjeto(string nesting){
     return contarCaracter(nesting,'.') > 0;
 }
 
+void ChequeoForwDecl(string atrMet, string clase, bool esAtributo){
+    string atr = sigID(atrMet);
+    if (atrMet.empty()){ //Si no esta vacio entonces: error
+        string uso = TablaDeSimbolos::usoAsignado(atr+"-"+clase);
+		if (esAtributo){
+			if(!( uso == "Metodo")){
+				TablaDeSimbolos::add(atr+"-"+clase, "", "REVISAR", "Atr"); //REVISAR TIPO DE ATRIBUTOS
+				TablaDeSimbolos::setClass(atr+"-"+clase,clase);
+				TablaDeSimbolos::del(atr);
+				TablaDeSimbolos::inicForwDecl(atr+"-"+clase);
+			}else{
+				yyerror("La clase no puede tener atributos y metodos con el mismo nombre");
+			}
+		}else{
+			if(!( uso == "Atr")){
+				TablaDeSimbolos::add(atr+"-"+clase, "", clase, "Metodo");
+				TablaDeSimbolos::setClass(atr+"-"+clase,clase);
+				TablaDeSimbolos::del(atr);
+				TablaDeSimbolos::inicForwDecl(atr+"-"+clase);
+			}else{
+				yyerror("La clase no puede tener atributos y metodos con el mismo nombre");
+			}
+		}
+    }else{
+        yyerror("No es posible que una clase incompleta herede de otra clase o tenga un atributo de tipo objeto previo a su declaracion completa");
+    }
+}
+
 bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo, bool esAtributo = true){
     string check = sigID(obj);
     TablaDeSimbolos::del(check);
     bool encontrada = false;
     bool final = ! ChequearDeclaracion(check, nomEncontrada, "Obj");
-    string antCheck = TablaDeSimbolos::getTipo(nomEncontrada)+":main";
-    while (! final && ! encontrada){
+    string antCheck = TablaDeSimbolos::getTipo(nomEncontrada)+":main"; // Ya es una clase con forwad declaration
+    bool hayForward = TablaDeSimbolos::getForwDecl(antCheck) == 0;
+    while (! final && ! encontrada && ! hayForward){
         check = sigID(obj);
         TablaDeSimbolos::del(check);
         if (TablaDeSimbolos::usoAsignado(check+":main") == "Clase"){
-        	if (TablaDeSimbolos::getHerencia(antCheck) != check+":main"){
-                if (check+":main" == antCheck){
-                    yyerror("Invocacion incorrecta de la clase " + check);
+            if (TablaDeSimbolos::getForwDecl(check+":main") == 0) {
+                antCheck = check;
+                hayForward = true;
+            } else {
+                if (TablaDeSimbolos::getHerencia(antCheck) != check+":main"){
+                    if (check+":main" == antCheck){
+                        yyerror("Invocacion incorrecta de la clase " + check);
+                    } else {
+                        yyerror("Clase " + antCheck + " No hereda de " + check);
+                    }
+                    final = true;
                 } else {
-                    yyerror("Clase " + antCheck + " No hereda de " + check);
+                    antCheck = check+":main";
+                    nomEncontrada = check + "." + nomEncontrada;
+                    if (obj.length() == 0){
+                        yyerror("Objeto esta intentando utilizar una clase "+ check +" en lugar de un atributo");
+                        final = true;
+                    }
                 }
-        		final = true;
-        	} else {
-				antCheck = check+":main";
-				nomEncontrada = check + "." + nomEncontrada;
-				if (obj.length() == 0){
-					yyerror("Objeto esta intentando utilizar una clase "+ check +" en lugar de un atributo");
-					final = true;
-				}
-        	}
+            }
         } else if (TablaDeSimbolos::usoAsignado(check+"-"+antCheck) == "Atr"){
             string tipo = TablaDeSimbolos::getTipo(check+"-"+antCheck);
         	nomEncontrada = check + "." + nomEncontrada;
@@ -737,6 +785,9 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
         }
         
     }
+    if (hayForward) {
+        ChequeoForwDecl(obj, antCheck, esAtributo);
+    }
     return encontrada;
 }
 
@@ -745,14 +796,16 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
 bool noReDeclarada(string decl, string usoOriginal){
     string ambito=Ambito::get();
     string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
-    if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase" || uso == "Atr" || uso == "Metodo"){
-    	yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
-    	return false;
-    } else if (uso == "Clase" && usoOriginal == "Clase" ){
-        if (TablaDeSimbolos::getForwDecl(decl+ambito) == 1){
-            yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
-        }   
-        return false;
+    if (TablaDeSimbolos::getForwDecl(decl+ambito) != 0){
+        if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase" || uso == "Atr" || uso == "Metodo"){
+                yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
+                return false;
+        } else if (uso == "Clase" && usoOriginal == "Clase" ){
+            if (TablaDeSimbolos::getForwDecl(decl+ambito) == 1){
+                yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
+            }   
+            return false;
+        }
     }
     return true;
 }
@@ -786,14 +839,22 @@ void claseSinimplementar(string clase){
 }
 
 void ChequearForwardDeclarations(){
-    if(!(TablaDeSimbolos::forwDeclAll())){
-        string forwDecl = "";
-        while (!(TablaDeSimbolos::forwDeclAll())){
-            forwDecl = forwDecl + TablaDeSimbolos::nextForwDecl() + ", ";
+    TablaDeSimbolos::inic();
+    while (! TablaDeSimbolos::fin()){
+        string clave = TablaDeSimbolos::getClave();
+        if (TablaDeSimbolos::getForwDecl(clave)==0){
+            string uso=TablaDeSimbolos::usoAsignado(clave);
+            if (uso=="Atr"){
+                yyerror("Atributo declarado con forward pero no determinada su estructura");
+            }else{
+                if (uso=="Metodo"){
+                    yyerror("Metodo declarado con forward pero no declarado");
+                }else{
+                    yyerror("Clase declarada con forward pero no declarada");
+                }
+            }
         }
-        forwDecl.pop_back();
-        forwDecl.pop_back();
-        yyerror("No se completo la declaracion de las siguientes clases: "+forwDecl);
+        TablaDeSimbolos::avanzar();
     }
 }
 
@@ -883,14 +944,21 @@ bool classInClass(string nombre){
 
 string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = ""){
     string key;
-    if ((InsideClass::insideClass()) && (!InsideClass::insideMethod())){
+    if ((InsideClass::insideClass()) && (!InsideClass::insideMethod())){ //Dentro de una clase pero no dentro de un metodo
         if (declarado == InsideClass::getClassSinMain()){
             yyerror("El nombre del atributo "+declarado+" es igual al nombre de la clase");
-        }else{
-            if (noReDeclarada(declarado+"-"+InsideClass::getClassSinMain(), "Atr")){
-                key = TablaDeSimbolos::changeKeyClass(declarado,InsideClass::getClass());
-                TablaDeSimbolos::setUso(key, "Atr");
-                TablaDeSimbolos::setClass(key,InsideClass::getClass());
+        }else{ //El atributo a declarar no tiene el nombre de la clase
+            bool hayForward = TablaDeSimbolos::getForwDecl(InsideClass::getClass()) == 0;
+            if (! hayForward){
+                if (noReDeclarada(declarado+"-"+InsideClass::getClassSinMain(), "Atr")){
+                    key = TablaDeSimbolos::changeKeyClass(declarado,InsideClass::getClass());
+                    TablaDeSimbolos::setUso(key, "Atr");
+                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                }
+            }else{
+                if (noReDeclarada(declarado+"-"+InsideClass::getClassSinMain(), "Atr")){
+                    TablaDeSimbolos::forwDeclComp(declarado+"-"+InsideClass::getClassSinMain());
+                }
             }
         }
     } else {

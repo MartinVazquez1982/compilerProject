@@ -280,7 +280,9 @@ void generarCodigo(string path, string nameFuente){
         		vector<string> atributos = EstrDeclObj::getAtributos(clases[i]);
         		for(string & atributo: atributos){
         			string nuevoObj = atributo.substr(0,atributo.find('-'))+"."+atr;
-        			string reemplazo="_"+reemplazarCaracter(nuevoObj,':','_');
+        			cout << nuevoObj << endl;
+        			string reemplazo="_"+reemplazarCaracter(reemplazarCaracter(nuevoObj,':','_'),'-','@');
+        			cout << reemplazo << endl;
         			if (TablaDeSimbolos::getTipo(atributo) == "SHORT"){
         				archivoASM << reemplazo+DB << endl;
         			} else {

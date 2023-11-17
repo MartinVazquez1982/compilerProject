@@ -40,8 +40,6 @@ class TablaDeSimbolos {
 		// Tabla de Simbolos
 		static unordered_map<string, Datos> table;
 
-		static set<string> forwardDeclaration;
-
 		static void fueConsultado(string lexema);
 
 		static void addConsultado(string lexema, string atributo, string valor);
@@ -106,10 +104,6 @@ class TablaDeSimbolos {
 		static int getForwDecl(string lexema);
 
 		static bool tieneParametros(string lexema);
-
-		static bool forwDeclAll();
-
-		static string nextForwDecl();
 
 		// Recorrer
 
