@@ -1265,6 +1265,7 @@ case 34:
                                                                     VarSinInic::addTop();
                                                                     key = TablaDeSimbolos::changeKeyClass(yyvsp[-3],InsideClass::getClass());
                                                                     TablaDeSimbolos::setUso(key, "Metodo");
+                                                                    TablaDeSimbolos::forwDeclComp(key);
                                                                     Ambito::add(yyvsp[-3]+"-"+InsideClass::getClassSinMain());
                                                                     InsideClass::insideMethod(true);
                                                                 }
@@ -1319,8 +1320,10 @@ case 35:
                                                         VarSinInic::addTop();
                                                         key = TablaDeSimbolos::changeKeyClass(yyvsp[-2],InsideClass::getClass());
                                                         TablaDeSimbolos::setUso(key, "Metodo");
+                                                        TablaDeSimbolos::forwDeclComp(key);
                                                         Ambito::add(yyvsp[-2]+"-"+InsideClass::getClassSinMain());
                                                         InsideClass::insideMethod(true);
+
                                                     }
                                                 }else{ /*Si no esta redeclarada se marca en 1 la columna de forward para ese metodo*/
                                                     if (noReDeclarada(yyvsp[-2]+"-"+InsideClass::getClassSinMain(), "Metodo")){

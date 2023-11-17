@@ -169,6 +169,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                                     VarSinInic::addTop();
                                                                     key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                                     TablaDeSimbolos::setUso(key, "Metodo");
+                                                                    TablaDeSimbolos::forwDeclComp(key);
                                                                     Ambito::add($2+"-"+InsideClass::getClassSinMain());
                                                                     InsideClass::insideMethod(true);
                                                                 }
@@ -214,12 +215,14 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                 yyerror("No es posible declarar un metodo con el mismo nombre al de la clase a la que pertenece");
                                             }else{
                                                 bool hayForward = TablaDeSimbolos::getForwDecl(InsideClass::getClass()) == 0;
+
                                                 if (! hayForward){
                                                     if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")) {
                                                         InsideClass::addMethod($2);
                                                         VarSinInic::addTop();
                                                         key = TablaDeSimbolos::changeKeyClass($2,InsideClass::getClass());
                                                         TablaDeSimbolos::setUso(key, "Metodo");
+                                                        TablaDeSimbolos::forwDeclComp(key);
                                                         Ambito::add($2+"-"+InsideClass::getClassSinMain());
                                                         InsideClass::insideMethod(true);
                                                     }
@@ -374,6 +377,7 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
 
 class: classHeader '{'sentenceList'}' { yymenssage("Clase");
                                         TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
+                                        TablaDeSimbolos::imprimir();
                                         InsideClass::unstackMethods();
                                         InsideClass::outClass();
                                       }
