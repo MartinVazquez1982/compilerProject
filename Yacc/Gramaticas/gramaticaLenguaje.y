@@ -41,7 +41,6 @@ sentenceList: sentenceList sentence
 sentence: declarative','
         | executable','
         | ',' {yywarning("Sentencia vacia");}
-        | error',' {yyerror("Sin coma");}
         ;
 
 declarative: function
@@ -142,26 +141,7 @@ nesting: nesting'.'ID {$$ = $1 + "." + $3;}
        | ID {$$ = $1;}
        ;
 
-function: functionHeader '{'functionBody'}' {Ambito::del();
-                                            EstructuraTercetos::setAmbito(Ambito::getTercetos());
-                                            if (!(InsideClass::insideClass())){
-                                                yymenssage("Funcion");
-                                            }
-                                            if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && (InsideClass::insideFuncionMethod())){
-                                                InsideClass::insideFuncionMethod(false);
-                                                yymenssage("Funcion");
-                                            }else{
-                                                if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && !(InsideClass::insideFuncionMethod())){
-                                                    InsideClass::insideMethod(false);
-                                                    yymenssage("Metodo");
-                                                }
-                                            }
-                                            list<string> varSinUsar = VarSinInic::listVarTop();
-                                            for (const string& var : varSinUsar){
-                                                yywarning("Variable/Objeto " + var + " Sin asignacion de un valor dentro de la funcion donde se declaro");
-                                            }
-                                            VarSinInic::delTop();
-                                        ;}
+function: functionHeader '{'functionBody'}' {stepsFunctionOrMethod();}
         ;
 
 functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
@@ -251,7 +231,8 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
               ;
 
 functionBody: sentenceList return
-            | return {yywarning("Funcion vacia");} 
+            | return {yywarning("Funcion vacia");}
+            | sentenceList {yyerror("Funcion sin RETURN obligatorio al final");}
             ;
 
 formalParameter: type ID {$$ = $2; TablaDeSimbolos::setUso($2, "PF"); setearTipos($1,$2);}
@@ -430,7 +411,7 @@ comparison: expression operatorsLogics expression {$$ = stepsOperation($1, $3, $
 expression: expression'+'termino { $$ = stepsOperation($1, $3, "+"); }
           | expression'-'termino { $$ = stepsOperation($1, $3, "-"); }
           | termino {$$ = $1;}
-          | '(' expression ')' {yyerror("Expresion no puede ir entre parentesis");}
+          | '(' expression ')' {yyerror("Expresion no puede ir entre parentesis");$$=$2;}
           ;
 
 termino: termino'*'factor { $$ = stepsOperation($1, $3, "*"); }
@@ -971,4 +952,28 @@ bool chequearNomPF(string function, string pf){
         return false;
     }
     return true;
+}
+
+// ======================== Pasos cuadno se reconoce una funcion o un metodo ========================
+
+void stepsFunctionOrMethod(){
+    Ambito::del();
+    EstructuraTercetos::setAmbito(Ambito::getTercetos());
+    if (!(InsideClass::insideClass())){
+        yymenssage("Funcion");
+    }
+    if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && (InsideClass::insideFuncionMethod())){
+        InsideClass::insideFuncionMethod(false);
+        yymenssage("Funcion");
+    }else{
+        if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && !(InsideClass::insideFuncionMethod())){
+            InsideClass::insideMethod(false);
+            yymenssage("Metodo");
+        }
+    }
+    list<string> varSinUsar = VarSinInic::listVarTop();
+    for (const string& var : varSinUsar){
+        yywarning("Variable/Objeto " + var + " Sin asignacion de un valor dentro de la funcion donde se declaro");
+    }
+    VarSinInic::delTop();
 }

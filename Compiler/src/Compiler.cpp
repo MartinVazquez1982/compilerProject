@@ -5,8 +5,10 @@
 //============================================================================
 
 #include <iostream>
+#include <cstdlib>
 #include <fstream>
 #include <string>
+#include <unistd.h>
 #include "./AnalisisSintactico/Parse.h"
 #include "./ContErrWar/ContErrWar.h"
 #include "./AnalisisSemantico/EstructuraTercetos.h"
@@ -71,6 +73,24 @@ int main(int argc, char *argv[]) {
         EstructuraTercetos::mostrarTercetos();
         if (ContErrWar::getError() == 0){
             generarCodigo(path, nombreArchivoAssembler);
+            string comandoObj= "\\masm32\\bin\\ml /c /Zd /coff " + path + "\\" + nombreArchivoAssembler + ".asm";
+            cout << endl << endl;
+            chdir(path.c_str());
+            int resultado = system(comandoObj.c_str());
+            cout << endl << endl;
+            if (resultado == 0){
+            	cout << "OBJ creado exitosamente" << endl << endl << endl;
+            	string comandoExe = "\\masm32\\bin\\Link /SUBSYSTEM:CONSOLE " + path + "\\" + nombreArchivoAssembler + ".obj";
+            	resultado = system(comandoExe.c_str());
+            	if (resultado == 0){
+            		cout << "EXE creado exitosamente" << endl << endl << endl;
+            	} else {
+            		cout << "No Ejecutado correctamente" << endl;
+            	}
+            } else {
+            	cout << "No Ejecutado correctamente" << endl;
+            }
+
         }
         TablaDeSimbolos::imprimir();
     //} else {

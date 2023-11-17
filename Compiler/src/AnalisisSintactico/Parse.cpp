@@ -46,10 +46,10 @@ static char yysccsid[] = "@(#)yaccpar	1.8 (Berkeley) 01/20/90";
 #define RETURN 278
 #define YYERRCODE 256
 short yylhs[] = {                                        -1,
-    0,    0,    0,    1,    1,    2,    2,    2,    2,    3,
-    3,    3,    8,    8,    8,    8,    4,    4,    4,    4,
-    4,    4,    6,    6,   15,   16,   19,   19,   18,   18,
-   13,   20,   20,    5,   22,   22,   23,   23,   24,   12,
+    0,    0,    0,    1,    1,    2,    2,    2,    3,    3,
+    3,    8,    8,    8,    8,    4,    4,    4,    4,    4,
+    4,    6,    6,   15,   16,   19,   19,   18,   18,   13,
+   20,   20,    5,   22,   22,   23,   23,   23,   24,   12,
    12,   26,    9,    9,    9,    9,    9,   29,   10,   10,
    30,   28,   28,   28,   28,   28,   27,   27,   27,   27,
     7,    7,    7,    7,   32,   33,   31,   21,   21,   21,
@@ -58,10 +58,10 @@ short yylhs[] = {                                        -1,
    17,   17,   17,   11,   38,   25,
 };
 short yylen[] = {                                         2,
-    3,    2,    1,    2,    1,    2,    2,    1,    2,    1,
-    1,    1,    3,    2,    3,    2,    1,    1,    1,    1,
-    1,    1,    1,    1,    2,    2,    3,    1,    3,    1,
-    3,    3,    1,    4,    5,    4,    2,    1,    2,    3,
+    3,    2,    1,    2,    1,    2,    2,    1,    1,    1,
+    1,    3,    2,    3,    2,    1,    1,    1,    1,    1,
+    1,    1,    1,    2,    2,    3,    1,    3,    1,    3,
+    3,    1,    4,    5,    4,    2,    1,    1,    2,    3,
     4,    1,    6,    4,    3,    5,    5,    1,    4,    3,
     1,    3,    4,    2,    1,    2,    3,    2,    2,    1,
     4,    5,    1,    6,    2,    2,    3,    3,    3,    1,
@@ -70,193 +70,183 @@ short yylen[] = {                                         2,
     1,    1,    1,    2,    1,    2,
 };
 short yydefred[] = {                                      0,
-    0,    0,    0,    0,    0,   91,   92,   93,   51,    0,
-    0,    8,    0,    0,    5,    0,    0,   10,   11,   12,
-   17,   18,   19,   20,   21,   22,   23,   24,    0,    0,
-    0,    0,    0,    9,   85,   89,   87,   33,    0,    0,
-   77,    0,    0,    0,    0,    0,   74,   76,   95,   94,
-   65,    0,   28,    0,    2,    0,    4,    6,    7,   30,
-    0,   78,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   86,   90,   88,   79,   80,   81,   82,    0,    0,
-   83,   84,    0,   48,   45,    0,    0,    0,   55,    0,
-    0,   59,    0,    0,    0,    0,    1,    0,    0,   32,
-   40,    0,    0,    0,    0,   38,    0,    0,    0,   71,
-   57,    0,    0,    0,   96,   56,    0,    0,    0,   54,
-   44,    0,    0,   72,   73,   36,    0,    0,   27,   29,
-   41,   37,   34,   49,    0,   61,    0,   16,   14,   52,
-    0,    0,    0,   46,    0,   47,   39,   35,   66,   62,
-    0,   15,   13,   53,   43,   64,
+    0,    0,    0,    0,   91,   92,   93,   51,    0,    0,
+    8,    0,    0,    5,    0,    0,    9,   10,   11,   16,
+   17,   18,   19,   20,   21,   22,   23,    0,    0,    0,
+    0,    0,   85,   89,   87,   32,    0,    0,   77,    0,
+    0,    0,    0,    0,   74,   76,   95,   94,   65,    0,
+   27,    0,    2,    0,    4,    6,    7,   29,    0,   78,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,   86,
+   90,   88,   79,   80,   81,   82,    0,    0,   83,   84,
+    0,   48,   45,    0,    0,    0,   55,    0,    0,   59,
+    0,    0,    0,    0,    1,    0,    0,   31,   40,    0,
+    0,    0,    0,   37,    0,    0,    0,   71,   57,    0,
+    0,    0,   96,   56,    0,    0,    0,   54,   44,    0,
+    0,   72,   73,   35,    0,    0,   26,   28,   41,   36,
+   33,   49,    0,   61,    0,   15,   13,   52,    0,    0,
+    0,   46,    0,   47,   39,   34,   66,   62,    0,   14,
+   12,   53,   43,   64,
 };
-short yydgoto[] = {                                      13,
-   14,   15,   16,   17,   18,   19,   20,  119,   21,   22,
-   23,   24,   25,   26,   27,   28,   29,   61,   54,   30,
-   43,   31,  105,  128,   89,  103,   44,   90,   91,   32,
-   45,   33,  137,   83,   46,   47,   48,   50,
+short yydgoto[] = {                                      12,
+   13,   14,   15,   16,   17,   18,   19,  117,   20,   21,
+   22,   23,   24,   25,   26,   27,   28,   59,   52,   29,
+   41,   30,  103,  126,   87,  101,   42,   88,   89,   31,
+   43,   32,  135,   81,   44,   45,   46,   48,
 };
 short yysindex[] = {                                     74,
-  -39,   -9, -246, -226, -220,    0,    0,    0,    0, -216,
-   96,    0,    0,  205,    0,   23,   32,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0, -199,  -33,
-  -40,   -9,  -37,    0,    0,    0,    0,    0,   13, -168,
-    0,  -35,   29,  -64,   43,  -15,    0,    0,    0,    0,
-    0,   50,    0,   42,    0,  120,    0,    0,    0,    0,
-   44,    0,   13, -166,  -31,   55, -152,  205,   13,   57,
-   75,    0,    0,    0,    0,    0,    0,    0,   68,   68,
-    0,    0,   13,    0,    0,   76,  239,   77,    0, -243,
- -111,    0,   68,   68,   14, -155,    0, -154,    9,    0,
-    0,    9,   83,   55,    2,    0, -111,  142,   -3,    0,
-    0,  -15,  -15,    9,    0,    0,   81,   84,  229,    0,
-    0,   89, -130,    0,    0,    0, -147,   90,    0,    0,
-    0,    0,    0,    0,  -21,    0,  164,    0,    0,    0,
-   88,   91,    8,    0, -125,    0,    0,    0,    0,    0,
-  183,    0,    0,    0,    0,    0,
+   -9, -271, -265, -262,    0,    0,    0,    0, -250,   84,
+    0,    0,  161,    0,  -14,   17,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0, -220,  -33,  -43,
+   -9,  -42,    0,    0,    0,    0,   13, -196,    0,  -35,
+   29, -105,   45,    9,    0,    0,    0,    0,    0,   54,
+    0,   36,    0,  102,    0,    0,    0,    0,   37,    0,
+   13, -172,  -31,   55, -159,  161,   13,  100,   68,    0,
+    0,    0,    0,    0,    0,    0,   53,   53,    0,    0,
+   13,    0,    0,   66,  217,   67,    0, -225,  -64,    0,
+   53,   53,   14, -165,    0, -164,   19,    0,    0,   19,
+   73,   55,  -10,    0,  -64,  120,   -3,    0,    0,    9,
+    9,   19,    0,    0,   72,   75,  183,    0,    0,  -56,
+ -142,    0,    0,    0, -156,   81,    0,    0,    0,    0,
+    0,    0,  -28,    0,  130,    0,    0,    0,   80,   83,
+    4,    0, -134,    0,    0,    0,    0,    0,  151,    0,
+    0,    0,    0,    0,
 };
 short yyrindex[] = {                                      0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,  -11,
-    0,    0,    0,  136,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,  -11,    0,
+    0,    0,  131,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,   93,    0,    0,    0,    0,    0,    0,    0,
-    0,  -41,    0,    0, -115,  -19,    0,    0,    0,    0,
-    0,    0,    0,   94,    0,    0,    0,    0,    0,    0,
-   95,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-  -86,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,   86,    0,    0,    0,    0,    0,    0,    0,  -41,
+    0,    0,  -91,  -19,    0,    0,    0,    0,    0,    0,
+    0,   88,    0,    0,    0,    0,    0,    0,   89,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,  -78,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,   97,    0,
-    0,  106,    0,    0,    0,    0,  109,    0,    0,    0,
-    0,    3,   25,   47,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,  -11,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,   90,    0,    0,   95,
+    0,   12,    0,    0,   96,    0,    0,    0,    0,    3,
+   25,   47,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,
+    0,    0,  -11,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,
 };
 short yygindex[] = {                                      0,
-   28,    6,  -42,  -27,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,  448,    0,    0,   59,    0,    0,  482,
-   10,    0,    0,    0,  -48,    0,  118,  -10,   66,    0,
-  119,    0,    0,    0,  -46,   15,    0,    0,
+    7,   -5,  -65,   18,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,  428,    0,    0,   46,    0,    0,  435,
+   39,    0,    0,    0,  -27,    0,  116,  -66,   61,    0,
+  113,    0,    0,    0,    6,    1,    0,    0,
 };
-#define YYTABLESIZE 576
+#define YYTABLESIZE 527
 short yytable[] = {                                      75,
-   75,   75,   75,   75,   34,   75,   65,   60,   69,  101,
-   64,   87,   64,   40,   84,  121,   88,  106,   75,   57,
-   75,   70,  149,   70,   70,   70,   93,   63,   33,   49,
-   39,   94,  112,  113,   33,   40,   58,  110,   56,   79,
-   70,   80,   70,   68,  117,   68,   68,   68,   70,   33,
-   51,   79,   69,   80,  126,  132,   52,   40,   87,  118,
-   53,   57,   68,   88,   68,   69,   58,   69,   69,   69,
-  143,   79,   99,   80,  102,   59,  141,   60,  109,   88,
-  123,   75,   66,   92,   69,   68,   69,   67,   81,   95,
-   82,  142,  114,  104,   88,  108,  134,  110,   12,   79,
-   96,   80,   98,   70,   72,   73,   74,  124,  125,   57,
-  100,  145,   40,   57,  107,  111,   81,   12,   82,  115,
-  120,  129,  130,  131,  138,   68,  133,  139,  146,  147,
-  148,  152,  154,  155,  153,    3,   63,   26,   25,   12,
-   31,   60,   60,   60,   60,    2,   42,   69,    3,   67,
-   60,   60,   50,  127,    9,  122,   57,   71,    0,    0,
-    0,   60,   60,   12,  151,   38,   86,    0,    0,   67,
-   58,   58,   58,   58,    0,    0,    0,    0,    0,   58,
-   58,    0,    0,    0,    0,   12,    0,    0,    0,    0,
-   58,   58,    2,   84,   85,    3,   11,    0,    0,    0,
-    0,    9,    0,    0,    0,    0,    0,   12,    0,    0,
-    0,   87,   38,   86,    0,   75,   75,   75,   75,    0,
-   55,    0,    0,    0,   75,   75,   12,   75,   75,   75,
-   75,    0,   62,    0,   62,   75,   75,   70,   70,   70,
-   70,   35,   36,   37,   97,   38,   70,   70,   12,   70,
-   70,   70,   70,    0,    0,   53,   33,   70,   70,   68,
-   68,   68,   68,   35,   36,   37,  136,   38,   68,   68,
-    0,   68,   68,   68,   68,    0,    6,    7,    8,   68,
-   68,   69,   69,   69,   69,   35,   36,   37,  150,   38,
-   69,   69,    0,   69,   69,   69,   69,   75,   76,   77,
-   78,   69,   69,   67,   67,   67,   67,  156,    0,    0,
-    1,    2,   67,   67,    3,    4,    5,    6,    7,    8,
-    9,    0,    0,   67,   67,   75,   76,   77,   78,    1,
-    2,   10,   86,    3,    4,    5,    6,    7,    8,    9,
-   35,   36,   37,    0,   38,    2,    0,  144,    3,    0,
-   10,    1,    2,  140,    9,    3,    4,    5,    6,    7,
-    8,    9,    0,  116,    0,   38,   86,    0,    0,    0,
-    0,    0,   10,    0,    0,    1,    2,    0,    0,    3,
-    4,    5,    6,    7,    8,    9,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,   10,    1,    2,    0,
-    0,    3,    4,    5,    6,    7,    8,    9,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,  135,    1,
-    2,    0,    0,    3,    4,    5,    6,    7,    8,    9,
-    0,    0,    0,    0,    0,    0,    0,    0,    1,    2,
-   10,    0,    3,    4,    5,    6,    7,    8,    9,   41,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,   10,
-    1,    2,    0,    0,    3,    4,    5,    6,    7,    8,
-    9,    0,    0,    0,    0,    0,    0,    0,    0,   41,
-    0,   10,    0,   42,    0,    2,   41,    0,    3,    4,
-    5,    6,    7,    8,    9,    2,    0,    0,    3,    4,
-    5,    6,    7,    8,    9,   10,   86,    0,    0,    0,
-   41,    0,   41,   42,    0,   10,   41,    0,    0,    0,
-   42,    0,    0,    0,    0,    0,   41,   41,    0,    0,
-   41,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-   41,   41,    0,    0,   42,    0,   42,    0,    0,    0,
-   42,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-   42,   42,    0,    0,   42,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,   42,   42,
+   75,   75,   75,   75,   47,   75,   63,   55,   67,   99,
+   62,   49,   62,   38,   50,  147,   54,   85,   75,  115,
+   75,   70,  121,   70,   70,   70,   51,   61,   32,   56,
+   37,   60,   82,  119,   32,   38,  104,  108,  132,   77,
+   70,   78,   70,   68,   58,   68,   68,   68,   55,   32,
+   91,  139,   67,  143,  124,   92,   58,   38,   85,   86,
+   57,   77,   68,   78,   68,   69,   85,   69,   69,   69,
+  102,   77,  106,   78,  130,   68,   70,   71,   72,   64,
+   66,   75,  110,  111,   69,   90,   69,   67,   79,  141,
+   80,  122,  123,   93,   94,   96,   55,   38,   11,   97,
+   55,  100,  116,   70,   98,  107,   86,  105,  109,  113,
+  118,  127,  128,  129,  131,  136,  144,   11,  137,  112,
+  145,  146,   86,  150,  153,   68,  151,   11,  152,   63,
+    3,   25,   24,   30,  140,   42,   38,   86,  125,   50,
+  108,  149,   77,   55,   78,   11,   65,   69,  120,   69,
+    0,    1,   82,   83,    2,    0,    0,    0,    0,   79,
+    8,   80,    0,   11,    0,   60,   60,   60,   60,   67,
+    0,   36,   84,   11,   60,   60,    0,    0,   58,   58,
+   58,   58,    0,    0,    0,   60,   60,   58,   58,    0,
+    0,    0,    1,    0,   11,    2,   10,    0,   58,   58,
+    1,    8,  142,    2,   11,    0,    0,    0,   53,    8,
+    0,    0,   36,   84,    0,   75,   75,   75,   75,    0,
+   36,   84,    0,    0,   75,   75,   95,   75,   75,   75,
+   75,    0,   60,    0,   60,   75,   75,   70,   70,   70,
+   70,   33,   34,   35,  134,   36,   70,   70,   51,   70,
+   70,   70,   70,    0,  148,    0,   32,   70,   70,   68,
+   68,   68,   68,   33,   34,   35,    0,   36,   68,   68,
+    0,   68,   68,   68,   68,  154,    5,    6,    7,   68,
+   68,   69,   69,   69,   69,   33,   34,   35,    0,   36,
+   69,   69,    0,   69,   69,   69,   69,   73,   74,   75,
+   76,   69,   69,   67,   67,   67,   67,  138,    0,    0,
+    0,    1,   67,   67,    2,    3,    4,    5,    6,    7,
+    8,    0,    0,   67,   67,   33,   34,   35,    0,   36,
+    1,    9,   84,    2,    3,    4,    5,    6,    7,    8,
+    1,  114,    0,    2,    3,    4,    5,    6,    7,    8,
+    9,    0,    0,    0,    0,    0,    0,    0,    1,    0,
+    9,    2,    3,    4,    5,    6,    7,    8,   73,   74,
+   75,   76,    0,    0,    0,    0,    1,    0,    9,    2,
+    3,    4,    5,    6,    7,    8,    1,    0,    0,    2,
+    3,    4,    5,    6,    7,    8,  133,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    9,    1,    0,    0,
+    2,    3,    4,    5,    6,    7,    8,    1,    0,    0,
+    2,    3,    4,    5,    6,    7,    8,    9,   39,    0,
+    0,    0,    0,    0,    0,   40,    0,    9,    0,    1,
+    0,    0,    2,    3,    4,    5,    6,    7,    8,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,   39,    9,
+   84,    0,    0,    0,   39,   40,    0,    0,    0,    0,
+    0,   40,    0,    1,    0,    0,    2,    3,    4,    5,
+    6,    7,    8,    0,    0,    0,    0,    0,   39,    0,
+   39,    0,    0,    9,   39,   40,    0,   40,    0,    0,
+    0,   40,    0,    0,   39,   39,    0,    0,   39,    0,
+    0,   40,   40,    0,    0,   40,    0,    0,   39,   39,
+    0,    0,    0,    0,    0,   40,   40,
 };
 short yycheck[] = {                                      41,
-   42,   43,   44,   45,   44,   47,   40,  123,   40,   41,
-   46,  123,   46,   45,  258,  259,   44,   66,   60,   14,
-   62,   41,   44,   43,   44,   45,   42,   61,   40,  276,
-   40,   47,   79,   80,   46,   45,  123,   41,   11,   43,
-   60,   45,   62,   41,   87,   43,   44,   45,   39,   61,
-  277,   43,   40,   45,   41,  104,  277,   45,  123,   87,
-  277,   56,   60,   91,   62,   41,   44,   43,   44,   45,
-  119,   43,   63,   45,   65,   44,  119,  277,   69,  107,
-   91,  123,  123,   41,   60,  123,   62,   41,   60,   40,
-   62,  119,   83,   66,  122,   68,  107,   41,   44,   43,
-   59,   45,   59,  123,  273,  274,  275,   93,   94,  104,
-  277,  122,   45,  108,  267,   41,   60,   44,   62,   44,
-   44,  277,  277,   41,   44,  123,  125,   44,  259,  277,
-   41,   44,  125,  259,   44,    0,   44,   44,   44,   44,
-   44,  257,  258,  259,  260,  257,   41,  123,  260,   32,
-  266,  267,   44,   95,  266,   90,  151,   39,   -1,   -1,
-   -1,  277,  278,   44,  137,  277,  278,   -1,   -1,  123,
-  257,  258,  259,  260,   -1,   -1,   -1,   -1,   -1,  266,
-  267,   -1,   -1,   -1,   -1,   44,   -1,   -1,   -1,   -1,
-  277,  278,  257,  258,  259,  260,  123,   -1,   -1,   -1,
-   -1,  266,   -1,   -1,   -1,   -1,   -1,   44,   -1,   -1,
-   -1,  123,  277,  278,   -1,  257,  258,  259,  260,   -1,
-  125,   -1,   -1,   -1,  266,  267,   44,  269,  270,  271,
+   42,   43,   44,   45,  276,   47,   40,   13,   40,   41,
+   46,  277,   46,   45,  277,   44,   10,  123,   60,   85,
+   62,   41,   89,   43,   44,   45,  277,   61,   40,   44,
+   40,  123,  258,  259,   46,   45,   64,   41,  105,   43,
+   60,   45,   62,   41,  123,   43,   44,   45,   54,   61,
+   42,  117,   40,  120,   41,   47,  277,   45,  123,   42,
+   44,   43,   60,   45,   62,   41,  123,   43,   44,   45,
+   64,   43,   66,   45,  102,   37,  273,  274,  275,  123,
+  123,  123,   77,   78,   60,   41,   62,   41,   60,  117,
+   62,   91,   92,   40,   59,   59,  102,   45,   44,   61,
+  106,   63,   85,  123,  277,   67,   89,  267,   41,   44,
+   44,  277,  277,   41,  125,   44,  259,   44,   44,   81,
+  277,   41,  105,   44,  259,  123,   44,   44,  125,   44,
+    0,   44,   44,   44,  117,   41,  125,  120,   93,   44,
+   41,  135,   43,  149,   45,   44,   31,  123,   88,   37,
+   -1,  257,  258,  259,  260,   -1,   -1,   -1,   -1,   60,
+  266,   62,   -1,   44,   -1,  257,  258,  259,  260,  123,
+   -1,  277,  278,   44,  266,  267,   -1,   -1,  257,  258,
+  259,  260,   -1,   -1,   -1,  277,  278,  266,  267,   -1,
+   -1,   -1,  257,   -1,   44,  260,  123,   -1,  277,  278,
+  257,  266,  259,  260,   44,   -1,   -1,   -1,  125,  266,
+   -1,   -1,  277,  278,   -1,  257,  258,  259,  260,   -1,
+  277,  278,   -1,   -1,  266,  267,  125,  269,  270,  271,
   272,   -1,  268,   -1,  268,  277,  278,  257,  258,  259,
-  260,  273,  274,  275,  125,  277,  266,  267,   44,  269,
-  270,  271,  272,   -1,   -1,  277,  268,  277,  278,  257,
-  258,  259,  260,  273,  274,  275,  125,  277,  266,  267,
-   -1,  269,  270,  271,  272,   -1,  263,  264,  265,  277,
-  278,  257,  258,  259,  260,  273,  274,  275,  125,  277,
+  260,  273,  274,  275,  125,  277,  266,  267,  277,  269,
+  270,  271,  272,   -1,  125,   -1,  268,  277,  278,  257,
+  258,  259,  260,  273,  274,  275,   -1,  277,  266,  267,
+   -1,  269,  270,  271,  272,  125,  263,  264,  265,  277,
+  278,  257,  258,  259,  260,  273,  274,  275,   -1,  277,
   266,  267,   -1,  269,  270,  271,  272,  269,  270,  271,
   272,  277,  278,  257,  258,  259,  260,  125,   -1,   -1,
-  256,  257,  266,  267,  260,  261,  262,  263,  264,  265,
-  266,   -1,   -1,  277,  278,  269,  270,  271,  272,  256,
+   -1,  257,  266,  267,  260,  261,  262,  263,  264,  265,
+  266,   -1,   -1,  277,  278,  273,  274,  275,   -1,  277,
   257,  277,  278,  260,  261,  262,  263,  264,  265,  266,
-  273,  274,  275,   -1,  277,  257,   -1,  259,  260,   -1,
-  277,  256,  257,  125,  266,  260,  261,  262,  263,  264,
-  265,  266,   -1,  125,   -1,  277,  278,   -1,   -1,   -1,
-   -1,   -1,  277,   -1,   -1,  256,  257,   -1,   -1,  260,
-  261,  262,  263,  264,  265,  266,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,  277,  256,  257,   -1,
-   -1,  260,  261,  262,  263,  264,  265,  266,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  277,  256,
-  257,   -1,   -1,  260,  261,  262,  263,  264,  265,  266,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  256,  257,
-  277,   -1,  260,  261,  262,  263,  264,  265,  266,    2,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  277,
-  256,  257,   -1,   -1,  260,  261,  262,  263,  264,  265,
-  266,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   32,
-   -1,  277,   -1,    2,   -1,  257,   39,   -1,  260,  261,
-  262,  263,  264,  265,  266,  257,   -1,   -1,  260,  261,
-  262,  263,  264,  265,  266,  277,  278,   -1,   -1,   -1,
-   63,   -1,   65,   32,   -1,  277,   69,   -1,   -1,   -1,
-   39,   -1,   -1,   -1,   -1,   -1,   79,   80,   -1,   -1,
-   83,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   93,   94,   -1,   -1,   63,   -1,   65,   -1,   -1,   -1,
-   69,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   79,   80,   -1,   -1,   83,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   93,   94,
+  257,  125,   -1,  260,  261,  262,  263,  264,  265,  266,
+  277,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  257,   -1,
+  277,  260,  261,  262,  263,  264,  265,  266,  269,  270,
+  271,  272,   -1,   -1,   -1,   -1,  257,   -1,  277,  260,
+  261,  262,  263,  264,  265,  266,  257,   -1,   -1,  260,
+  261,  262,  263,  264,  265,  266,  277,   -1,   -1,   -1,
+   -1,   -1,   -1,   -1,   -1,   -1,  277,  257,   -1,   -1,
+  260,  261,  262,  263,  264,  265,  266,  257,   -1,   -1,
+  260,  261,  262,  263,  264,  265,  266,  277,    1,   -1,
+   -1,   -1,   -1,   -1,   -1,    1,   -1,  277,   -1,  257,
+   -1,   -1,  260,  261,  262,  263,  264,  265,  266,   -1,
+   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   31,  277,
+  278,   -1,   -1,   -1,   37,   31,   -1,   -1,   -1,   -1,
+   -1,   37,   -1,  257,   -1,   -1,  260,  261,  262,  263,
+  264,  265,  266,   -1,   -1,   -1,   -1,   -1,   61,   -1,
+   63,   -1,   -1,  277,   67,   61,   -1,   63,   -1,   -1,
+   -1,   67,   -1,   -1,   77,   78,   -1,   -1,   81,   -1,
+   -1,   77,   78,   -1,   -1,   81,   -1,   -1,   91,   92,
+   -1,   -1,   -1,   -1,   -1,   91,   92,
 };
-#define YYFINAL 13
+#define YYFINAL 12
 #ifndef YYDEBUG
 #define YYDEBUG 0
 #endif
@@ -284,7 +274,6 @@ char *yyrule[] = {
 "sentence : declarative ','",
 "sentence : executable ','",
 "sentence : ','",
-"sentence : error ','",
 "declarative : function",
 "declarative : declaration",
 "declarative : class",
@@ -314,6 +303,7 @@ char *yyrule[] = {
 "functionHeader : VOID ID '(' ')'",
 "functionBody : sentenceList return",
 "functionBody : return",
+"functionBody : sentenceList",
 "formalParameter : type ID",
 "functionCall : nesting '(' ')'",
 "functionCall : nesting '(' realParameter ')'",
@@ -402,7 +392,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 480 ".\Gramaticas\gramaticaLenguaje.y"
+#line 461 ".\Gramaticas\gramaticaLenguaje.y"
 
 // ============================== Mensajes ==============================
 
@@ -898,7 +888,31 @@ bool chequearNomPF(string function, string pf){
     }
     return true;
 }
-#line 902 "y.tab.c"
+
+// ======================== Pasos cuadno se reconoce una funcion o un metodo ========================
+
+void stepsFunctionOrMethod(){
+    Ambito::del();
+    EstructuraTercetos::setAmbito(Ambito::getTercetos());
+    if (!(InsideClass::insideClass())){
+        yymenssage("Funcion");
+    }
+    if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && (InsideClass::insideFuncionMethod())){
+        InsideClass::insideFuncionMethod(false);
+        yymenssage("Funcion");
+    }else{
+        if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && !(InsideClass::insideFuncionMethod())){
+            InsideClass::insideMethod(false);
+            yymenssage("Metodo");
+        }
+    }
+    list<string> varSinUsar = VarSinInic::listVarTop();
+    for (const string& var : varSinUsar){
+        yywarning("Variable/Objeto " + var + " Sin asignacion de un valor dentro de la funcion donde se declaro");
+    }
+    VarSinInic::delTop();
+}
+#line 916 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -1059,20 +1073,16 @@ case 8:
 #line 43 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Sentencia vacia");}
 break;
-case 9:
-#line 44 ".\Gramaticas\gramaticaLenguaje.y"
-{yyerror("Sin coma");}
+case 14:
+#line 53 ".\Gramaticas\gramaticaLenguaje.y"
+{yyerror("Sentencia declarativa en lugar de una ejecutable");}
 break;
 case 15:
 #line 54 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Sentencia declarativa en lugar de una ejecutable");}
 break;
-case 16:
-#line 55 ".\Gramaticas\gramaticaLenguaje.y"
-{yyerror("Sentencia declarativa en lugar de una ejecutable");}
-break;
-case 22:
-#line 63 ".\Gramaticas\gramaticaLenguaje.y"
+case 21:
+#line 62 ".\Gramaticas\gramaticaLenguaje.y"
 {
                         if (esObjeto(yyvsp[0])){
                             string atributo, objeto;
@@ -1083,12 +1093,12 @@ case 22:
                         }
                     }
 break;
-case 25:
-#line 77 ".\Gramaticas\gramaticaLenguaje.y"
+case 24:
+#line 76 ".\Gramaticas\gramaticaLenguaje.y"
 {setearTipos(yyvsp[-1],yyvsp[0]);}
 break;
-case 26:
-#line 80 ".\Gramaticas\gramaticaLenguaje.y"
+case 25:
+#line 79 ".\Gramaticas\gramaticaLenguaje.y"
 {  
                                     if (InsideClass::insideClass() && yyvsp[-1] == InsideClass::getClassSinMain()){
                                         yyerror("No es posible declarar un atributo el cual su tipo sea la misma clase a la que pertenece");
@@ -1100,24 +1110,24 @@ case 26:
                                     }
                                    }
 break;
-case 27:
-#line 92 ".\Gramaticas\gramaticaLenguaje.y"
+case 26:
+#line 91 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsDeclVarAndObj(yyvsp[0], "Obj", yyvsp[-2]);}
 break;
-case 28:
-#line 93 ".\Gramaticas\gramaticaLenguaje.y"
+case 27:
+#line 92 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = stepsDeclVarAndObj(yyvsp[0], "Obj");}
+break;
+case 28:
+#line 95 ".\Gramaticas\gramaticaLenguaje.y"
+{yyval = stepsDeclVarAndObj(yyvsp[0], "Var", yyvsp[-2]);}
 break;
 case 29:
 #line 96 ".\Gramaticas\gramaticaLenguaje.y"
-{yyval = stepsDeclVarAndObj(yyvsp[0], "Var", yyvsp[-2]);}
-break;
-case 30:
-#line 97 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsDeclVarAndObj(yyvsp[0], "Var");}
 break;
-case 31:
-#line 100 ".\Gramaticas\gramaticaLenguaje.y"
+case 30:
+#line 99 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("Asignacion");
                                     string nomEncontrada, nomAtributo;
                                     if (esObjeto(yyvsp[-2]) && (ChequearDeclObjeto(yyvsp[-2],nomEncontrada, nomAtributo)) || !esObjeto(yyvsp[-2]) && (ChequearDeclaracion(yyvsp[-2],nomEncontrada, "Var",true))){
@@ -1158,39 +1168,20 @@ case 31:
                                     }
                                     }
 break;
-case 32:
-#line 141 ".\Gramaticas\gramaticaLenguaje.y"
+case 31:
+#line 140 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[-2] + "." + yyvsp[0];}
 break;
-case 33:
-#line 142 ".\Gramaticas\gramaticaLenguaje.y"
+case 32:
+#line 141 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
-case 34:
-#line 145 ".\Gramaticas\gramaticaLenguaje.y"
-{Ambito::del();
-                                            EstructuraTercetos::setAmbito(Ambito::getTercetos());
-                                            if (!(InsideClass::insideClass())){
-                                                yymenssage("Funcion");
-                                            }
-                                            if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && (InsideClass::insideFuncionMethod())){
-                                                InsideClass::insideFuncionMethod(false);
-                                                yymenssage("Funcion");
-                                            }else{
-                                                if ((InsideClass::insideClass()) && (InsideClass::insideMethod()) && !(InsideClass::insideFuncionMethod())){
-                                                    InsideClass::insideMethod(false);
-                                                    yymenssage("Metodo");
-                                                }
-                                            }
-                                            list<string> varSinUsar = VarSinInic::listVarTop();
-                                            for (const string& var : varSinUsar){
-                                                yywarning("Variable/Objeto " + var + " Sin asignacion de un valor dentro de la funcion donde se declaro");
-                                            }
-                                            VarSinInic::delTop();
-                                        ;}
+case 33:
+#line 144 ".\Gramaticas\gramaticaLenguaje.y"
+{stepsFunctionOrMethod();}
 break;
-case 35:
-#line 167 ".\Gramaticas\gramaticaLenguaje.y"
+case 34:
+#line 147 ".\Gramaticas\gramaticaLenguaje.y"
 { if (InsideClass::insideClass()){
                                                     string key; 
                                                     if ((InsideClass::insideMethod())){ /*Se trata de una funcion dentro de un metodo*/
@@ -1236,8 +1227,8 @@ case 35:
                                               }
                                             }
 break;
-case 36:
-#line 211 ".\Gramaticas\gramaticaLenguaje.y"
+case 35:
+#line 191 ".\Gramaticas\gramaticaLenguaje.y"
 {if (InsideClass::insideClass()){
                                         string key; 
                                         if ((InsideClass::insideMethod())){ /*Se trata de una funcion dentro de un metodo*/
@@ -1279,16 +1270,20 @@ case 36:
                                     }
                                 }
 break;
-case 38:
-#line 254 ".\Gramaticas\gramaticaLenguaje.y"
+case 37:
+#line 234 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Funcion vacia");}
 break;
+case 38:
+#line 235 ".\Gramaticas\gramaticaLenguaje.y"
+{yyerror("Funcion sin RETURN obligatorio al final");}
+break;
 case 39:
-#line 257 ".\Gramaticas\gramaticaLenguaje.y"
+#line 238 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0]; TablaDeSimbolos::setUso(yyvsp[0], "PF"); setearTipos(yyvsp[-1],yyvsp[0]);}
 break;
 case 40:
-#line 260 ".\Gramaticas\gramaticaLenguaje.y"
+#line 241 ".\Gramaticas\gramaticaLenguaje.y"
 {
                             string name;
                             string tipo;
@@ -1321,7 +1316,7 @@ case 40:
                             }
 break;
 case 41:
-#line 290 ".\Gramaticas\gramaticaLenguaje.y"
+#line 271 ".\Gramaticas\gramaticaLenguaje.y"
 {
                                             string name;
                                             string tipo;
@@ -1379,63 +1374,63 @@ case 41:
                                          }
 break;
 case 43:
-#line 350 ".\Gramaticas\gramaticaLenguaje.y"
+#line 331 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("IF");jumpEndIf();}
 break;
 case 44:
-#line 351 ".\Gramaticas\gramaticaLenguaje.y"
+#line 332 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("IF");jumpEndIf();}
 break;
 case 45:
-#line 352 ".\Gramaticas\gramaticaLenguaje.y"
+#line 333 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("If vacio");yymenssage("IF");jumpEndIf();}
 break;
 case 46:
-#line 353 ".\Gramaticas\gramaticaLenguaje.y"
+#line 334 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Else vacio");yymenssage("IF");jumpEndIf();}
 break;
 case 47:
-#line 354 ".\Gramaticas\gramaticaLenguaje.y"
+#line 335 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("If vacio");yymenssage("IF");jumpEndIf();}
 break;
 case 48:
-#line 357 ".\Gramaticas\gramaticaLenguaje.y"
+#line 338 ".\Gramaticas\gramaticaLenguaje.y"
 {jumpEndThen();}
 break;
 case 49:
-#line 360 ".\Gramaticas\gramaticaLenguaje.y"
+#line 341 ".\Gramaticas\gramaticaLenguaje.y"
 {yymenssage("While");jumpEndWhile();}
 break;
 case 50:
-#line 361 ".\Gramaticas\gramaticaLenguaje.y"
+#line 342 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("While vacio");yymenssage("While");jumpEndWhile();}
 break;
 case 51:
-#line 364 ".\Gramaticas\gramaticaLenguaje.y"
+#line 345 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::apilar();EstructuraTercetos::addLabel();}
 break;
 case 56:
-#line 371 ".\Gramaticas\gramaticaLenguaje.y"
+#line 352 ".\Gramaticas\gramaticaLenguaje.y"
 {yywarning("Bloque vacio");}
 break;
 case 57:
-#line 374 ".\Gramaticas\gramaticaLenguaje.y"
+#line 355 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",yyvsp[-1],"");}
 break;
 case 58:
-#line 375 ".\Gramaticas\gramaticaLenguaje.y"
+#line 356 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta segundo parentesis en la condicion");EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",yyvsp[0],"");}
 break;
 case 59:
-#line 376 ".\Gramaticas\gramaticaLenguaje.y"
+#line 357 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Falta primer parentesis en la condicion");EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",yyvsp[-1],"");}
 break;
 case 60:
-#line 377 ".\Gramaticas\gramaticaLenguaje.y"
+#line 358 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Faltan  parentesis en la condicion");EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",yyvsp[0],"");}
 break;
 case 61:
-#line 380 ".\Gramaticas\gramaticaLenguaje.y"
+#line 361 ".\Gramaticas\gramaticaLenguaje.y"
 { yymenssage("Clase");
                                         TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
                                         InsideClass::unstackMethods();
@@ -1443,7 +1438,7 @@ case 61:
                                       }
 break;
 case 62:
-#line 385 ".\Gramaticas\gramaticaLenguaje.y"
+#line 366 ".\Gramaticas\gramaticaLenguaje.y"
 {
                                                  yymenssage("Clase");
                                                  TablaDeSimbolos::setHerencia(InsideClass::getClass(),yyvsp[-1]);
@@ -1459,15 +1454,15 @@ case 62:
                                                  }
 break;
 case 63:
-#line 398 ".\Gramaticas\gramaticaLenguaje.y"
+#line 379 ".\Gramaticas\gramaticaLenguaje.y"
 {claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
 break;
 case 64:
-#line 399 ".\Gramaticas\gramaticaLenguaje.y"
+#line 380 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("La herencia debe ir al final de la declaracion de la clase");}
 break;
 case 65:
-#line 402 ".\Gramaticas\gramaticaLenguaje.y"
+#line 383 ".\Gramaticas\gramaticaLenguaje.y"
 { if ((!classInFunction(yyvsp[0])) && !classInClass(yyvsp[0])){
                             if (noReDeclarada(yyvsp[0], "Clase")){
                                 string name =  TablaDeSimbolos::changeKey(yyvsp[0]);
@@ -1482,7 +1477,7 @@ case 65:
                       }
 break;
 case 66:
-#line 416 ".\Gramaticas\gramaticaLenguaje.y"
+#line 397 ".\Gramaticas\gramaticaLenguaje.y"
 { string name = "<NoExiste>";
                 ChequearDeclaracion(yyvsp[-1],name,"Clase");
                 TablaDeSimbolos::del(yyvsp[-1]);
@@ -1494,122 +1489,122 @@ case 66:
                 }
 break;
 case 67:
-#line 427 ".\Gramaticas\gramaticaLenguaje.y"
+#line 408 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = stepsOperation(yyvsp[-2], yyvsp[0], yyvsp[-1]);}
 break;
 case 68:
-#line 430 ".\Gramaticas\gramaticaLenguaje.y"
+#line 411 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "+"); }
 break;
 case 69:
-#line 431 ".\Gramaticas\gramaticaLenguaje.y"
+#line 412 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "-"); }
 break;
 case 70:
-#line 432 ".\Gramaticas\gramaticaLenguaje.y"
+#line 413 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 71:
-#line 433 ".\Gramaticas\gramaticaLenguaje.y"
-{yyerror("Expresion no puede ir entre parentesis");}
+#line 414 ".\Gramaticas\gramaticaLenguaje.y"
+{yyerror("Expresion no puede ir entre parentesis");yyval=yyvsp[-1];}
 break;
 case 72:
-#line 436 ".\Gramaticas\gramaticaLenguaje.y"
+#line 417 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "*"); }
 break;
 case 73:
-#line 437 ".\Gramaticas\gramaticaLenguaje.y"
+#line 418 ".\Gramaticas\gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "/"); }
 break;
 case 74:
-#line 438 ".\Gramaticas\gramaticaLenguaje.y"
+#line 419 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 75:
-#line 441 ".\Gramaticas\gramaticaLenguaje.y"
+#line 422 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = stepsFactor(yyvsp[0]);}
 break;
 case 76:
-#line 442 ".\Gramaticas\gramaticaLenguaje.y"
+#line 423 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 77:
-#line 443 ".\Gramaticas\gramaticaLenguaje.y"
+#line 424 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 78:
-#line 446 ".\Gramaticas\gramaticaLenguaje.y"
+#line 427 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = stepsFactor(yyvsp[-1], true);}
 break;
 case 79:
-#line 449 ".\Gramaticas\gramaticaLenguaje.y"
+#line 430 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "==";}
 break;
 case 80:
-#line 450 ".\Gramaticas\gramaticaLenguaje.y"
+#line 431 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "!!";}
 break;
 case 81:
-#line 451 ".\Gramaticas\gramaticaLenguaje.y"
+#line 432 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">=";}
 break;
 case 82:
-#line 452 ".\Gramaticas\gramaticaLenguaje.y"
+#line 433 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<=";}
 break;
 case 83:
-#line 453 ".\Gramaticas\gramaticaLenguaje.y"
+#line 434 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = "<";}
 break;
 case 84:
-#line 454 ".\Gramaticas\gramaticaLenguaje.y"
+#line 435 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = ">";}
 break;
 case 85:
-#line 457 ".\Gramaticas\gramaticaLenguaje.y"
+#line 438 ".\Gramaticas\gramaticaLenguaje.y"
 {chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 86:
-#line 458 ".\Gramaticas\gramaticaLenguaje.y"
+#line 439 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = "-"+yyvsp[0];}
 break;
 case 87:
-#line 459 ".\Gramaticas\gramaticaLenguaje.y"
+#line 440 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 88:
-#line 460 ".\Gramaticas\gramaticaLenguaje.y"
+#line 441 ".\Gramaticas\gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = "-"+yyvsp[0];}
 break;
 case 89:
-#line 461 ".\Gramaticas\gramaticaLenguaje.y"
+#line 442 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 90:
-#line 462 ".\Gramaticas\gramaticaLenguaje.y"
+#line 443 ".\Gramaticas\gramaticaLenguaje.y"
 {yyerror("Una constante ULONG no puede ser negativa");}
 break;
 case 91:
-#line 465 ".\Gramaticas\gramaticaLenguaje.y"
+#line 446 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="SHORT";}
 break;
 case 92:
-#line 466 ".\Gramaticas\gramaticaLenguaje.y"
+#line 447 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="ULONG";}
 break;
 case 93:
-#line 467 ".\Gramaticas\gramaticaLenguaje.y"
+#line 448 ".\Gramaticas\gramaticaLenguaje.y"
 {yyval="FLOAT";}
 break;
 case 94:
-#line 470 ".\Gramaticas\gramaticaLenguaje.y"
+#line 451 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Print",yyvsp[0],"");}
 break;
 case 96:
-#line 476 ".\Gramaticas\gramaticaLenguaje.y"
+#line 457 ".\Gramaticas\gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1613 "y.tab.c"
+#line 1608 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

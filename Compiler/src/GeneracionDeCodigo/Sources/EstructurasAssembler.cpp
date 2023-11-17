@@ -5,6 +5,8 @@
 #include <string>
 #include <functional>
 
+
+
 using namespace std;
 
 int EstructurasAssembler::nroVar = 0;
@@ -178,12 +180,11 @@ string EstructurasAssembler::getSumaFloat(string operando1, string operando2, st
 	string salida = FLD+operando1;
 	salida = salida + "\n" + FADD+operando2;
 	varAux = generarVariable();
-	salida = salida + "\n" + FSTSW+AX;
-	salida = salida + "\n" + SAHF;
-	salida = salida + "\n" + FNSTSW+AX;
-	salida = salida + "\n" + TEST+AH+", 010h";
-	salida = salida + "\n" + JNZ + "overflow_add_float";
-	salida = salida + "\n" + FSTP+varAux;
+	salida = salida + "\n" + FCOM+" MAXPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"overflow_add_float";
+	salida = salida + "\n" + FCOM+" MAXNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JB+"overflow_add_float";
+	salida = salida + "\n" + FCOM+" MINPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"realizarAsignacion"+"\n"+JMP+"overflow_add_float";
+	salida = salida + "\n" + FCOM+" MINNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"overflow_add_float";
+	salida = salida + "\n" + "realizarAsignacion:" + "\n" + FSTP+varAux;
 	error[1]=true;
 	return salida;
 }
