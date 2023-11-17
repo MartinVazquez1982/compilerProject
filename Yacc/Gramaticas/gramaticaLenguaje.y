@@ -411,7 +411,6 @@ comparison: expression operatorsLogics expression {$$ = stepsOperation($1, $3, $
 expression: expression'+'termino { $$ = stepsOperation($1, $3, "+"); }
           | expression'-'termino { $$ = stepsOperation($1, $3, "-"); }
           | termino {$$ = $1;}
-          | '(' expression ')' {yyerror("Expresion no puede ir entre parentesis");$$=$2;}
           ;
 
 termino: termino'*'factor { $$ = stepsOperation($1, $3, "*"); }
@@ -422,6 +421,7 @@ termino: termino'*'factor { $$ = stepsOperation($1, $3, "*"); }
 factor: nesting          {$$ = stepsFactor($1);}
       | constant         {$$ = $1;}
       | lessless         {$$ = $1;}
+      | '(' expression ')' {yyerror("Expresion no puede ir entre parentesis");$$=$2;}
       ;
 
 lessless: nesting LESSLESS {$$ = stepsFactor($1, true);}

@@ -2,7 +2,7 @@
 	SHORT x,
 	SHORT y,
 
-	x = ( 12_s + x ) + y,
+	x = 12_s + (x  +  y),
 	
 	y = (14_s - 3_s),
 

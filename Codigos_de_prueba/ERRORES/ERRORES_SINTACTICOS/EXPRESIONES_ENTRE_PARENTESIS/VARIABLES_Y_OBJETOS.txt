@@ -1,0 +1,17 @@
+{
+	CLASS a {
+		SHORT x,
+	},
+
+	CLASS b {
+		SHORT y,
+		a,
+	},
+
+	a obj1,
+	b obj2,
+
+	SHORT var1,
+
+	var1 = obj1.x + (obj2.a.x * obj2.y),
+}

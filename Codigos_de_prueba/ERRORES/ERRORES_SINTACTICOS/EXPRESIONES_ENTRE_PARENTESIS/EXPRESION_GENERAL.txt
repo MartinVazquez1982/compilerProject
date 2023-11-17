@@ -1,0 +1,9 @@
+{
+
+	SHORT x,
+	SHORT y,
+	SHORT z,
+
+	x = (x + y) / (1_s + (y * z)),
+
+}

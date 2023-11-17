@@ -2,11 +2,11 @@
 	SHORT x,
 	SHORT y,
 
-	x = ( 12_s * x ) / y,
+	x = ( 12_s + x-- ) / y,
 	
-	y = (14_s / 3_s),
+	y = (14_s / y--),
 
-	x = (y / y) * 1_s,
+	x = (y--),
 
 	x = x / y * x,
 }
