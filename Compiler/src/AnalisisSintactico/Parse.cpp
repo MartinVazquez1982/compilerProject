@@ -1426,6 +1426,8 @@ case 41:
                                                                 }
                                                             }
                                                             EstructuraTercetos::addTerceto("Call",name,"");
+                                                        }else{
+                                                              yyerror("La función "+ name +" no acepta parámetros");
                                                         }
                                                     }else{
                                                         yyerror("Se esta haciendo un llamado recursivo del metodo: "+yyvsp[-3]);
@@ -1451,6 +1453,8 @@ case 41:
                                                                 }
                                                             }
                                                             EstructuraTercetos::addTerceto("Call",name,"");
+                                                        }else{
+                                                            yyerror("La función "+ name +" no acepta parámetros");
                                                         }
                                                     }else{
                                                         yyerror("Se esta haciendo un llamado recursivo a la funcion: "+yyvsp[-3]);

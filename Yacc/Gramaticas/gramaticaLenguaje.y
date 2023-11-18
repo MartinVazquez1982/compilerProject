@@ -305,6 +305,8 @@ functionCall: nesting'('')' {
                                                                 }
                                                             }
                                                             EstructuraTercetos::addTerceto("Call",name,"");
+                                                        }else{
+                                                            yyerror("Esta funcion no acepta parametros");
                                                         }
                                                     }else{
                                                         yyerror("Se esta haciendo un llamado recursivo del metodo: "+$1);
@@ -330,6 +332,8 @@ functionCall: nesting'('')' {
                                                                 }
                                                             }
                                                             EstructuraTercetos::addTerceto("Call",name,"");
+                                                        }else{
+                                                            yyerror("Esta funcion no acepta parametros");
                                                         }
                                                     }else{
                                                         yyerror("Se esta haciendo un llamado recursivo a la funcion: "+$1);
