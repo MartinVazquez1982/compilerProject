@@ -104,7 +104,7 @@ assignment: nesting '=' expression {yymenssage("Asignacion");
                                         bool conversion;
                                         string op = $3;
                                         bool lessLessOp1 = revisarLessLess(op);
-                                        if (esObjeto($1) ){
+                                        if (esObjeto($1)){
                                             conversion = converAsig(nomAtributo,op,tipo);
                                             VarSinInic::delVar(sigID($1)+Ambito::get());
                                         } else {
@@ -377,7 +377,6 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
 
 class: classHeader '{'sentenceList'}' { yymenssage("Clase");
                                         TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
-                                        TablaDeSimbolos::imprimir();
                                         InsideClass::unstackMethods();
                                         InsideClass::outClass();
                                       }
@@ -400,9 +399,12 @@ class: classHeader '{'sentenceList'}' { yymenssage("Clase");
 
 classHeader: CLASS ID { if ((!classInFunction($2)) && !classInClass($2)){
                             if (noReDeclarada($2, "Clase")){
-                                string name =  TablaDeSimbolos::changeKey($2);
-                                TablaDeSimbolos::setUso(name,"Clase");
-                                TablaDeSimbolos::inicNivelHer(name);
+                                string name = $2+":main";
+                                if (TablaDeSimbolos::getForwDecl(name) != 0){
+                                    name =  TablaDeSimbolos::changeKey($2);
+                                    TablaDeSimbolos::setUso(name,"Clase");
+                                    TablaDeSimbolos::inicNivelHer(name);
+                                }
                                 InsideClass::inClass(name);
                             } else {
                                 InsideClass::inClass($2+Ambito::get());
@@ -570,17 +572,21 @@ bool converAsig(string izq, string der, string & tipo){
     string tercetoDer = der; //Se hace una copia para el caso de tener que sacarle los corchetes
     string tipoDer = tipoOperando(atrDer);
     if (tipoIzq == " " || tipoDer == " "){
-    		tipo = " ";
-    		return false;
+            tipo = " ";
+            return false;
     }
-    string valido = Conversion::asignacion(tipoIzq,tipoDer);
-    tipo = tipoIzq;
-    if (valido == "ERROR"){
-        yyerror("No es posible asignarle un tipo "+tipoDer+" a un tipo "+tipoIzq);
-    }else if (tipoIzq != tipoDer){
-            string conversion = string(1,tipoDer[0])+"to"+string(1,tipoIzq[0]); 
-            EstructuraTercetos::addTerceto(conversion,tercetoDer,"",tipoIzq);
-            return true;
+    if (tipoIzq != "REVISAR"){
+        string valido = Conversion::asignacion(tipoIzq,tipoDer);
+        tipo = tipoIzq;
+        if (valido == "ERROR"){
+            yyerror("No es posible asignarle un tipo "+tipoDer+" a un tipo "+tipoIzq);
+        }else if (tipoIzq != tipoDer){
+                string conversion = string(1,tipoDer[0])+"to"+string(1,tipoIzq[0]); 
+                EstructuraTercetos::addTerceto(conversion,tercetoDer,"",tipoIzq);
+                return true;
+        }
+    } else {
+        TablaDeSimbolos::setTipo(atrIzq,tipoDer);
     }
     return false;
 }
@@ -630,7 +636,11 @@ void setearTipos(string tipo, string listVariable){
     string var;
     std::istringstream variableStream(listVariable);  // Asegúrate de inicializar el istringstream
     while (getline(variableStream, var, '&')) {
-        TablaDeSimbolos::setTipo(var, tipo);
+        if (TablaDeSimbolos::getTipo(var) == " "){
+            TablaDeSimbolos::setTipo(var, tipo);
+        } else if(TablaDeSimbolos::getTipo(var) != tipo){
+            yyerror("Tipo detectado en inferencia no coincide con su declaracion Atributo" + var);
+        }
     }
 }
 
@@ -691,23 +701,28 @@ bool esObjeto(string nesting){
     return contarCaracter(nesting,'.') > 0;
 }
 
-void ChequeoForwDecl(string atrMet, string clase, bool esAtributo){
+void ChequeoForwDecl(string atrMet, string clase, bool esAtributo, string & nomEncontrada, bool & encontrada, string & nombAtributo){
     string atr = sigID(atrMet);
     if (atrMet.empty()){ //Si no esta vacio entonces: error
         string uso = TablaDeSimbolos::usoAsignado(atr+"-"+clase);
 		if (esAtributo){
-			if(!( uso == "Metodo")){
+			if(uso != "Metodo"){
 				TablaDeSimbolos::add(atr+"-"+clase, "", "REVISAR", "Atr"); //REVISAR TIPO DE ATRIBUTOS
 				TablaDeSimbolos::setClass(atr+"-"+clase,clase);
+                nomEncontrada = atr+"."+nomEncontrada;
+                nombAtributo = atr+"-"+clase;
+                encontrada = true;
 				TablaDeSimbolos::del(atr);
 				TablaDeSimbolos::inicForwDecl(atr+"-"+clase);
 			}else{
 				yyerror("La clase no puede tener atributos y metodos con el mismo nombre");
 			}
 		}else{
-			if(!( uso == "Atr")){
+			if(uso != "Atr"){
 				TablaDeSimbolos::add(atr+"-"+clase, "", clase, "Metodo");
 				TablaDeSimbolos::setClass(atr+"-"+clase,clase);
+                nomEncontrada = atr+"-"+clase;
+                encontrada = true;
 				TablaDeSimbolos::del(atr);
 				TablaDeSimbolos::inicForwDecl(atr+"-"+clase);
 			}else{
@@ -731,6 +746,7 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
         TablaDeSimbolos::del(check);
         if (TablaDeSimbolos::usoAsignado(check+":main") == "Clase"){
             if (TablaDeSimbolos::getForwDecl(check+":main") == 0) {
+                nomEncontrada = check + "." + nomEncontrada;
                 antCheck = check;
                 hayForward = true;
             } else {
@@ -790,7 +806,7 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
         
     }
     if (hayForward) {
-        ChequeoForwDecl(obj, antCheck, esAtributo);
+        ChequeoForwDecl(obj, antCheck, esAtributo, nomEncontrada, encontrada, nomAtributo);
     }
     return encontrada;
 }

@@ -265,7 +265,11 @@ int TablaDeSimbolos::nivelHerencia(string lexema){
 }
 
 int TablaDeSimbolos::getForwDecl(string lexema){
-	return TablaDeSimbolos::table[lexema].forwDecl;
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
+				return -1;
+	}
+	return it->second.forwDecl;
 }
 
 
