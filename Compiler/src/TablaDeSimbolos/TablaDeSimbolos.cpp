@@ -17,8 +17,13 @@ void TablaDeSimbolos::add(string lexema){
 	auto existe = TablaDeSimbolos::table.find(lexema);
 	if (existe == TablaDeSimbolos::table.end()){
 		TablaDeSimbolos::Datos info;
+		info.valor=" ";
+		info.tipo = " ";
 		info.consultado = false;
-		info.tipo = "";
+		info.uso=" ";
+		info.parametro_formal=" ";
+		info.clase=" ";
+		info.hereda=" ";
 		info.nivelHerencia = -1;
 		info.forwDecl = -1;
 		TablaDeSimbolos::table[lexema]=info;
@@ -38,11 +43,14 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo, string uso){
 	auto existe = TablaDeSimbolos::table.find(lexema);
 	if (existe == TablaDeSimbolos::table.end()){
 		TablaDeSimbolos::Datos info;
-		info.tipo = tipo;
 		info.valor = valor;
+		info.tipo = tipo;
 		info.consultado = false;
-		info.nivelHerencia = -1;
 		info.uso = uso;
+		info.parametro_formal=" ";
+		info.clase=" ";
+		info.hereda=" ";
+		info.nivelHerencia = -1;
 		info.forwDecl = -1;
 		TablaDeSimbolos::table[lexema]=info;
 	}
@@ -205,20 +213,19 @@ string TablaDeSimbolos::usoAsignado(string lexema){
 }
 
 string TablaDeSimbolos::getParametroFormal(string lexema){
-	// Falta ver caso cuando no tiene parametro formal
-	return TablaDeSimbolos::table[lexema].parametro_formal;
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
+				return " ";
+	}
+	return it->second.parametro_formal;
 }
 
 string TablaDeSimbolos::getTipo(string lexema){
-	try {
-		string dato =  TablaDeSimbolos::table[lexema].tipo;
-		if (dato.empty()){
-			return " ";
-		}
-		return dato;
-	} catch(const out_of_range & err){
-		return " ";
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
+				return " ";
 	}
+	return it->second.tipo;
 }
 
 string TablaDeSimbolos::getUno(string lexema){
@@ -237,31 +244,27 @@ string TablaDeSimbolos::getUno(string lexema){
 }
 
 string TablaDeSimbolos::getClass(string lexema){
-	try {
-			string dato =  TablaDeSimbolos::table[lexema].clase;
-			if (dato.empty()){
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
 				return " ";
-			}
-			return dato;
-		} catch(const out_of_range & err){
-			return " ";
-		}
+	}
+	return it->second.clase;
 }
 
 string TablaDeSimbolos::getHerencia(string lexema){
-	try {
-			string dato =  TablaDeSimbolos::table[lexema].hereda;
-			if (dato.empty()){
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
 				return " ";
-			}
-			return dato;
-		} catch(const out_of_range & err){
-			return " ";
-		}
+	}
+	return it->second.hereda;
 }
 
 int TablaDeSimbolos::nivelHerencia(string lexema){
-	return TablaDeSimbolos::table[lexema].nivelHerencia;
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
+				return -1;
+	}
+	return it->second.nivelHerencia;
 }
 
 int TablaDeSimbolos::getForwDecl(string lexema){
@@ -279,11 +282,19 @@ bool TablaDeSimbolos::tieneParametros(string lexema){
 			return false;
 		}
 		string parametro = it->second.parametro_formal;
-		if (parametro.empty()){
+		if (parametro == " "){
 			return false;
 		} else {
 			return true;
 		}
+}
+
+bool TablaDeSimbolos::existeClave(string lexema){
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
+		return false;
+	}
+	return true;
 }
 
 void TablaDeSimbolos::inic(){

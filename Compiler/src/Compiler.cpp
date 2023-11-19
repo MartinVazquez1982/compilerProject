@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) {
         ContErrWar::mostrarMensajes();
         cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
         EstructuraTercetos::mostrarTercetos();
+        TablaDeSimbolos::imprimir();
         if (ContErrWar::getError() == 0){
             generarCodigo(path, nombreArchivoAssembler);
             string comandoObj= "\\masm32\\bin\\ml /c /Zd /coff " + path + "\\" + nombreArchivoAssembler + ".asm";
@@ -92,7 +93,6 @@ int main(int argc, char *argv[]) {
             }
 
         }
-        TablaDeSimbolos::imprimir();
     //} else {
     //    cout << "No se pudo abrir el archivo de salida." << endl;
     //}

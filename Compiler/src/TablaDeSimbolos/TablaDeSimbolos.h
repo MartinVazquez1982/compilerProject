@@ -105,6 +105,8 @@ class TablaDeSimbolos {
 
 		static bool tieneParametros(string lexema);
 
+		static bool existeClave(string lexema);
+
 		// Recorrer
 
 		static void inic();

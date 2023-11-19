@@ -201,6 +201,7 @@ void generarCodigo(string path, string nameFuente){
         archivoASMCODE << "main:" << endl;
         vector<EstructuraTercetos::terceto> tercetos = listaTercetos.find(":main")->second;
         crearAssembler(tercetos,":main",error, print,archivoASMCODE);
+        cout << endl << endl << endl << "&&&&&&&pase2&&&&&&&" << endl << endl << endl;
 		if (error[0]){
 			archivoASMCODE << FINEJEC << endl;
 			archivoASMCODE << "etiqueta_divcero:" << endl;
