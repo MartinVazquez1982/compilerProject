@@ -154,6 +154,9 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                                 TablaDeSimbolos::setUso(key, "Funcion");
                                                                 Ambito::add($2);
                                                                 InsideClass::insideFuncionMethod(true);
+                                                                TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                                                string keyFormal = TablaDeSimbolos::changeKey($4);
+                                                                TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                             }
                                                         }else{
                                                             yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
@@ -172,18 +175,24 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                                     TablaDeSimbolos::forwDeclComp(key);
                                                                     Ambito::add($2+"-"+InsideClass::getClassSinMain());
                                                                     InsideClass::insideMethod(true);
+                                                                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                                                    string keyFormal = TablaDeSimbolos::changeKey($4);
+                                                                    TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                                 }
                                                             }else{ //Si no esta redeclarada se marca en 1 la columna de forward para ese metodo
                                                                if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")){
+                                                                    InsideClass::addMethod($2);
+                                                                    VarSinInic::addTop();
                                                                     TablaDeSimbolos::del($2);
+                                                                    InsideClass::insideMethod(true);
+                                                                    Ambito::add($2+"-"+InsideClass::getClassSinMain());
                                                                     TablaDeSimbolos::forwDeclComp($2+"-"+InsideClass::getClass());
+                                                                    string keyFormal = TablaDeSimbolos::changeKey($4);
+                                                                    TablaDeSimbolos::setParametroFormal($2+"-"+InsideClass::getClass(),keyFormal);
                                                                 } 
                                                             }     
                                                         }
                                                     }
-                                                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                                    string keyFormal = TablaDeSimbolos::changeKey($4);
-                                                    TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                     EstructuraTercetos::setAmbito(Ambito::getTercetos()); 
                                             }else{
                                                 if (noReDeclarada($2, "Funcion") && chequearNomPF($2,$4)) {
@@ -207,6 +216,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                     TablaDeSimbolos::setUso(key, "Funcion");
                                                     Ambito::add($2);
                                                     InsideClass::insideFuncionMethod(true);
+                                                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                                 }
                                             }else{
                                                 yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
@@ -226,16 +236,21 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                         TablaDeSimbolos::forwDeclComp(key);
                                                         Ambito::add($2+"-"+InsideClass::getClassSinMain());
                                                         InsideClass::insideMethod(true);
+                                                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                                     }
                                                 }else{ //Si no esta redeclarada se marca en 1 la columna de forward para ese metodo
                                                     if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")){
                                                         TablaDeSimbolos::del($2);
                                                         TablaDeSimbolos::forwDeclComp($2+"-"+InsideClass::getClass());
+                                                        Ambito::add($2+"-"+InsideClass::getClassSinMain());
+                                                        InsideClass::insideMethod(true);
+                                                        InsideClass::addMethod($2);
+                                                        VarSinInic::addTop();
                                                     } 
                                                 }  
                                             }
                                         }
-                                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
+
                                         EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                 }else{ 
                                         if (noReDeclarada($2, "Funcion")) {
@@ -982,10 +997,13 @@ string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = "
                     key = TablaDeSimbolos::changeKeyClass(declarado,InsideClass::getClass());
                     TablaDeSimbolos::setUso(key, "Atr");
                     TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                    TablaDeSimbolos::forwDeclComp(key);
                 }
             }else{
                 if (noReDeclarada(declarado+"-"+InsideClass::getClassSinMain(), "Atr")){
                     TablaDeSimbolos::forwDeclComp(declarado+"-"+InsideClass::getClass());
+                    TablaDeSimbolos::del(declarado);
+                    key=declarado+"-"+InsideClass::getClass();
                 }
             }
         }

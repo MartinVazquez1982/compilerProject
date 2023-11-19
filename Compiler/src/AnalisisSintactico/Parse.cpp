@@ -2,7 +2,7 @@
 static char yysccsid[] = "@(#)yaccpar	1.8 (Berkeley) 01/20/90";
 #endif
 #define YYBYACC 1
-#line 2 ".\Gramaticas\gramaticaLenguaje.y"
+#line 2 "./Gramaticas/gramaticaLenguaje.y"
 
 #include <iostream>
 #include <sstream>
@@ -396,7 +396,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 489 ".\Gramaticas\gramaticaLenguaje.y"
+#line 504 "./Gramaticas/gramaticaLenguaje.y"
 
 // ============================== Mensajes ==============================
 
@@ -555,6 +555,7 @@ void setearTipos(string tipo, string listVariable){
     string var;
     std::istringstream variableStream(listVariable);  // Asegúrate de inicializar el istringstream
     while (getline(variableStream, var, '&')) {
+        //cout << "var " << var <<"tabla " << TablaDeSimbolos::getTipo(var) << "tipo "<< tipo << endl;
         if (TablaDeSimbolos::getTipo(var) == " "){
             TablaDeSimbolos::setTipo(var, tipo);
         } else if(TablaDeSimbolos::getTipo(var) != tipo){
@@ -893,10 +894,13 @@ string stepsDeclVarAndObj(string declarado, string uso ,string declaraciones = "
                     key = TablaDeSimbolos::changeKeyClass(declarado,InsideClass::getClass());
                     TablaDeSimbolos::setUso(key, "Atr");
                     TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                    TablaDeSimbolos::forwDeclComp(key);
                 }
             }else{
                 if (noReDeclarada(declarado+"-"+InsideClass::getClassSinMain(), "Atr")){
                     TablaDeSimbolos::forwDeclComp(declarado+"-"+InsideClass::getClass());
+                    TablaDeSimbolos::del(declarado);
+                    key=declarado+"-"+InsideClass::getClass();
                 }
             }
         }
@@ -1125,7 +1129,7 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 27 ".\Gramaticas\gramaticaLenguaje.y"
+#line 27 "./Gramaticas/gramaticaLenguaje.y"
 {ChequearForwardDeclarations();
                              list<string> varSinUsar = VarSinInic::listVarTop();
                              for (const string& var : varSinUsar){
@@ -1134,27 +1138,27 @@ case 1:
                             }
 break;
 case 2:
-#line 33 ".\Gramaticas\gramaticaLenguaje.y"
+#line 33 "./Gramaticas/gramaticaLenguaje.y"
 {yywarning("Programa vacio");}
 break;
 case 3:
-#line 34 ".\Gramaticas\gramaticaLenguaje.y"
+#line 34 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("Falta llaves delimitadores de programa");}
 break;
 case 8:
-#line 43 ".\Gramaticas\gramaticaLenguaje.y"
+#line 43 "./Gramaticas/gramaticaLenguaje.y"
 {yywarning("Sentencia vacia");}
 break;
 case 14:
-#line 53 ".\Gramaticas\gramaticaLenguaje.y"
+#line 53 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("Sentencia declarativa en lugar de una ejecutable");}
 break;
 case 15:
-#line 54 ".\Gramaticas\gramaticaLenguaje.y"
+#line 54 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("Sentencia declarativa en lugar de una ejecutable");}
 break;
 case 21:
-#line 62 ".\Gramaticas\gramaticaLenguaje.y"
+#line 62 "./Gramaticas/gramaticaLenguaje.y"
 {
                         if (esObjeto(yyvsp[0])){
                             string atributo, objeto;
@@ -1166,11 +1170,11 @@ case 21:
                     }
 break;
 case 24:
-#line 76 ".\Gramaticas\gramaticaLenguaje.y"
+#line 76 "./Gramaticas/gramaticaLenguaje.y"
 {setearTipos(yyvsp[-1],yyvsp[0]);}
 break;
 case 25:
-#line 79 ".\Gramaticas\gramaticaLenguaje.y"
+#line 79 "./Gramaticas/gramaticaLenguaje.y"
 {  
                                     if (InsideClass::insideClass() && yyvsp[-1] == InsideClass::getClassSinMain()){
                                         yyerror("No es posible declarar un atributo el cual su tipo sea la misma clase a la que pertenece");
@@ -1183,23 +1187,23 @@ case 25:
                                    }
 break;
 case 26:
-#line 91 ".\Gramaticas\gramaticaLenguaje.y"
+#line 91 "./Gramaticas/gramaticaLenguaje.y"
 { yyval = stepsDeclVarAndObj(yyvsp[0], "Obj", yyvsp[-2]);}
 break;
 case 27:
-#line 92 ".\Gramaticas\gramaticaLenguaje.y"
+#line 92 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = stepsDeclVarAndObj(yyvsp[0], "Obj");}
 break;
 case 28:
-#line 95 ".\Gramaticas\gramaticaLenguaje.y"
+#line 95 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = stepsDeclVarAndObj(yyvsp[0], "Var", yyvsp[-2]);}
 break;
 case 29:
-#line 96 ".\Gramaticas\gramaticaLenguaje.y"
+#line 96 "./Gramaticas/gramaticaLenguaje.y"
 { yyval = stepsDeclVarAndObj(yyvsp[0], "Var");}
 break;
 case 30:
-#line 99 ".\Gramaticas\gramaticaLenguaje.y"
+#line 99 "./Gramaticas/gramaticaLenguaje.y"
 {yymenssage("Asignacion");
                                     string nomEncontrada, nomAtributo;
                                     if (esObjeto(yyvsp[-2]) && (ChequearDeclObjeto(yyvsp[-2],nomEncontrada, nomAtributo)) || !esObjeto(yyvsp[-2]) && (ChequearDeclaracion(yyvsp[-2],nomEncontrada, "Var",true))){
@@ -1241,19 +1245,19 @@ case 30:
                                     }
 break;
 case 31:
-#line 140 ".\Gramaticas\gramaticaLenguaje.y"
+#line 140 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = yyvsp[-2] + "." + yyvsp[0];}
 break;
 case 32:
-#line 141 ".\Gramaticas\gramaticaLenguaje.y"
+#line 141 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 33:
-#line 144 ".\Gramaticas\gramaticaLenguaje.y"
+#line 144 "./Gramaticas/gramaticaLenguaje.y"
 {stepsFunctionOrMethod();}
 break;
 case 34:
-#line 147 ".\Gramaticas\gramaticaLenguaje.y"
+#line 147 "./Gramaticas/gramaticaLenguaje.y"
 { if (InsideClass::insideClass()){
                                                     string key; 
                                                     if ((InsideClass::insideMethod())){ /*Se trata de una funcion dentro de un metodo*/
@@ -1264,6 +1268,9 @@ case 34:
                                                                 TablaDeSimbolos::setUso(key, "Funcion");
                                                                 Ambito::add(yyvsp[-3]);
                                                                 InsideClass::insideFuncionMethod(true);
+                                                                TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                                                string keyFormal = TablaDeSimbolos::changeKey(yyvsp[-1]);
+                                                                TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                             }
                                                         }else{
                                                             yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
@@ -1282,18 +1289,24 @@ case 34:
                                                                     TablaDeSimbolos::forwDeclComp(key);
                                                                     Ambito::add(yyvsp[-3]+"-"+InsideClass::getClassSinMain());
                                                                     InsideClass::insideMethod(true);
+                                                                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
+                                                                    string keyFormal = TablaDeSimbolos::changeKey(yyvsp[-1]);
+                                                                    TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                                 }
                                                             }else{ /*Si no esta redeclarada se marca en 1 la columna de forward para ese metodo*/
                                                                if (noReDeclarada(yyvsp[-3]+"-"+InsideClass::getClassSinMain(), "Metodo")){
+                                                                    InsideClass::addMethod(yyvsp[-3]);
+                                                                    VarSinInic::addTop();
                                                                     TablaDeSimbolos::del(yyvsp[-3]);
+                                                                    InsideClass::insideMethod(true);
+                                                                    Ambito::add(yyvsp[-3]+"-"+InsideClass::getClassSinMain());
                                                                     TablaDeSimbolos::forwDeclComp(yyvsp[-3]+"-"+InsideClass::getClass());
+                                                                    string keyFormal = TablaDeSimbolos::changeKey(yyvsp[-1]);
+                                                                    TablaDeSimbolos::setParametroFormal(yyvsp[-3]+"-"+InsideClass::getClass(),keyFormal);
                                                                 } 
                                                             }     
                                                         }
                                                     }
-                                                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
-                                                    string keyFormal = TablaDeSimbolos::changeKey(yyvsp[-1]);
-                                                    TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                     EstructuraTercetos::setAmbito(Ambito::getTercetos()); 
                                             }else{
                                                 if (noReDeclarada(yyvsp[-3], "Funcion") && chequearNomPF(yyvsp[-3],yyvsp[-1])) {
@@ -1309,7 +1322,7 @@ case 34:
                                             }
 break;
 case 35:
-#line 200 ".\Gramaticas\gramaticaLenguaje.y"
+#line 209 "./Gramaticas/gramaticaLenguaje.y"
 {if (InsideClass::insideClass()){
                                         string key; 
                                         if ((InsideClass::insideMethod())){ /*Se trata de una funcion dentro de un metodo*/
@@ -1320,6 +1333,7 @@ case 35:
                                                     TablaDeSimbolos::setUso(key, "Funcion");
                                                     Ambito::add(yyvsp[-2]);
                                                     InsideClass::insideFuncionMethod(true);
+                                                    TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                                 }
                                             }else{
                                                 yyerror("No es posible anidar otra funcion, excede los niveles permitidos");
@@ -1339,16 +1353,21 @@ case 35:
                                                         TablaDeSimbolos::forwDeclComp(key);
                                                         Ambito::add(yyvsp[-2]+"-"+InsideClass::getClassSinMain());
                                                         InsideClass::insideMethod(true);
+                                                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
                                                     }
                                                 }else{ /*Si no esta redeclarada se marca en 1 la columna de forward para ese metodo*/
                                                     if (noReDeclarada(yyvsp[-2]+"-"+InsideClass::getClassSinMain(), "Metodo")){
                                                         TablaDeSimbolos::del(yyvsp[-2]);
                                                         TablaDeSimbolos::forwDeclComp(yyvsp[-2]+"-"+InsideClass::getClass());
+                                                        Ambito::add(yyvsp[-2]+"-"+InsideClass::getClassSinMain());
+                                                        InsideClass::insideMethod(true);
+                                                        InsideClass::addMethod(yyvsp[-2]);
+                                                        VarSinInic::addTop();
                                                     } 
                                                 }  
                                             }
                                         }
-                                        TablaDeSimbolos::setClass(key,InsideClass::getClass());
+
                                         EstructuraTercetos::setAmbito(Ambito::getTercetos());
                                 }else{ 
                                         if (noReDeclarada(yyvsp[-2], "Funcion")) {
@@ -1362,19 +1381,19 @@ case 35:
                                 }
 break;
 case 37:
-#line 253 ".\Gramaticas\gramaticaLenguaje.y"
+#line 268 "./Gramaticas/gramaticaLenguaje.y"
 {yywarning("Funcion vacia");}
 break;
 case 38:
-#line 254 ".\Gramaticas\gramaticaLenguaje.y"
+#line 269 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("Funcion sin RETURN obligatorio al final");}
 break;
 case 39:
-#line 257 ".\Gramaticas\gramaticaLenguaje.y"
+#line 272 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = yyvsp[0]; TablaDeSimbolos::setUso(yyvsp[0], "PF"); setearTipos(yyvsp[-1],yyvsp[0]);}
 break;
 case 40:
-#line 260 ".\Gramaticas\gramaticaLenguaje.y"
+#line 275 "./Gramaticas/gramaticaLenguaje.y"
 {
                             string name;
                             string tipo;
@@ -1407,7 +1426,7 @@ case 40:
                             }
 break;
 case 41:
-#line 290 ".\Gramaticas\gramaticaLenguaje.y"
+#line 305 "./Gramaticas/gramaticaLenguaje.y"
 {
                                             string name;
                                             string tipo;
@@ -1469,63 +1488,63 @@ case 41:
                                          }
 break;
 case 43:
-#line 354 ".\Gramaticas\gramaticaLenguaje.y"
+#line 369 "./Gramaticas/gramaticaLenguaje.y"
 {yymenssage("IF");jumpEndIf();}
 break;
 case 44:
-#line 355 ".\Gramaticas\gramaticaLenguaje.y"
+#line 370 "./Gramaticas/gramaticaLenguaje.y"
 {yymenssage("IF");jumpEndIf();}
 break;
 case 45:
-#line 356 ".\Gramaticas\gramaticaLenguaje.y"
+#line 371 "./Gramaticas/gramaticaLenguaje.y"
 {yywarning("If vacio");yymenssage("IF");jumpEndIf();}
 break;
 case 46:
-#line 357 ".\Gramaticas\gramaticaLenguaje.y"
+#line 372 "./Gramaticas/gramaticaLenguaje.y"
 {yywarning("Else vacio");yymenssage("IF");jumpEndIf();}
 break;
 case 47:
-#line 358 ".\Gramaticas\gramaticaLenguaje.y"
+#line 373 "./Gramaticas/gramaticaLenguaje.y"
 {yywarning("If vacio");yymenssage("IF");jumpEndIf();}
 break;
 case 48:
-#line 361 ".\Gramaticas\gramaticaLenguaje.y"
+#line 376 "./Gramaticas/gramaticaLenguaje.y"
 {jumpEndThen();}
 break;
 case 49:
-#line 364 ".\Gramaticas\gramaticaLenguaje.y"
+#line 379 "./Gramaticas/gramaticaLenguaje.y"
 {yymenssage("While");jumpEndWhile();}
 break;
 case 50:
-#line 365 ".\Gramaticas\gramaticaLenguaje.y"
+#line 380 "./Gramaticas/gramaticaLenguaje.y"
 {yywarning("While vacio");yymenssage("While");jumpEndWhile();}
 break;
 case 51:
-#line 368 ".\Gramaticas\gramaticaLenguaje.y"
+#line 383 "./Gramaticas/gramaticaLenguaje.y"
 {EstructuraTercetos::apilar();EstructuraTercetos::addLabel();}
 break;
 case 56:
-#line 375 ".\Gramaticas\gramaticaLenguaje.y"
+#line 390 "./Gramaticas/gramaticaLenguaje.y"
 {yywarning("Bloque vacio");}
 break;
 case 57:
-#line 378 ".\Gramaticas\gramaticaLenguaje.y"
+#line 393 "./Gramaticas/gramaticaLenguaje.y"
 {EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",yyvsp[-1],"");}
 break;
 case 58:
-#line 379 ".\Gramaticas\gramaticaLenguaje.y"
+#line 394 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("Falta segundo parentesis en la condicion");EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",yyvsp[0],"");}
 break;
 case 59:
-#line 380 ".\Gramaticas\gramaticaLenguaje.y"
+#line 395 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("Falta primer parentesis en la condicion");EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",yyvsp[-1],"");}
 break;
 case 60:
-#line 381 ".\Gramaticas\gramaticaLenguaje.y"
+#line 396 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("Faltan  parentesis en la condicion");EstructuraTercetos::apilar();EstructuraTercetos::addTerceto("BF",yyvsp[0],"");}
 break;
 case 61:
-#line 384 ".\Gramaticas\gramaticaLenguaje.y"
+#line 399 "./Gramaticas/gramaticaLenguaje.y"
 { yymenssage("Clase");
                                         TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
                                         InsideClass::unstackMethods();
@@ -1533,7 +1552,7 @@ case 61:
                                       }
 break;
 case 62:
-#line 389 ".\Gramaticas\gramaticaLenguaje.y"
+#line 404 "./Gramaticas/gramaticaLenguaje.y"
 {
                                                  yymenssage("Clase");
                                                  TablaDeSimbolos::setHerencia(InsideClass::getClass(),yyvsp[-1]);
@@ -1549,15 +1568,15 @@ case 62:
                                                  }
 break;
 case 63:
-#line 402 ".\Gramaticas\gramaticaLenguaje.y"
+#line 417 "./Gramaticas/gramaticaLenguaje.y"
 {claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
 break;
 case 64:
-#line 403 ".\Gramaticas\gramaticaLenguaje.y"
+#line 418 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("La herencia debe ir al final de la declaracion de la clase");}
 break;
 case 65:
-#line 406 ".\Gramaticas\gramaticaLenguaje.y"
+#line 421 "./Gramaticas/gramaticaLenguaje.y"
 { if ((!classInFunction(yyvsp[0])) && !classInClass(yyvsp[0])){
                             if (noReDeclarada(yyvsp[0], "Clase")){
                                 string name = yyvsp[0]+":main";
@@ -1577,7 +1596,7 @@ case 65:
                       }
 break;
 case 66:
-#line 425 ".\Gramaticas\gramaticaLenguaje.y"
+#line 440 "./Gramaticas/gramaticaLenguaje.y"
 { string name = "<NoExiste>";
                 ChequearDeclaracion(yyvsp[-1],name,"Clase");
                 TablaDeSimbolos::del(yyvsp[-1]);
@@ -1589,122 +1608,122 @@ case 66:
                 }
 break;
 case 67:
-#line 436 ".\Gramaticas\gramaticaLenguaje.y"
+#line 451 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = stepsOperation(yyvsp[-2], yyvsp[0], yyvsp[-1]);}
 break;
 case 68:
-#line 439 ".\Gramaticas\gramaticaLenguaje.y"
+#line 454 "./Gramaticas/gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "+"); }
 break;
 case 69:
-#line 440 ".\Gramaticas\gramaticaLenguaje.y"
+#line 455 "./Gramaticas/gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "-"); }
 break;
 case 70:
-#line 441 ".\Gramaticas\gramaticaLenguaje.y"
+#line 456 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 71:
-#line 444 ".\Gramaticas\gramaticaLenguaje.y"
+#line 459 "./Gramaticas/gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "*"); }
 break;
 case 72:
-#line 445 ".\Gramaticas\gramaticaLenguaje.y"
+#line 460 "./Gramaticas/gramaticaLenguaje.y"
 { yyval = stepsOperation(yyvsp[-2], yyvsp[0], "/"); }
 break;
 case 73:
-#line 446 ".\Gramaticas\gramaticaLenguaje.y"
+#line 461 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 74:
-#line 449 ".\Gramaticas\gramaticaLenguaje.y"
+#line 464 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = stepsFactor(yyvsp[0]);}
 break;
 case 75:
-#line 450 ".\Gramaticas\gramaticaLenguaje.y"
+#line 465 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 76:
-#line 451 ".\Gramaticas\gramaticaLenguaje.y"
+#line 466 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 77:
-#line 452 ".\Gramaticas\gramaticaLenguaje.y"
+#line 467 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("Expresion no puede ir entre parentesis");yyval=yyvsp[-1];}
 break;
 case 78:
-#line 455 ".\Gramaticas\gramaticaLenguaje.y"
+#line 470 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = stepsFactor(yyvsp[-1], true);}
 break;
 case 79:
-#line 458 ".\Gramaticas\gramaticaLenguaje.y"
+#line 473 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = "==";}
 break;
 case 80:
-#line 459 ".\Gramaticas\gramaticaLenguaje.y"
+#line 474 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = "!!";}
 break;
 case 81:
-#line 460 ".\Gramaticas\gramaticaLenguaje.y"
+#line 475 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = ">=";}
 break;
 case 82:
-#line 461 ".\Gramaticas\gramaticaLenguaje.y"
+#line 476 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = "<=";}
 break;
 case 83:
-#line 462 ".\Gramaticas\gramaticaLenguaje.y"
+#line 477 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = "<";}
 break;
 case 84:
-#line 463 ".\Gramaticas\gramaticaLenguaje.y"
+#line 478 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = ">";}
 break;
 case 85:
-#line 466 ".\Gramaticas\gramaticaLenguaje.y"
+#line 481 "./Gramaticas/gramaticaLenguaje.y"
 {chequearRangoSHORT(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 86:
-#line 467 ".\Gramaticas\gramaticaLenguaje.y"
+#line 482 "./Gramaticas/gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = "-"+yyvsp[0];}
 break;
 case 87:
-#line 468 ".\Gramaticas\gramaticaLenguaje.y"
+#line 483 "./Gramaticas/gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearPositivos(yyvsp[0]); yyval = yyvsp[0];}
 break;
 case 88:
-#line 469 ".\Gramaticas\gramaticaLenguaje.y"
+#line 484 "./Gramaticas/gramaticaLenguaje.y"
 {TablaDeSimbolos::chequearNegativos(yyvsp[0]);yyval = "-"+yyvsp[0];}
 break;
 case 89:
-#line 470 ".\Gramaticas\gramaticaLenguaje.y"
+#line 485 "./Gramaticas/gramaticaLenguaje.y"
 {yyval = yyvsp[0];}
 break;
 case 90:
-#line 471 ".\Gramaticas\gramaticaLenguaje.y"
+#line 486 "./Gramaticas/gramaticaLenguaje.y"
 {yyerror("Una constante ULONG no puede ser negativa");}
 break;
 case 91:
-#line 474 ".\Gramaticas\gramaticaLenguaje.y"
+#line 489 "./Gramaticas/gramaticaLenguaje.y"
 {yyval="SHORT";}
 break;
 case 92:
-#line 475 ".\Gramaticas\gramaticaLenguaje.y"
+#line 490 "./Gramaticas/gramaticaLenguaje.y"
 {yyval="ULONG";}
 break;
 case 93:
-#line 476 ".\Gramaticas\gramaticaLenguaje.y"
+#line 491 "./Gramaticas/gramaticaLenguaje.y"
 {yyval="FLOAT";}
 break;
 case 94:
-#line 479 ".\Gramaticas\gramaticaLenguaje.y"
+#line 494 "./Gramaticas/gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Print",yyvsp[0],"");}
 break;
 case 96:
-#line 485 ".\Gramaticas\gramaticaLenguaje.y"
+#line 500 "./Gramaticas/gramaticaLenguaje.y"
 {EstructuraTercetos::addTerceto("Return","","");}
 break;
-#line 1708 "y.tab.c"
+#line 1723 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
