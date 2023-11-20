@@ -498,7 +498,11 @@ bool converAsig(string izq, string der, string & tipo){
         string valido = Conversion::asignacion(tipoIzq,tipoDer);
         tipo = tipoIzq;
         if (valido == "ERROR"){
-            yyerror("No es posible asignarle un tipo "+tipoDer+" a un tipo "+tipoIzq);
+            if (tipoDer == "REVISAR"){
+                yyerror("No es posible asignarle un atributos declarado con forward sin tipo a una variable");          
+            }else{
+                yyerror("No es posible asignarle un "+tipoIzq+" y un "+tipoDer);
+        }
         }else if (tipoIzq != tipoDer){
                 string conversion = string(1,tipoDer[0])+"to"+string(1,tipoIzq[0]); 
                 EstructuraTercetos::addTerceto(conversion,tercetoDer,"",tipoIzq);
@@ -529,8 +533,12 @@ bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
 		return false;
     }
     string valido = Conversion::operacion(tipoOp1,tipoOp2);
-    if (valido == "ERROR"){
-        yyerror("No es posible operar entre un "+tipoOp1+" y un "+tipoOp2);
+    if (valido == "ERROR" || tipoOp1 == "REVISAR" || tipoOp2 == "REVISAR"){
+        if (tipoOp1 == "REVISAR" || tipoOp2 == "REVISAR"){
+            yyerror("No es posible realizar operaciones con atributos declarados con forward sin tipo");          
+        }else{
+            yyerror("No es posible operar entre un "+tipoOp1+" y un "+tipoOp2);
+        }
     }else if (tipoOp1 != tipoOp2){
             if (cambiarTipoOp1(tipoOp1, tipoOp2)){
                 opAConvertir = "op1";

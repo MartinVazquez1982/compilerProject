@@ -182,7 +182,6 @@ void crearAssembler(vector<EstructuraTercetos::terceto> tercetos, string claveTS
 }
 
 void generarCodigo(string path, string nameFuente){
-
         ofstream archivoASM = generarArchivoASM(path,nameFuente+".asm");
         fstream archivoASMCODE = generarASM(path,"code.asm");
         const auto listaTercetos = EstructuraTercetos::getLista();
