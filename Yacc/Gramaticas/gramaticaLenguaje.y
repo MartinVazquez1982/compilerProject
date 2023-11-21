@@ -869,13 +869,20 @@ bool noReDeclarada(string decl, string usoOriginal){
 void ChequearSobrescritura(string clase, string herencia){
     string metodoActual, uso;
     if (!(herencia == " ")){
+        string herAbuelo = TablaDeSimbolos::getHerencia(herencia);
         while (InsideClass::moreMethods()){
-        metodoActual = InsideClass::getMethod();
-        uso = TablaDeSimbolos::usoAsignado(metodoActual+"-"+herencia);
-        if (uso == "Metodo"){
-            yyerror("No es posible en la clase "+clase+" sobreescribir el metodo "+metodoActual+" de la clase "+herencia+" de la cual hereda");
-        }
-        InsideClass::outMethod();
+            metodoActual = InsideClass::getMethod();
+            uso = TablaDeSimbolos::usoAsignado(metodoActual+"-"+herencia);
+            if (uso == "Metodo"){
+                yyerror("No es posible en la clase "+clase+" sobreescribir el metodo "+metodoActual+" de la clase "+herencia+" de la cual hereda");
+            }
+            if (herAbuelo != " "){
+                uso = TablaDeSimbolos::usoAsignado(metodoActual+"-"+herAbuelo);
+                if (uso == "Metodo"){
+                    yyerror("No es posible en la clase "+clase+" sobreescribir el metodo "+metodoActual+" de la clase "+herAbuelo+" de la cual hereda");
+                }
+            }
+            InsideClass::outMethod();
         }
     }
     InsideClass::unstackMethods(); //En el caso de no haber herencia se vacia la pila llena de metodos
