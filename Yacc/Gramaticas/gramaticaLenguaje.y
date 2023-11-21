@@ -404,14 +404,16 @@ class: classHeader '{'sentenceList'}' { yymenssage("Clase");
 										vector<string> lista;
 										if (foward==0){
 											listaHerencia(clase,lista);
-										}
-										if (!lista.empty()){
-											for (const string& clase : lista){
-												cout << "Clase: " << clase << endl;
-											}
-										}
+                                            if (!lista.empty()){
+                                                while (InsideClass::moreMethods()){
+                                                    cheqRedecMetForward(InsideClass::getClass(), lista, InsideClass::getMethod());
+                                                    InsideClass::outMethod();
+                                                }
+										    }
+										} else {
+                                            InsideClass::unstackMethods();
+                                        }
                                         TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
-                                        InsideClass::unstackMethods();
                                         InsideClass::outClass();
                                       }
      | classHeader '{'sentenceList heredity '}' {
@@ -426,14 +428,9 @@ class: classHeader '{'sentenceList'}' { yymenssage("Clase");
                                                  if (foward==0){
                                                     listaHerencia(clase,lista);
                                                  }
-                                                 if (!lista.empty()){
-                                                  	for (const string& clase : lista){
-                                                        cout << "Clase: " << clase << endl;
-                                                   	}
-                                                 }
                                                  TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
                                                  string herencia = TablaDeSimbolos::getHerencia(clase);
-                                                 ChequearSobrescritura(clase,herencia);
+                                                 ChequearSobrescritura(clase,herencia,foward==0,lista);
                                                  InsideClass::outClass();
                                                  
                                                  }
@@ -741,6 +738,15 @@ void listaHerencia(string clase, vector<string> & lista){
     }
 }
 
+void cheqRedecMetForward(string clasePadre,vector<string> clases, string metodo){
+    for (string clase:clases){
+        string uso = TablaDeSimbolos::usoAsignado(metodo+"-"+clase);
+        if (uso == "Metodo"){
+            yyerror("No es posible en la clase "+clase+" sobreescribir el metodo "+metodo+" de la clase "+clasePadre+" de la cual hereda");
+        }
+    }
+}
+
 bool ChequearDeclaracion(string var, string & nomEncontrada, string uso, bool chequeoFormal = false){
     string ambito=Ambito::get();
     bool final = false;
@@ -913,7 +919,7 @@ bool noReDeclarada(string decl, string usoOriginal){
 
 // ============================== Sobrescritura de metodos ==============================
 
-void ChequearSobrescritura(string clase, string herencia){
+void ChequearSobrescritura(string clase, string herencia, bool forward, vector<string> clasesForward){
     string metodoActual, uso;
     if (!(herencia == " ")){
         string herAbuelo = TablaDeSimbolos::getHerencia(herencia);
@@ -928,6 +934,9 @@ void ChequearSobrescritura(string clase, string herencia){
                 if (uso == "Metodo"){
                     yyerror("No es posible en la clase "+clase+" sobreescribir el metodo "+metodoActual+" de la clase "+herAbuelo+" de la cual hereda");
                 }
+            }
+            if (forward){
+                cheqRedecMetForward(clase, clasesForward, metodoActual);
             }
             InsideClass::outMethod();
         }
