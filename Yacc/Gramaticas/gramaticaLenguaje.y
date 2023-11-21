@@ -614,6 +614,7 @@ bool converAsig(string izq, string der, string & tipo){
         }
     } else {
         TablaDeSimbolos::setTipo(atrIzq,tipoDer);
+        tipo = tipoDer;
     }
     return false;
 }
@@ -643,6 +644,7 @@ bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
         }else{
             yyerror("No es posible operar entre un "+tipoOp1+" y un "+tipoOp2);
         }
+        tipo = " ";
     }else if (tipoOp1 != tipoOp2){
             if (cambiarTipoOp1(tipoOp1, tipoOp2)){
                 opAConvertir = "op1";
@@ -656,8 +658,9 @@ bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
                 EstructuraTercetos::addTerceto(conversion,op2,"",tipoOp1);
             }
             return true;
-    } 
-    tipo = tipoOp1;
+    } else {
+        tipo = tipoOp1;
+    }
     return false;
 }
 
@@ -667,7 +670,7 @@ void setearTipos(string tipo, string listVariable){
     string var;
     std::istringstream variableStream(listVariable);  // Asegúrate de inicializar el istringstream
     while (getline(variableStream, var, '&')) {
-        if (TablaDeSimbolos::getTipo(var) == " "){
+        if (TablaDeSimbolos::getTipo(var) == " " || TablaDeSimbolos::getTipo(var) == "REVISAR"){
             TablaDeSimbolos::setTipo(var, tipo);
         } else if(TablaDeSimbolos::getTipo(var) != tipo){
             yyerror("Tipo detectado en inferencia no coincide con su declaracion Atributo" + var);

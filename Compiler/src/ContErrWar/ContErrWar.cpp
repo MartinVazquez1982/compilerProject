@@ -51,4 +51,5 @@ void ContErrWar::mostrarMensajes(){
 		}
 		ContErrWar::mensajes.pop();
 	}
+	cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
 }

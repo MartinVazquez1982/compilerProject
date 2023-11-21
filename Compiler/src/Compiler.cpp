@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
     string nombreSinPath = nombreArchivoEntrada.substr(found + 1);
     found = nombreSinPath.find_last_of(".");
     string nombreArchivoAssembler = nombreSinPath.substr(0, found);
-    string nombreArchivoSalida = nombreArchivoAssembler + " - con lineas.txt";
+    string nombreArchivoSalida = nombreArchivoAssembler + "(Lineas Numeradas).txt";
     
     
 
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
             numero_linea++;
         }*/
 
-        cout << "Se ha generado el archivo con las líneas numeradas como: " << path + "/" + nombreArchivoSalida << endl;
+        cout << endl << endl << "Se ha generado el archivo con las líneas numeradas como: " << path + "/" + nombreArchivoSalida << endl;
         codigoFuente.close();
         codigoFuente.clear();
         codigoFuente.open(nombreArchivo);
@@ -69,7 +69,6 @@ int main(int argc, char *argv[]) {
         codigoFuente.close();
         //archivo_salida.close();
         ContErrWar::mostrarMensajes();
-        cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
         EstructuraTercetos::mostrarTercetos();
         TablaDeSimbolos::imprimir();
         if (ContErrWar::getError() == 0){
@@ -86,10 +85,10 @@ int main(int argc, char *argv[]) {
             	if (resultado == 0){
             		cout << "EXE creado exitosamente" << endl << endl << endl;
             	} else {
-            		cout << "No Ejecutado correctamente" << endl;
+            		cout << "Error al intentar realizar el assembler del codigo fuente" << endl;
             	}
             } else {
-            	cout << "No Ejecutado correctamente" << endl;
+            	cout << "Error al intentar realizar el link y assembler del codigo fuente" << endl;
             }
 
         }

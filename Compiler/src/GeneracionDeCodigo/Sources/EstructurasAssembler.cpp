@@ -28,8 +28,8 @@ unordered_map<string,EstructurasAssembler::FunctionType> EstructurasAssembler::c
 		{"*FLOAT", EstructurasAssembler::getMultFloat},
 		{"/FLOAT", EstructurasAssembler::getDivFloat},
 		{"=FLOAT", EstructurasAssembler::getEqualFloat},
-		{"StoFFLOAT", EstructurasAssembler::getConver},
-		{"UtoFFLOAT", EstructurasAssembler::getConver},
+		{"StoFFLOAT", EstructurasAssembler::getConverShort},
+		{"UtoFFLOAT", EstructurasAssembler::getConverUlong},
 		{"==SHORT", EstructurasAssembler::getCompEqualShort},
 		{"!!SHORT", EstructurasAssembler::getComDifShort},
 		{"<SHORT", EstructurasAssembler::getCompLessShort},
@@ -181,9 +181,9 @@ string EstructurasAssembler::getSumaFloat(string operando1, string operando2, st
 	salida = salida + "\n" + FADD+operando2;
 	varAux = generarVariable();
 	salida = salida + "\n" + FCOM+" MAXPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"overflow_add_float";
-	salida = salida + "\n" + FCOM+" MAXNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JB+"overflow_add_float";
+	salida = salida + "\n" + FCOM+" MINNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JB+"overflow_add_float";
 	salida = salida + "\n" + FCOM+" MINPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"realizarAsignacion"+"\n"+JMP+"overflow_add_float";
-	salida = salida + "\n" + FCOM+" MINNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"overflow_add_float";
+	salida = salida + "\n" + FCOM+" MAXNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"overflow_add_float";
 	salida = salida + "\n" + "realizarAsignacion:" + "\n" + FSTP+varAux;
 	error[1]=true;
 	return salida;
@@ -223,7 +223,17 @@ string EstructurasAssembler::getEqualFloat(string operando1, string operando2, s
 	return salida;
 }
 
-string EstructurasAssembler::getConver(string operando1, string operando2, string & varAux, bool error[]){
+string EstructurasAssembler::getConverShort(string operando1, string operando2, string & varAux, bool error[]){
+	varAux = generarVariable();
+	string salida = MOV+AL+", "+operando1;
+	salida = salida + "\n" + CBW + "\n" + CWDE;
+	salida = salida + "\n" + MOV + varAux + ", " + EAX;
+	salida = salida + "\n" + FILD + varAux;
+	salida = salida + "\n" + FSTP+varAux;
+	return salida;
+}
+
+string EstructurasAssembler::getConverUlong(string operando1, string operando2, string & varAux, bool error[]){
 	string salida = FILD+operando1;
 	varAux = generarVariable();
 	salida = salida + "\n" + FSTP+varAux;
@@ -307,5 +317,10 @@ string EstructurasAssembler::getReturn(string operando1, string operando2, strin
 }
 
 string EstructurasAssembler::getPrint(string operando1, string operando2, string & varAux,bool error[]){
-	return INVOKE+"MessageBox, NULL,addr "+operando1+", addr SPRINTS, MB_OK";
+	string var = TablaDeSimbolos::getVarAux(operando1);
+	if (var == " "){
+		var = generarVariable();
+		TablaDeSimbolos::setVarAux(operando1, var);
+	}
+	return INVOKE+"MessageBox, NULL,addr "+var+", addr SPRINTS, MB_OK";
 }

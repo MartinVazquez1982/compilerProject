@@ -24,6 +24,7 @@ void TablaDeSimbolos::add(string lexema){
 		info.parametro_formal=" ";
 		info.clase=" ";
 		info.hereda=" ";
+		info.varAux=" ";
 		info.nivelHerencia = -1;
 		info.forwDecl = -1;
 		TablaDeSimbolos::table[lexema]=info;
@@ -52,6 +53,7 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo, string uso){
 		info.hereda=" ";
 		info.nivelHerencia = -1;
 		info.forwDecl = -1;
+		info.varAux=" ";
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -69,32 +71,32 @@ string TablaDeSimbolos::getValor(string lexema){
 void TablaDeSimbolos::imprimir() {
 	cout << setw(55) << "			Tabla de Simbolos" << endl << endl;
 	cout << left << setw(25) << "Lexema";
-	cout << left << setw(10) << "Uso";
-	cout << left << setw(10) << "Valor";
+	cout << left << setw(7) << "Uso";
+	cout << left << setw(17) << "Valor";
 	cout << left << setw(10) << "Tipo";
 	cout << left << setw(25) << "Parametro Formal";
-	cout << left << setw(19) << "Clase";
+	cout << left << setw(15) << "Clase";
 	cout << left << setw(19) << "Hereda";
 	cout << left << setw(10) << "Nivel Her";
 	cout << left << "ForwDecl" << endl;
 
 	cout << setfill('-') << setw(24) << "" << " ";
-	cout << setfill('-') << setw(9) << "" << " ";
-	cout << setfill('-') << setw(9) << "" << " ";
+	cout << setfill('-') << setw(6) << "" << " ";
+	cout << setfill('-') << setw(16) << "" << " ";
 	cout << setfill('-') << setw(9) << "" << " ";
 	cout << setfill('-') << setw(24) << "" << " ";
-	cout << setfill('-') << setw(18) << "" << " ";
+	cout << setfill('-') << setw(14) << "" << " ";
 	cout << setfill('-') << setw(18) << "" << " ";
 	cout << setfill('-') << setw(9) << "" << " ";
 	cout << setfill('-') << setw(9) << "" << endl;
 	cout << setfill(' ');
 	for (const auto& par : TablaDeSimbolos::table) {
 		cout << left << setw(25) << par.first;
-			cout << left << setw(10) << par.second.uso;
-			cout << left << setw(10) << par.second.valor;
+			cout << left << setw(7) << par.second.uso;
+			cout << left << setw(17) << par.second.valor;
 			cout << left << setw(10) << par.second.tipo;
 			cout << left << setw(25) << par.second.parametro_formal;
-			cout << left << setw(19) << par.second.clase;
+			cout << left << setw(15) << par.second.clase;
 			cout << left << setw(19) << par.second.hereda;
 			cout << left << setw(10) << par.second.nivelHerencia;
 			cout << left << par.second.forwDecl << endl;
@@ -311,4 +313,17 @@ void TablaDeSimbolos::avanzar(){
 
 bool TablaDeSimbolos::fin(){
 	return (it == table.end());
+}
+
+void TablaDeSimbolos::setVarAux(string lexema,string var){
+	TablaDeSimbolos::table[lexema].varAux = var;
+}
+
+
+string TablaDeSimbolos::getVarAux(string lexema){
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
+		return " ";	
+	}
+	return it->second.varAux;
 }

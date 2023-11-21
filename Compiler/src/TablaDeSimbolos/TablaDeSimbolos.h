@@ -35,6 +35,9 @@ class TablaDeSimbolos {
 			string hereda;
 			int nivelHerencia;
 			int forwDecl;
+
+			//VarAux
+			string varAux;
 		};
 
 		// Tabla de Simbolos
@@ -78,7 +81,10 @@ class TablaDeSimbolos {
 		static void setHerencia(string lexema, string clase);
 
 		static void forwDeclComp(string lexema);
-
+		
+		static void setVarAux(string lexema, string var);
+		
+		
 		// Inicializaciones
 
 		static void inicNivelHer(string lexema);
@@ -106,6 +112,8 @@ class TablaDeSimbolos {
 		static bool tieneParametros(string lexema);
 
 		static bool existeClave(string lexema);
+
+		static string getVarAux(string lexema);
 
 		// Recorrer
 

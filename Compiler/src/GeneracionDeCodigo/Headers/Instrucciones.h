@@ -11,6 +11,7 @@ const string ADD = "ADD ";
 const string SUB = "SUB ";
 const string IMUL = "IMUL ";
 const string CBW = "CBW ";
+const string CWDE = "CWDE ";
 const string IDIV = "IDIV ";
 const string MUL = "MUL ";
 const string DIV = "DIV ";

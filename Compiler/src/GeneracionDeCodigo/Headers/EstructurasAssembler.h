@@ -38,7 +38,8 @@ class EstructurasAssembler {
 		static string getDivFloat(string operando1, string operando2, string & varAux,bool error[]);
 		static string getEqualFloat(string operando1, string operando2, string & varAux,bool error[]);
 
-		static string getConver(string operando1, string operando2, string & varAux,bool error[]);
+		static string getConverShort(string operando1, string operando2, string & varAux,bool error[]);
+		static string getConverUlong(string operando1, string operando2, string & varAux,bool error[]);
 
 		static string getCompEqualShort(string operando1, string operando2, string & varAux,bool error[]);
 		static string getComDifShort(string operando1, string operando2, string & varAux,bool error[]);
