@@ -27,6 +27,7 @@ void TablaDeSimbolos::add(string lexema){
 		info.varAux=" ";
 		info.nivelHerencia = -1;
 		info.forwDecl = -1;
+		info.tiene_parametro = 0;
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -54,6 +55,7 @@ void TablaDeSimbolos::add(string lexema, string valor, string tipo, string uso){
 		info.nivelHerencia = -1;
 		info.forwDecl = -1;
 		info.varAux=" ";
+		info.tiene_parametro = 0;
 		TablaDeSimbolos::table[lexema]=info;
 	}
 }
@@ -190,6 +192,10 @@ void TablaDeSimbolos::forwDeclComp(string lexema){
 	TablaDeSimbolos::table[lexema].forwDecl = 1;
 }
 
+void TablaDeSimbolos::setTiene_parametro(string lexema, int nro){
+	TablaDeSimbolos::table[lexema].tiene_parametro = nro;
+}
+
 // Inicializaciones
 
 void TablaDeSimbolos::inicNivelHer(string lexema){
@@ -276,7 +282,13 @@ int TablaDeSimbolos::getForwDecl(string lexema){
 	}
 	return it->second.forwDecl;
 }
-
+int TablaDeSimbolos::getTieneParamDF(string lexema){
+	auto it = TablaDeSimbolos::table.find(lexema);
+	if (it == TablaDeSimbolos::table.end()){
+				return 0;
+	}
+	return it->second.tiene_parametro;
+}
 
 bool TablaDeSimbolos::tieneParametros(string lexema){
 		auto it = TablaDeSimbolos::table.find(lexema);

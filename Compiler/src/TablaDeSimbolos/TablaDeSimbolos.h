@@ -29,6 +29,7 @@ class TablaDeSimbolos {
 
 			//Funciones
 			string parametro_formal;
+			int tiene_parametro;
 
 			//Clases
 			string clase;
@@ -83,6 +84,8 @@ class TablaDeSimbolos {
 		static void forwDeclComp(string lexema);
 		
 		static void setVarAux(string lexema, string var);
+
+		static void setTiene_parametro(string lexema, int nro);
 		
 		
 		// Inicializaciones
@@ -114,6 +117,8 @@ class TablaDeSimbolos {
 		static bool existeClave(string lexema);
 
 		static string getVarAux(string lexema);
+
+		static int getTieneParamDF(string lexema);
 
 		// Recorrer
 

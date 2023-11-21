@@ -279,11 +279,20 @@ functionCall: nesting'('')' {
                             string tipo;
                             if (esObjeto($1)){
                                 if (ChequearDeclObjeto($1,name,tipo,false)){
-                                    if (ChequearRecursion($1,true)){
+                                    if (ChequearRecursion($1,true) && TablaDeSimbolos::getForwDecl(name) != 0){
                                         if (!TablaDeSimbolos::tieneParametros(name)){
                                             EstructuraTercetos::addTerceto("Call",name,"");
                                         } else {
                                             yyerror("El metodo " + name + " requiere parametro");
+                                        }
+                                    }else if(TablaDeSimbolos::getForwDecl(name) == 0){
+                                        if (TablaDeSimbolos::getTieneParamDF(name) == 2){
+                                            yyerror("Funcion " + name + " primera vez utilizada con parametro");
+                                        }else{
+                                            if (TablaDeSimbolos::getTieneParamDF(name) == 0){
+                                                TablaDeSimbolos::setTiene_parametro(name,1);
+                                            }
+                                            EstructuraTercetos::addTerceto("Call",name,"");
                                         }
                                     }else{
                                         yyerror("Se esta haciendo un llamado recursivo del metodo: "+$1);
@@ -297,7 +306,7 @@ functionCall: nesting'('')' {
                                         } else {
                                             yyerror("La funcion " + name + " requiere parametro");
                                         }
-                                    }else{
+                                    } else{
                                         yyerror("Se esta haciendo un llamado recursivo a la funcion: "+$1);
                                     }
                                 }
@@ -311,7 +320,7 @@ functionCall: nesting'('')' {
                                                 if (ChequearDeclObjeto($1,name,tipo,false)){
                                                     if (ChequearRecursion($1,true)){
                                                         string tipo;
-                                                        if (TablaDeSimbolos::tieneParametros(name)){
+                                                        if (TablaDeSimbolos::tieneParametros(name) && TablaDeSimbolos::getForwDecl(name) != 0){
                                                             if (converAsig(TablaDeSimbolos::getParametroFormal(name), $3, tipo)){
                                                                 EstructuraTercetos::addTerceto("=",TablaDeSimbolos::getParametroFormal(name),EstructuraTercetos::nroActualTerceto(),tipo);
                                                             } else {
@@ -324,6 +333,28 @@ functionCall: nesting'('')' {
                                                                 }
                                                             }
                                                             EstructuraTercetos::addTerceto("Call",name,"");
+                                                        }else if(TablaDeSimbolos::getForwDecl(name) == 0 ){
+                                                            int nroPF = TablaDeSimbolos::getTieneParamDF(name);
+                                                            if (nroPF == 1){
+                                                                yyerror("Funcion " + name + " primera vez utilizada sin parametro");
+                                                            } else {
+                                                                if (nroPF == 0){
+                                                                    TablaDeSimbolos::setTiene_parametro(name,2);
+                                                                }
+                                                                // Guardar Numero
+                                                                InsideClass::addTerVacios(name,EstructuraTercetos::nroSigTerceto(),Ambito::get());
+                                                                if (esObjeto($3)){
+                                                                        string atributo, objeto;
+                                                                        dividirStringPorArroba($3,objeto, atributo);
+                                                                        EstructuraTercetos::addTerceto(" ",objeto," ","FLOAT");
+                                                                        EstructuraTercetos::addTerceto("="," ",objeto," ");
+                                                                }else{
+                                                                    EstructuraTercetos::addTerceto(" ",$3," ","FLOAT");
+                                                                    EstructuraTercetos::addTerceto("="," ",$3," ");
+                                                                }
+                                                                 EstructuraTercetos::addTerceto("Call",name,"");
+                                                                InsideClass::imprimir();
+                                                            }
                                                         }else{
                                                             yyerror("Esta funcion no acepta parametros");
                                                         }
