@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 #include "../AnalisisLexico/AnalizadorLexico.h"
 #include "../AnalisisLexico/Headers/AccionesSemanticas.h"
 #include "../TablaDeSimbolos/TablaDeSimbolos.h"
@@ -397,22 +399,43 @@ condition: '('comparison')' {EstructuraTercetos::apilar();EstructuraTercetos::ad
          ;
 
 class: classHeader '{'sentenceList'}' { yymenssage("Clase");
+                                        string clase = InsideClass::getClass();
+                                        int foward = TablaDeSimbolos::getForwDecl(clase);
+										vector<string> lista;
+										if (foward==0){
+											listaHerencia(clase,lista);
+										}
+										if (!lista.empty()){
+											for (const string& clase : lista){
+												cout << "Clase: " << clase << endl;
+											}
+										}
                                         TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
                                         InsideClass::unstackMethods();
                                         InsideClass::outClass();
                                       }
      | classHeader '{'sentenceList heredity '}' {
                                                  yymenssage("Clase");
-                                                 TablaDeSimbolos::setHerencia(InsideClass::getClass(),$4);
+                                                 TablaDeSimbolos::setHerencia(InsideClass::getClass(),yyvsp[-1]);
                                                  if (TablaDeSimbolos::nivelHerencia(InsideClass::getClass()) > 3){
                                                     yyerror("La clase ha excedido el nivel de herencia (maximo nivel = 3)");
                                                  }
-                                                 TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
                                                  string clase = InsideClass::getClass();
+                                                 int foward = TablaDeSimbolos::getForwDecl(clase);
+                                                 vector<string> lista;
+                                                 if (foward==0){
+                                                    listaHerencia(clase,lista);
+                                                 }
+                                                 if (!lista.empty()){
+                                                  	for (const string& clase : lista){
+                                                        cout << "Clase: " << clase << endl;
+                                                   	}
+                                                 }
+                                                 TablaDeSimbolos::forwDeclComp(InsideClass::getClass());
                                                  string herencia = TablaDeSimbolos::getHerencia(clase);
-                                                 int foward = TablaDeSimbolos::getForwDecl(herencia);
                                                  ChequearSobrescritura(clase,herencia);
                                                  InsideClass::outClass();
+                                                 
                                                  }
      | classHeader {claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
      | classHeader '{'sentenceList heredity sentenceList'}'  {yyerror("La herencia debe ir al final de la declaracion de la clase");}
@@ -691,6 +714,30 @@ string sigID(string & var){
         string aux=var;
         var.clear();
         return aux;
+    }
+}
+
+void listaHerencia(string clase, vector<string> & lista){
+    TablaDeSimbolos::inic();
+    while (! TablaDeSimbolos::fin()){
+        string clave = TablaDeSimbolos::getClave();
+        string hereda=TablaDeSimbolos::getHerencia(clave);
+        if (hereda==clase){
+            lista.push_back(clave);
+        }
+        TablaDeSimbolos::avanzar();
+    }
+    if (!lista.empty()){
+        TablaDeSimbolos::inic();
+        while (! TablaDeSimbolos::fin()){
+            string clave = TablaDeSimbolos::getClave();
+            string hereda=TablaDeSimbolos::getHerencia(clave);
+            auto it = find(lista.begin(), lista.end(), hereda);
+            if (it!=lista.end()){
+                lista.push_back(clave);
+            }
+            TablaDeSimbolos::avanzar();
+        }
     }
 }
 
