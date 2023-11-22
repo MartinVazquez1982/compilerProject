@@ -69,10 +69,10 @@ int main(int argc, char *argv[]) {
         codigoFuente.close();
         //archivo_salida.close();
         ContErrWar::mostrarMensajes();
-        EstructuraTercetos::mostrarTercetos();
-        TablaDeSimbolos::imprimir();
         if (ContErrWar::getError() == 0){
             generarCodigo(path, nombreArchivoAssembler);
+            EstructuraTercetos::mostrarTercetos();
+            TablaDeSimbolos::imprimir();
             string comandoObj= "\\masm32\\bin\\ml /c /Zd /coff " + path + "\\" + nombreArchivoAssembler + ".asm";
             cout << endl << endl;
             chdir(path.c_str());

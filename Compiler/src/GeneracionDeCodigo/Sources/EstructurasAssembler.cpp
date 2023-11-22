@@ -234,8 +234,9 @@ string EstructurasAssembler::getConverShort(string operando1, string operando2, 
 }
 
 string EstructurasAssembler::getConverUlong(string operando1, string operando2, string & varAux, bool error[]){
-	string salida = FILD+operando1;
 	varAux = generarVariable();
+	string salida = MOV+varAux+", "+operando1;
+	salida = salida+"\n"+FILD+varAux;
 	salida = salida + "\n" + FSTP+varAux;
 	return salida;
 }
