@@ -59,6 +59,17 @@ class EstructuraTercetos {
 		static unordered_map<string, vector<terceto>>& getLista();
 
 		static string getVarAux(string ambito, string terceto);
+
+		static void cargarPF(string pila, int nroTer, string pf, string tipo);
+
+		static string getPrimerOperando(string pila, int nroTer);
+
+		static string getSegundoOperando(string pila, int nroTer);
+
+		static void setOperador(string pila, int nroTer, string nuevoOperador);
+
+		static void setOperando2(string pila, int nroTer, string nuevoOperador);
+
 };
 
 #endif /* ANALISISSEMANTICO_ESTRUCTURATERCETOS_H_ */

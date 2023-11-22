@@ -109,3 +109,32 @@ string EstructuraTercetos::getVarAux(string ambito, string terceto){
 	cout << terceto << " " << ambito <<endl;
 	return listaTercetos[ambito][stoi(terceto)].varAux;
 }
+
+void EstructuraTercetos::cargarPF(string pila, int nroTer, string pf, string tipo){
+	EstructuraTercetos::terceto info = listaTercetos[pila][nroTer];
+	info.operando1=pf;
+	info.tipo = tipo;
+	listaTercetos[pila][nroTer] = info;
+}
+
+string EstructuraTercetos::getPrimerOperando(string pila, int nroTer){
+	EstructuraTercetos::terceto info = listaTercetos[pila][nroTer];
+	return info.operando1;
+}
+
+string EstructuraTercetos::getSegundoOperando(string pila, int nroTer){
+	EstructuraTercetos::terceto info = listaTercetos[pila][nroTer];
+	return info.operando2;
+}
+
+void EstructuraTercetos::setOperador(string pila, int nroTer, string nuevoOperador){
+	EstructuraTercetos::terceto info = listaTercetos[pila][nroTer];
+	info.operador = nuevoOperador;
+	listaTercetos[pila][nroTer] = info;
+}
+
+void EstructuraTercetos::setOperando2(string pila, int nroTer, string nuevoOperador){
+	EstructuraTercetos::terceto info = listaTercetos[pila][nroTer];
+	info.operando2 = nuevoOperador;
+	listaTercetos[pila][nroTer] = info;
+}

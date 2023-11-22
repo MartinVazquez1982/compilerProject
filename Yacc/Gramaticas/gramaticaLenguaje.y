@@ -182,7 +182,10 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                                     TablaDeSimbolos::setParametroFormal(key,keyFormal);
                                                                 }
                                                             }else{ //Si no esta redeclarada se marca en 1 la columna de forward para ese metodo
-                                                               if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")){
+                                                               if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo") && chequearNomPF($2,$4)){
+                                                                    if (TablaDeSimbolos::getTieneParamDF($2+"-"+InsideClass::getClass()) != 2) {
+                                                                        yyerror("Metodo " + $2 + " se ha indicado que NO tiene parametro en su primer invocacion.");
+                                                                    }
                                                                     InsideClass::addMethod($2);
                                                                     VarSinInic::addTop();
                                                                     TablaDeSimbolos::del($2);
@@ -191,6 +194,7 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                                     TablaDeSimbolos::forwDeclComp($2+"-"+InsideClass::getClass());
                                                                     string keyFormal = TablaDeSimbolos::changeKey($4);
                                                                     TablaDeSimbolos::setParametroFormal($2+"-"+InsideClass::getClass(),keyFormal);
+                                                                    cargarTercetosPF($2+"-"+InsideClass::getClass(),keyFormal);
                                                                 } 
                                                             }     
                                                         }
@@ -242,6 +246,9 @@ functionHeader: VOID ID'('formalParameter')'{ if (InsideClass::insideClass()){
                                                     }
                                                 }else{ //Si no esta redeclarada se marca en 1 la columna de forward para ese metodo
                                                     if (noReDeclarada($2+"-"+InsideClass::getClassSinMain(), "Metodo")){
+                                                        if (TablaDeSimbolos::getTieneParamDF($2+"-"+InsideClass::getClass()) !=1) {
+                                                            yyerror("Metodo " + $2 + " se ha indicado que tiene parametro en su primer invocacion.");
+                                                        }
                                                         TablaDeSimbolos::del($2);
                                                         TablaDeSimbolos::forwDeclComp($2+"-"+InsideClass::getClass());
                                                         Ambito::add($2+"-"+InsideClass::getClassSinMain());
@@ -346,14 +353,13 @@ functionCall: nesting'('')' {
                                                                 if (esObjeto($3)){
                                                                         string atributo, objeto;
                                                                         dividirStringPorArroba($3,objeto, atributo);
-                                                                        EstructuraTercetos::addTerceto(" ",objeto," ","FLOAT");
+                                                                        EstructuraTercetos::addTerceto(" ",objeto,atributo,"FLOAT");
                                                                         EstructuraTercetos::addTerceto("="," ",objeto," ");
                                                                 }else{
                                                                     EstructuraTercetos::addTerceto(" ",$3," ","FLOAT");
                                                                     EstructuraTercetos::addTerceto("="," ",$3," ");
                                                                 }
                                                                  EstructuraTercetos::addTerceto("Call",name,"");
-                                                                InsideClass::imprimir();
                                                             }
                                                         }else{
                                                             yyerror("Esta funcion no acepta parametros");
@@ -1195,4 +1201,46 @@ void stepsFunctionOrMethod(){
         yywarning("Variable/Objeto " + var + " Sin asignacion de un valor dentro de la funcion donde se declaro");
     }
     VarSinInic::delTop();
+}
+
+// =========================== Carga de PF en Tercetos ===========================
+
+void revisarConversion(string pila, int nroTer, string pf){
+    string op = EstructuraTercetos::getPrimerOperando(pila, nroTer);
+    string tipoPF = TablaDeSimbolos::getTipo(pf);
+    string tipoPR;
+    if (esObjeto(op)){
+        tipoPR = TablaDeSimbolos::getTipo(EstructuraTercetos::getSegundoOperando(pila, nroTer));
+    } else {
+        tipoPR = TablaDeSimbolos::getTipo(op);
+    }
+    string valido = Conversion::asignacion(tipoPF,tipoPR);
+    if (valido == "ERROR" ){
+        if (tipoPR == "REVISAR"){
+            yyerror("No es posible asignarle un atributos declarado con forward sin tipo a una variable");          
+        }else{
+            yyerror("No es posible asignarle un "+tipoPF+" y un "+tipoPR);
+        }
+    } else if (tipoPF != tipoPR){
+        string conversion = string(1,tipoPR[0])+"to"+string(1,tipoPF[0]);
+        EstructuraTercetos::setOperador(pila, nroTer, conversion);
+        EstructuraTercetos::setOperando2(pila, nroTer+1,"["+to_string(nroTer)+"]");
+    }
+}
+
+void cargarTercetosPF(string metodo, string pf){
+    InsideClass::inicTerVacios();
+    while(! InsideClass::finTerVacios()){
+        if (InsideClass::getTerVacio().metodo == metodo){
+            string nroTerceto = InsideClass::getTerVacio().nroTerceto;
+            string pilaTerceto = InsideClass::getTerVacio().pilaTerceto;
+            nroTerceto.erase(0, 1);
+            nroTerceto.erase(nroTerceto.size() - 1, 1);
+            revisarConversion(pilaTerceto, stoi(nroTerceto), pf);
+            EstructuraTercetos::cargarPF(pilaTerceto, stoi(nroTerceto)+1, pf, TablaDeSimbolos::getTipo(pf));
+            InsideClass::delTerVacios();
+        } else {
+            InsideClass::avanzarTerVacios();
+        }
+    }
 }
