@@ -1,0 +1,8 @@
+{
+	CLASS a{
+		SHORT x,
+		CLASS b{
+			SHORT y,
+		},
+	},
+}

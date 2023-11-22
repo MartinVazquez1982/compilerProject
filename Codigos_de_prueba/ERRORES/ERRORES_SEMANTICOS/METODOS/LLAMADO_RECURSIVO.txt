@@ -1,0 +1,11 @@
+{
+
+	CLASS a{
+		VOID m(){
+			a obj,
+			obj.m(),
+			RETURN,
+		},	
+
+	},
+}

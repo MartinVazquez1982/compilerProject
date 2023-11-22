@@ -1,0 +1,17 @@
+{
+	CLASS a,
+	CLASS b{
+		VOID x(){			
+			PRINT %QUE TAL%,
+			RETURN,
+		},
+		a,
+	},
+	CLASS a{
+		VOID x(){
+			PRINT %HOLA%,
+			RETURN,
+		},
+	},
+	
+}

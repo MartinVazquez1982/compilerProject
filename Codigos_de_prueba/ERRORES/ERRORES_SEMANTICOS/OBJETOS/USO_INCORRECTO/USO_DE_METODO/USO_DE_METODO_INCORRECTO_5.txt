@@ -1,0 +1,11 @@
+{
+	CLASS a{
+		SHORT x,
+		VOID f(SHORT y){
+			PRINT %HOLA%,
+			RETURN,
+		},
+	},
+	a obj,
+	obj.f(obj.x).x,
+}

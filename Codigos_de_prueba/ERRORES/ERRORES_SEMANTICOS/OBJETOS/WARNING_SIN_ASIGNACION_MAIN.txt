@@ -1,0 +1,6 @@
+{
+	CLASS a{
+		SHORT x,
+	},
+	a obj,
+}

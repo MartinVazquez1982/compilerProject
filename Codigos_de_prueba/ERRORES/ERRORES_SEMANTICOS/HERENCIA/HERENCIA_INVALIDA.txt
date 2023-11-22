@@ -1,0 +1,16 @@
+{
+	CLASS a{
+		SHORT f,
+	},
+	CLASS c{
+		SHORT y,
+	},
+	CLASS b{
+		SHORT x,
+		a,
+	},
+	b obj,
+	obj.c.y--,
+
+
+}

@@ -1,7 +1,0 @@
-{
-	*{Funcionamiento de la tabla de simbolos ante el mismo numero}*
-	*{primero positivo y segundo negativo}*
-	var1 = 100_s,
-	var1 = -100_s,
-	*{RESULTADO: ambos se encuentran en la tabla de simbolos}*
-}

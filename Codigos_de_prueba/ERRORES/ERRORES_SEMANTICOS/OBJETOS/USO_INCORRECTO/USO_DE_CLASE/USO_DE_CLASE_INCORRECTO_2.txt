@@ -1,0 +1,12 @@
+{
+	CLASS a{
+		SHORT x,
+	},
+	CLASS b{
+		SHORT x,
+		a,
+	},
+	a obj,
+	obj.a.b.x--,
+
+}

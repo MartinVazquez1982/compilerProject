@@ -1,0 +1,8 @@
+{
+	VOID func(){
+		CLASS a{
+			SHORT x,
+		},
+		RETURN,
+	},
+}

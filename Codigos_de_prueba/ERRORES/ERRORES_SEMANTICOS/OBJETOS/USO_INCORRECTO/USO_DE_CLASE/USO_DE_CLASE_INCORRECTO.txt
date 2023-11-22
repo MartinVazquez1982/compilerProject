@@ -1,0 +1,8 @@
+{
+	CLASS a{
+		SHORT x,
+	},
+	a obj,
+	obj.a.x--,
+
+}

@@ -1,0 +1,7 @@
+{
+	CLASS a{
+		SHORT x,
+		a,
+	},
+
+}

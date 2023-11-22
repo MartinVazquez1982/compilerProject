@@ -1,0 +1,8 @@
+{
+	CLASS a{
+		VOID a(){
+			PRINT %HOLA%,
+			RETURN,
+		}, 
+	},
+}

@@ -1,0 +1,9 @@
+{
+	CLASS a{
+		SHORT x,
+		VOID x(){
+			PRINT %HOLA%,
+			RETURN,
+		},
+	},
+}

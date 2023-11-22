@@ -79,14 +79,10 @@ variableDeclaration: type variableList {setearTipos($1,$2);}
                    ;
 
 objectDeclaration: ID objectList {  
-                                    if (InsideClass::insideClass() && $1 == InsideClass::getClassSinMain()){
-                                        yyerror("No es posible declarar un atributo el cual su tipo sea la misma clase a la que pertenece");
-                                    }else{
-                                        string name;
-                                        ChequearDeclaracion($1, name, "Clase");
-                                        setearTipos($1,$2);
-                                        TablaDeSimbolos::del($1); //El ID al declarar un objeto se agrega automaticamente por error en el lexico
-                                    }
+                                    string name;
+                                    ChequearDeclaracion($1, name, "Clase");
+                                    setearTipos($1,$2);
+                                    TablaDeSimbolos::del($1); //El ID al declarar un objeto se agrega automaticamente por error en el lexico
                                    }
                  ;
 

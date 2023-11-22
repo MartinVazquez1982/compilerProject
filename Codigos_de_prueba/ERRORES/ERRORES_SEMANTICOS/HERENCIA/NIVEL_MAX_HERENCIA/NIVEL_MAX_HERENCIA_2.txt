@@ -1,0 +1,37 @@
+{
+	CLASS a{
+		SHORT x,
+	},
+	CLASS b{
+		SHORT y,
+		a,
+	},
+	CLASS c{
+		SHORT z,
+		b,
+	},
+	CLASS e{
+		SHORT t,
+		a,
+	},
+	CLASS f{
+		SHORT t,
+		a,
+	},
+	CLASS g{
+		SHORT t,
+		b,
+	},
+	CLASS d{
+		SHORT t,
+		c,
+	},
+	CLASS h{
+		SHORT t,
+		g,
+	},
+	CLASS i{
+		SHORT t,
+		h,
+	},
+}

@@ -1,0 +1,11 @@
+{
+	VOID x(){
+		x(),
+		RETURN,
+	},
+	VOID y(){
+		x(),
+		RETURN,
+	},
+
+}

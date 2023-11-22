@@ -1,0 +1,6 @@
+{
+	VOID x(){
+		SHORT x,
+		RETURN,
+	},
+}
