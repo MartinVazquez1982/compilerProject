@@ -199,7 +199,7 @@ void generarCodigo(string path, string nameFuente){
         	}
             archivoASMCODE << "\n";
         }
-        archivoASMCODE << "main:" << endl;
+        archivoASMCODE << "main:\nfinit" << endl;
         vector<EstructuraTercetos::terceto> tercetos = listaTercetos.find(":main")->second;
         crearAssembler(tercetos,":main",error, print,archivoASMCODE);
 		if (error[0]){
@@ -213,6 +213,7 @@ void generarCodigo(string path, string nameFuente){
 			archivoASMCODE << "overflow_add_float:" << endl;
 			archivoASMCODE << "invoke MessageBox, NULL, addr msj_addfloat, addr msj_addfloat, MB_OK" << endl;
 			archivoASM << "msj_addfloat db \"Error: Overflow suma entre flotantes\", 0" << endl;
+			archivoASM << CERO << endl;
 			archivoASM << MAXPOSITIVO << endl;
 			archivoASM << MINPOSITIVO << endl;
 			archivoASM << MAXNEGATIVO << endl;

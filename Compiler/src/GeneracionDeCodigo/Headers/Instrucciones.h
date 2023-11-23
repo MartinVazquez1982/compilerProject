@@ -61,6 +61,8 @@ const string FSTSW = "FSTSW ";
 const string SAHF = "SAHF ";
 const string FLDZ = "FLDZ ";
 const string FNSTSW = "FNSTSW ";
+const string FTST = "FTST ";
+const string FCOMPP = "FCOMPP ";
 
 // RETURN
 
@@ -87,6 +89,7 @@ const string FINEJEC = "invoke ExitProcess, 0";
 
 // LIMITES CONSTANTES FLOTANTES
 
+const string CERO = "CERO DD 0.0";
 const string MAXPOSITIVO = "MAXPOSITIVO DD 3.40282347E+38";
 const string MINPOSITIVO = "MINPOSITIVO DD 1.17549435E-38";
 const string MINNEGATIVO = "MAXNEGATIVO DD -1.17549435E-38";

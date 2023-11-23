@@ -180,9 +180,10 @@ string EstructurasAssembler::getSumaFloat(string operando1, string operando2, st
 	string salida = FLD+operando1;
 	salida = salida + "\n" + FADD+operando2;
 	varAux = generarVariable();
+	salida = salida + "\n" + FCOM+" CERO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JE+"realizarAsignacion";
 	salida = salida + "\n" + FCOM+" MAXPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"overflow_add_float";
 	salida = salida + "\n" + FCOM+" MINNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JB+"overflow_add_float";
-	salida = salida + "\n" + FCOM+" MINPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"realizarAsignacion"+"\n"+JMP+"overflow_add_float";
+	salida = salida + "\n" + FCOM+" MINPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"realizarAsignacion";
 	salida = salida + "\n" + FCOM+" MAXNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"overflow_add_float";
 	salida = salida + "\n" + "realizarAsignacion:" + "\n" + FSTP+varAux;
 	error[1]=true;
@@ -191,7 +192,7 @@ string EstructurasAssembler::getSumaFloat(string operando1, string operando2, st
 
 string EstructurasAssembler::getRestaFloat(string operando1, string operando2, string & varAux, bool error[]){
 	string salida = FLD+operando1;
-	salida = salida + "\n" + FSUB+operando2;
+	salida = salida + "\n"+ FLD+operando2+"\n"+FSUB;
 	varAux = generarVariable();
 	salida = salida + "\n" + FSTP+varAux;
 	return salida;
@@ -208,7 +209,7 @@ string EstructurasAssembler::getMultFloat(string operando1, string operando2, st
 string EstructurasAssembler::getDivFloat(string operando1, string operando2, string & varAux, bool error[]){
 	string salida = FLD+operando1;
 	string varAuxComp;
-	salida = salida + "\n" + getCompFloat(operando2,"000",varAuxComp,error);
+	salida = salida + "\n" + getCompFloat("000",operando2,varAuxComp,error);
 	salida = salida + "\n" + JE + "etiqueta_divcero";
 	varAux = generarVariable();
 	salida = salida + "\n" + FDIV+operando2;
@@ -298,11 +299,11 @@ string EstructurasAssembler::getCompInt(string operando1, string operando2, stri
 }
 
 string EstructurasAssembler::getCompFloat(string operando1, string operando2, string & varAux,bool error[]){
-	string salida = FLD+operando1;
-	if (operando2=="000"){
-		salida = salida+"\n"+FLDZ+"\n"+FCOM;
+	string salida = FLD+operando2;
+	if (operando1=="000"){
+		salida = salida+"\n"+FLDZ+"\n"+FCOMPP;
 	} else {
-		salida = salida+"\n"+FCOM+operando2;
+		salida = salida+"\n"+FLD+operando1+"\n"+FCOMPP;
 	}
 	salida = salida+"\n"+FSTSW+AX;
 	salida = salida+"\n" + SAHF;

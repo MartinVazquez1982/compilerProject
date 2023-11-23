@@ -892,7 +892,7 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
             if (tipo != "SHORT" && tipo != "ULONG" && tipo != "FLOAT"){
                 antCheck = tipo+":main";
                 if (obj.length() == 0){
-                    yyerror("Uso no valido de atributo");
+                    yyerror("Uso no valido de atributo"); // Intentar usar un objeto al final de la cadena (Debe encontrar un primitivo)
                     final = true;
                 }
             } else {
@@ -902,13 +902,13 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
                         encontrada = true;
                     }
                 } else {
-                    yyerror("Uso no valido de atributo en el llamado a metodo");
+                    yyerror("Uso no valido de atributo en el llamado a metodo"); //Se quiere llamar ATR de tipo primitivo como metodo
                     final = true;
                 }
             }
         }else if (TablaDeSimbolos::usoAsignado(check+"-"+antCheck) == "Metodo"){
             if (esAtributo){
-                yyerror("Uso no valido de atributo en la invocacion a metodo");
+                yyerror("Uso no valido de atributo en la invocacion a metodo"); //Se quiere utilizar un metodo como si fuera un atributo
                 final = true;
             } else {
                 if (obj.length() == 0){
