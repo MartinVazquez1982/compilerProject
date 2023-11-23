@@ -376,7 +376,7 @@ char *yyrule[] = {
 };
 #endif
 #ifndef YYSTYPE
-typedef int YYSTYPE;
+typedef string YYSTYPE;
 #endif
 #define yyclearin (yychar=(-1))
 #define yyerrok (yyerrflag=0)

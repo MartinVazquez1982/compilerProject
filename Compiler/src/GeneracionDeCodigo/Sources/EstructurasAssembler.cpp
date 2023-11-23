@@ -10,6 +10,7 @@
 using namespace std;
 
 int EstructurasAssembler::nroVar = 0;
+int EstructurasAssembler::label = 0;
 
 // Inicializa el miembro estático "codigos" en el archivo .cpp
 unordered_map<string,EstructurasAssembler::FunctionType> EstructurasAssembler::codigos = {
@@ -180,13 +181,14 @@ string EstructurasAssembler::getSumaFloat(string operando1, string operando2, st
 	string salida = FLD+operando1;
 	salida = salida + "\n" + FADD+operando2;
 	varAux = generarVariable();
-	salida = salida + "\n" + FCOM+" CERO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JE+"realizarAsignacion";
+	salida = salida + "\n" + FCOM+" CERO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JE+"realizarAsignacion"+to_string(label);
 	salida = salida + "\n" + FCOM+" MAXPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"overflow_add_float";
 	salida = salida + "\n" + FCOM+" MINNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JB+"overflow_add_float";
-	salida = salida + "\n" + FCOM+" MINPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"realizarAsignacion";
+	salida = salida + "\n" + FCOM+" MINPOSITIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"realizarAsignacion"+to_string(label);
 	salida = salida + "\n" + FCOM+" MAXNEGATIVO"+"\n"+FSTSW+AX+"\n"+SAHF+"\n"+JA+"overflow_add_float";
-	salida = salida + "\n" + "realizarAsignacion:" + "\n" + FSTP+varAux;
+	salida = salida + "\n" + "realizarAsignacion"+to_string(label)+":" + "\n" + FSTP+varAux;
 	error[1]=true;
+	label++;
 	return salida;
 }
 
@@ -236,8 +238,7 @@ string EstructurasAssembler::getConverShort(string operando1, string operando2, 
 
 string EstructurasAssembler::getConverUlong(string operando1, string operando2, string & varAux, bool error[]){
 	varAux = generarVariable();
-	string salida = MOV+varAux+", "+operando1;
-	salida = salida+"\n"+FILD+varAux;
+	string salida = FILD+operando1;
 	salida = salida + "\n" + FSTP+varAux;
 	return salida;
 }
