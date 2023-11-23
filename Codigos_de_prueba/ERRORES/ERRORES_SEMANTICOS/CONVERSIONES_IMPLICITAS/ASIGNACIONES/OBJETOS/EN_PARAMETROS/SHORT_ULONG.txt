@@ -1,0 +1,10 @@
+{
+	CLASS a{
+		ULONG y,
+	},
+	VOID func(SHORT x){
+		RETURN,
+	},
+	a obj,
+	func(obj.y),
+}

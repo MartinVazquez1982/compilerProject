@@ -1,0 +1,7 @@
+{
+	VOID func(SHORT x){
+		RETURN,
+	},
+	FLOAT y,
+	func(y),
+}

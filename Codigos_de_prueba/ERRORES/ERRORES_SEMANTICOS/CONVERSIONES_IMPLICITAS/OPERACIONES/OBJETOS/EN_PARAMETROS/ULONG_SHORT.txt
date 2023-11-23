@@ -1,0 +1,15 @@
+{
+	CLASS aaa {
+		SHORT x,
+		FLOAT z,
+	},
+	CLASS bbb {
+		ULONG y,
+	},
+	VOID func(FLOAT y){
+		RETURN,
+	},
+	aaa obja,
+	bbb objb,
+	func(objb.y / obja.x),
+}

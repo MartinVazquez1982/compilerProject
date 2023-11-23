@@ -1,0 +1,8 @@
+{
+	SHORT x,
+	ULONG y,
+	VOID func(FLOAT y){
+		RETURN,
+	},
+	func(y + x),
+}

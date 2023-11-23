@@ -1,0 +1,12 @@
+{
+	CLASS a,
+	a obj1,
+	a obj2,
+	obj1.x(),
+	obj2.x(5_s),*{primera vez invocado al metodo sin parametro y ahora con parametro}*
+	CLASS a{
+		VOID x(){
+			RETURN,
+		},
+	},
+}

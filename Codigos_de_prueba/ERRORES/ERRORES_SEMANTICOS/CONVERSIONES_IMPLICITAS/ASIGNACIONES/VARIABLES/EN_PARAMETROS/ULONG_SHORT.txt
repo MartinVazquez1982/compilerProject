@@ -1,0 +1,7 @@
+{
+	VOID func(ULONG x){
+		RETURN,
+	},
+	SHORT y,
+	func(y),
+}

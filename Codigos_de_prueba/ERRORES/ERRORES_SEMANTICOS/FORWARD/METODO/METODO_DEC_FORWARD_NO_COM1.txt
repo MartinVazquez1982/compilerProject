@@ -1,0 +1,10 @@
+{
+	CLASS a,
+	a obj,
+	obj.x(),*{Metodo no encontrado posteriormente en la clase a}*
+	CLASS a{
+		VOID fun(){
+			RETURN,
+		},
+	},
+}

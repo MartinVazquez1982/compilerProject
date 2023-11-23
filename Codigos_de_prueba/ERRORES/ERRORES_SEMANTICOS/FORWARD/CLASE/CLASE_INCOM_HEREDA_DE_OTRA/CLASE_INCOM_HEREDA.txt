@@ -1,0 +1,10 @@
+{
+	CLASS c,
+	c obj,
+	obj.a.fun1(),
+	CLASS a{
+		VOID fun1(){
+			RETURN,
+		},
+	},
+}
