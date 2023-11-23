@@ -376,7 +376,7 @@ char *yyrule[] = {
 };
 #endif
 #ifndef YYSTYPE
-typedef int YYSTYPE;
+typedef string YYSTYPE;
 #endif
 #define yyclearin (yychar=(-1))
 #define yyerrok (yyerrflag=0)
@@ -541,7 +541,7 @@ bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
 		return false;
     }
     string valido = Conversion::operacion(tipoOp1,tipoOp2);
-    if (valido == "ERROR" ){
+    if (valido == "ERROR" || tipoOp1 == "REVISAR" || tipoOp2 == "REVISAR"){
         if (tipoOp1 == "REVISAR" || tipoOp2 == "REVISAR"){
             yyerror("No es posible realizar operaciones con atributos predeclarados sin tipo");          
         }else{
@@ -1063,7 +1063,7 @@ void revisarConversion(string pila, int nroTer, string pf){
     string valido = Conversion::asignacion(tipoPF,tipoPR);
     if (valido == "ERROR" ){
         if (tipoPR == "REVISAR"){
-            yyerror("No es posible asignarle un atributos predeclarado sin tipo a una variable");          
+            yyerror("No es posible asignarle un atributo predeclarado sin tipo a una variable");          
         }else{
             yyerror("No es posible asignarle a un "+tipoPF+" un "+tipoPR);
         }
@@ -1512,7 +1512,7 @@ case 40:
                                         }
                                     }else if(TablaDeSimbolos::getForwDecl(name) == 0){
                                         if (TablaDeSimbolos::getTieneParamDF(name) == 2){
-                                            yyerror("Funcion " + name + " primera vez utilizada con parametro");
+                                            yyerror("Metodo " + name + " primera vez utilizado con parametro");
                                         }else{
                                             if (TablaDeSimbolos::getTieneParamDF(name) == 0){
                                                 TablaDeSimbolos::setTiene_parametro(name,1);
@@ -1564,7 +1564,7 @@ case 41:
                                                         }else if(TablaDeSimbolos::getForwDecl(name) == 0 ){
                                                             int nroPF = TablaDeSimbolos::getTieneParamDF(name);
                                                             if (nroPF == 1){
-                                                                yyerror("Funcion " + name + " primera vez utilizada sin parametro");
+                                                                yyerror("Metodo " + name + " primera vez utilizado sin parametro");
                                                             } else {
                                                                 if (nroPF == 0){
                                                                     TablaDeSimbolos::setTiene_parametro(name,2);
@@ -1583,7 +1583,7 @@ case 41:
                                                                  EstructuraTercetos::addTerceto("Call",name,"");
                                                             }
                                                         }else{
-                                                            yyerror("Esta funcion no acepta parametros");
+                                                            yyerror("Este metodo no acepta parametros");
                                                         }
                                                     }else{
                                                         yyerror("Se esta haciendo un llamado recursivo del metodo: "+yyvsp[-3]);

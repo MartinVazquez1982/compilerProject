@@ -1,0 +1,9 @@
+{
+	CLASS a,
+	a obj,
+	SHORT x,
+	x=obj.y,*{Atributo declado con forward no se sabe su tipo todavia}*
+	CLASS a{
+		SHORT y,
+	},
+}
