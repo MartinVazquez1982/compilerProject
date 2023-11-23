@@ -1,0 +1,13 @@
+{
+	FLOAT x,
+	FLOAT y,
+
+	x = 10.0,
+	y = 30.0,
+
+	WHILE (x > 0.0) DO{
+		x--,
+	},
+	
+	y = y/x,
+}

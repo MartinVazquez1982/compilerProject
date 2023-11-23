@@ -1,0 +1,10 @@
+{
+	CLASS clase{
+		SHORT x,
+	},
+	VOID fun(){
+		SHORT x,
+		x=-129_s,
+		RETURN,
+	},
+}

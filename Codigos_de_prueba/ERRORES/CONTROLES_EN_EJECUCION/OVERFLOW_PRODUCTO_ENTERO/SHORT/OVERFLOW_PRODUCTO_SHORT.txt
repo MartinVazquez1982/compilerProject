@@ -1,0 +1,12 @@
+{
+
+	SHORT x,
+	SHORT y,
+
+	x = 64_s,
+
+	y = 2_s,
+
+	x = x * y,
+
+}

@@ -1,0 +1,14 @@
+{
+	ULONG x,
+	ULONG y,
+
+	x = 10_ul,
+	y = 30_ul,
+
+	WHILE (x !! 0_ul) DO{
+		x--,
+	},
+
+	y = y/x,
+
+}

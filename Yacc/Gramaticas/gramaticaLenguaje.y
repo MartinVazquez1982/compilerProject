@@ -467,8 +467,9 @@ class: classHeader '{'sentenceList'}' { yymenssage("Clase");
                                                  InsideClass::outClass();
                                                  
                                                  }
+     | classHeader '{'heredity sentenceList'}' {yyerror("La herencia debe ir al final de la declaracion de la clase no al principio");}
      | classHeader {claseSinimplementar(InsideClass::getClass());InsideClass::outClass();}
-     | classHeader '{'sentenceList heredity sentenceList'}'  {yyerror("La herencia debe ir al final de la declaracion de la clase");}
+     | classHeader '{'sentenceList heredity sentenceList'}'  {yyerror("La herencia debe ir al final de la declaracion de la clase no entre medio");}
      ;
 
 classHeader: CLASS ID { if ((!classInFunction($2)) && !classInClass($2)){

@@ -1,0 +1,4 @@
+{
+	ULONG x,
+	x=-7_ul,*{es menor que el rango 0}*
+}

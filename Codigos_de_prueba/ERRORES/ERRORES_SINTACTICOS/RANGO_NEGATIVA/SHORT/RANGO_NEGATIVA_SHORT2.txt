@@ -1,0 +1,7 @@
+{
+	CLASS clase{
+		SHORT x,
+	},
+	clase obj,
+	obj.x=-129_s,
+}
