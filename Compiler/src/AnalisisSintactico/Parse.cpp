@@ -376,7 +376,7 @@ char *yyrule[] = {
 };
 #endif
 #ifndef YYSTYPE
-typedef string YYSTYPE;
+typedef int YYSTYPE;
 #endif
 #define yyclearin (yychar=(-1))
 #define yyerrok (yyerrflag=0)
@@ -506,9 +506,9 @@ bool converAsig(string izq, string der, string & tipo){
         tipo = tipoIzq;
         if (valido == "ERROR" ){
             if (tipoDer == "REVISAR"){
-                yyerror("No es posible asignarle un atributos declarado con forward sin tipo a una variable");          
+                yyerror("No es posible asignarle un atributo predeclarado sin tipo a una variable");          
             }else{
-                yyerror("No es posible asignarle un "+tipoIzq+" y un "+tipoDer);
+                yyerror("No es posible asignarle a un "+tipoIzq+" un "+tipoDer);
         }
         }else if (tipoIzq != tipoDer){
                 string conversion = string(1,tipoDer[0])+"to"+string(1,tipoIzq[0]); 
@@ -543,7 +543,7 @@ bool converOp(string op1, string op2, string & opAConvertir, string & tipo){
     string valido = Conversion::operacion(tipoOp1,tipoOp2);
     if (valido == "ERROR" ){
         if (tipoOp1 == "REVISAR" || tipoOp2 == "REVISAR"){
-            yyerror("No es posible realizar operaciones con atributos declarados con forward sin tipo");          
+            yyerror("No es posible realizar operaciones con atributos predeclarados sin tipo");          
         }else{
             yyerror("No es posible operar entre un "+tipoOp1+" y un "+tipoOp2);
         }
@@ -742,7 +742,7 @@ bool ChequearDeclObjeto(string obj, string & nomEncontrada, string & nomAtributo
             if (tipo != "SHORT" && tipo != "ULONG" && tipo != "FLOAT"){
                 antCheck = tipo+":main";
                 if (obj.length() == 0){
-                    yyerror("Uso no valido de atributo"); // Intentar usar un objeto al final de la cadena (Debe encontrar un primitivo)
+                    yyerror("Se debe operar con tipos primitivos | SHORT - ULONG - FLOAT"); // Intentar usar un objeto al final de la cadena (Debe encontrar un primitivo)
                     final = true;
                 }
             } else {
@@ -845,12 +845,12 @@ void ChequearForwardDeclarations(){
         if (TablaDeSimbolos::getForwDecl(clave)==0){
             string uso=TablaDeSimbolos::usoAsignado(clave);
             if (uso=="Atr"){
-                yyerror("Atributo declarado con forward pero no determinada su estructura");
+                yyerror("Atributo "+clave+" no finalizada su declaracion");
             }else{
                 if (uso=="Metodo"){
-                    yyerror("Metodo declarado con forward pero no declarado");
+                    yyerror("Metodo "+clave+" no finalizado su declaracion");
                 }else if (uso=="Clase"){
-                    yyerror("Clase declarada con forward pero no declarada");
+                    yyerror("Clase "+clave+" no finalizada su declaracion");
                 }
             }
         }
@@ -1019,7 +1019,7 @@ bool ChequearRecursion(string funcion, bool esMetodo){
 
 bool chequearNomPF(string function, string pf){
     if (function == pf){
-        yyerror("Mismo funcion " + function + " tiene el mismo nombre que el parametro formal");
+        yyerror("Funcion " + function + " tiene el mismo nombre que el parametro formal");
         return false;
     }
     return true;
@@ -1063,9 +1063,9 @@ void revisarConversion(string pila, int nroTer, string pf){
     string valido = Conversion::asignacion(tipoPF,tipoPR);
     if (valido == "ERROR" ){
         if (tipoPR == "REVISAR"){
-            yyerror("No es posible asignarle un atributos declarado con forward sin tipo a una variable");          
+            yyerror("No es posible asignarle un atributos predeclarado sin tipo a una variable");          
         }else{
-            yyerror("No es posible asignarle un "+tipoPF+" y un "+tipoPR);
+            yyerror("No es posible asignarle a un "+tipoPF+" un "+tipoPR);
         }
     } else if (tipoPF != tipoPR){
         string conversion = string(1,tipoPR[0])+"to"+string(1,tipoPF[0]);
@@ -1375,7 +1375,7 @@ case 34:
                                                         }
                                                     }else{ /*Se trata de un metodo*/
                                                         if (yyvsp[-3] == InsideClass::getClassSinMain()){
-                                                            yyerror("No es posible declarar un metodo con el mismo nombre al de la clase a la que pertenece");
+                                                            yyerror("No es posible declarar un metodo con el mismo nombre que el de la clase a la que pertenece");
                                                         }else{
                                                             bool hayForward = TablaDeSimbolos::getForwDecl(InsideClass::getClass()) == 0;
                                                             if (! hayForward || ! TablaDeSimbolos::existeClave(yyvsp[-3]+"-"+InsideClass::getClass())){
@@ -1442,7 +1442,7 @@ case 35:
                                             }
                                         }else{ /*Se trata de un metodo*/
                                             if (yyvsp[-2] == InsideClass::getClassSinMain()){
-                                                yyerror("No es posible declarar un metodo con el mismo nombre al de la clase a la que pertenece");
+                                                yyerror("No es posible declarar un metodo con el mismo nombre que el de la clase a la que pertenece");
                                             }else{
                                                 bool hayForward = TablaDeSimbolos::getForwDecl(InsideClass::getClass()) == 0;
 
