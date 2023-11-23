@@ -1,6 +1,0 @@
-{
-	SHORT x,
-	FLOAT y,
-	FLOAT z,
-	z = y + x,
-}

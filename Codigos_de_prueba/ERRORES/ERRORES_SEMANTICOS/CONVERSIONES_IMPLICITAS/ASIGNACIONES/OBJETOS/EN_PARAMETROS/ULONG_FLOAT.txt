@@ -1,0 +1,10 @@
+{
+	CLASS a{
+		FLOAT y,
+	},
+	VOID func(ULONG  x){
+		RETURN,
+	},
+	a obj,
+	func(obj.y),
+}

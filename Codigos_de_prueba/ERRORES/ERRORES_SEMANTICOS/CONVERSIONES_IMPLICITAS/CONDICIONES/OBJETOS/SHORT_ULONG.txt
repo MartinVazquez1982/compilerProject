@@ -1,0 +1,13 @@
+{
+	CLASS a{
+		SHORT x,
+		ULONG y,
+	},
+	a obj,
+
+	IF (obj.x < obj.y){
+	} END_IF,
+
+	WHILE (obj.y < obj.x) DO{
+	},
+}
