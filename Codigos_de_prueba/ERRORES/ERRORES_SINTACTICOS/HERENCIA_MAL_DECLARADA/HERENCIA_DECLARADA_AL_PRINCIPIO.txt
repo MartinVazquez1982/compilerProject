@@ -1,0 +1,10 @@
+{
+	CLASS clase{
+		SHORT x,
+		ULONG y,
+	},
+	CLASS claseh{
+		clase,
+		SHORT w,
+	},
+}

@@ -1,0 +1,10 @@
+{
+	CLASS clase{
+		ULONG x,
+	},
+	VOID fun(){
+		ULONG x,
+		x=-1_ul,
+		RETURN,
+	},
+}

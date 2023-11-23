@@ -1,0 +1,7 @@
+{
+	CLASS clase{
+		ULONG x,
+	},
+	clase obj,
+	obj.x=-100_ul,
+}

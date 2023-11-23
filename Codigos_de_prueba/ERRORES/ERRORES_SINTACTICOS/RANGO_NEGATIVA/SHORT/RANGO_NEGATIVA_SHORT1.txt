@@ -1,0 +1,4 @@
+{
+	SHORT x,
+	x=-129_s,*{es menor que el rango -128}*
+}

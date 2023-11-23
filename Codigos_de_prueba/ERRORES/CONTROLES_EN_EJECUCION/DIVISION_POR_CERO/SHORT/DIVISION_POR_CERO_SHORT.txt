@@ -1,0 +1,14 @@
+{
+	SHORT x,
+	SHORT y,
+
+	x = 10_s,
+	y = 30_s,
+
+	WHILE (x !! 0_s) DO{
+		x--,
+	},
+
+	y = y/x,
+
+}
