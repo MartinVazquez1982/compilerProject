@@ -1,0 +1,10 @@
+{
+	CLASS a,
+	a obj,
+	FLOAT x,
+	SHORT w,
+	x= x/w +obj.y + 5_s,*{No es posible operar con atributos declarados con forward sin un tipo}*
+	CLASS a{
+		SHORT y,
+	},
+}

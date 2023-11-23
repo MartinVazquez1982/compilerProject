@@ -1,0 +1,9 @@
+{
+	CLASS a,
+	CLASS b{
+		VOID fun(){
+			RETURN,
+		},
+		a, *{Hereda de una clase que finalmente no se termina de declarar}*
+	},
+}

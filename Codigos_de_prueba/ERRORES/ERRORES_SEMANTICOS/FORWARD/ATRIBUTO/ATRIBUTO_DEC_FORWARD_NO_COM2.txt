@@ -1,0 +1,22 @@
+{
+	CLASS c,
+	CLASS a{
+		VOID fun1(){
+			RETURN,
+		},
+		c,
+	},
+	CLASS b{
+		VOID fun2(){
+			RETURN,
+		},
+		a,
+	},
+	b obj,
+	obj.a.c.x=2_s,*{Atributo no encontrado posteriormente en la clase c}*
+	CLASS c{
+		VOID fun3(){
+			RETURN,
+		},
+	},
+}

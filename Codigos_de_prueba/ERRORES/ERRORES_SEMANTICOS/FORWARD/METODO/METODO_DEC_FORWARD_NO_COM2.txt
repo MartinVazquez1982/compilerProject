@@ -1,0 +1,24 @@
+{
+	CLASS c,
+	c obj2,
+	obj2.l(),*{Metodo no encontrado posteriormente en la clase c}*
+	CLASS a{
+		VOID fun1(){
+			RETURN,
+		},
+		c,
+	},
+	CLASS b{
+		VOID fun2(){
+			RETURN,
+		},
+		a,
+	},
+	b obj,
+	obj.a.c.x(),*{Metodo no encontrado posteriormente en la clase c}*
+	CLASS c{
+		VOID fun3(){
+			RETURN,
+		},
+	},
+}
