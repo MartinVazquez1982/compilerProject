@@ -72,13 +72,13 @@ void EstructuraTercetos::updateTerceto(int nro, string nroLabel){
 }
 
 void EstructuraTercetos::mostrarTercetos(){
-	cout << MAGENTA << endl << "=========== TERCETOS ===========" << endl << endl;
+	cout << MAGENTA << endl << "=============== TERCETOS ===============" << endl << endl;
 	for (const auto& entry : listaTercetos) {
 		cout << "	" << entry.first << endl << endl;
 		for (int i=0; i < entry.second.size(); i++) {
 			cout << i << "	( " << entry.second[i].operador << " , " << entry.second[i].operando1 << " , " << entry.second[i].operando2 << " )   " << entry.second[i].tipo  << endl;
 		}
-		cout << endl;
+		cout << endl << "========================================" << endl;
 	}
 	cout << RESET;
 }

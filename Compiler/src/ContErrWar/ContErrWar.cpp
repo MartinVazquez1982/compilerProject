@@ -41,7 +41,7 @@ void ContErrWar::addMensaje(string msj, string tipo){
 }
 
 void ContErrWar::mostrarMensajes(){
-	cout << endl << endl << RED " ================ Errores |" << YELLOW << "| Warnings ================ " << RESET << endl << endl;
+	cout << endl << endl << RED "================ Errores |" << YELLOW << "| Warnings ================ " << RESET << endl << endl;
 	while (!mensajes.empty()) {
 		auto elementoActual = ContErrWar::mensajes.front();
 		if (get<1>(elementoActual) == "ERROR"){
@@ -51,5 +51,5 @@ void ContErrWar::mostrarMensajes(){
 		}
 		ContErrWar::mensajes.pop();
 	}
-	cout << endl << YELLOW << "Warnings - " << ContErrWar::getWarning() << "		" << RED << "Errores - " << ContErrWar::getError() << RESET << endl << endl;
+	cout << endl << RED  << "	     " << ContErrWar::getError() << " - Errores    " << YELLOW << "Warnings - " << ContErrWar::getWarning() << RESET << endl << endl;
 }

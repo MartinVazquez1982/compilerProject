@@ -45,32 +45,33 @@ int main(int argc, char *argv[]) {
     string nombreSinPath = nombreArchivoEntrada.substr(found + 1);
     found = nombreSinPath.find_last_of(".");
     string nombreArchivoAssembler = nombreSinPath.substr(0, found);
-    string nombreArchivoSalida = nombreArchivoAssembler + "(Lineas Numeradas).txt";
+    string nombreArchivoLineas = nombreArchivoAssembler + "(Lineas-Numeradas).txt";
     
     
 
-    //ofstream archivo_salida(path + "/" + nombreArchivoSalida);
+    ofstream archivo_lineas(path + "/" + nombreArchivoLineas);
 
-    //if (archivo_salida.is_open()) {
+    if (archivo_lineas.is_open()) {
         string linea;
         int numero_linea = 1;
 
-        /*while (getline(codigoFuente, linea)) {
-            archivo_salida << numero_linea << " " << linea << "\n";
+        while (getline(codigoFuente, linea)) {
+        	archivo_lineas << numero_linea << " " << linea << "\n";
             numero_linea++;
-        }*/
-
-        cout << endl << endl << "Se ha generado el archivo con las líneas numeradas como: " << path + "/" + nombreArchivoSalida << endl;
+        }
+        archivo_lineas.close();
         codigoFuente.close();
         codigoFuente.clear();
         codigoFuente.open(nombreArchivo);
         VarSinInic::addTop();
+        cout << endl << "====================== Inicio de Compilacion ======================" << endl;
+        cout << endl << "=====================> Generacion de Tokens <======================" << endl;
         yyparse();
         codigoFuente.close();
-        //archivo_salida.close();
         ContErrWar::mostrarMensajes();
         if (ContErrWar::getError() == 0){
             generarCodigo(path, nombreArchivoAssembler);
+            cout << endl << "Se ha generado el archivo con las lineas numeradas como: " << path + "\\" + nombreArchivoLineas << endl << endl;
             EstructuraTercetos::mostrarTercetos();
             TablaDeSimbolos::imprimir();
             string comandoObj= "\\masm32\\bin\\ml /c /Zd /coff " + path + "\\" + nombreArchivoAssembler + ".asm";
@@ -83,7 +84,7 @@ int main(int argc, char *argv[]) {
             	string comandoExe = "\\masm32\\bin\\Link /SUBSYSTEM:CONSOLE " + path + "\\" + nombreArchivoAssembler + ".obj";
             	resultado = system(comandoExe.c_str());
             	if (resultado == 0){
-            		cout << "EXE creado exitosamente" << endl << endl << endl;
+            		cout  << "EXE creado exitosamente" << endl << endl << endl;
             	} else {
             		cout << "Error al intentar realizar el assembler del codigo fuente" << endl;
             	}
@@ -92,9 +93,9 @@ int main(int argc, char *argv[]) {
             }
 
         }
-    //} else {
-    //    cout << "No se pudo abrir el archivo de salida." << endl;
-    //}
+    } else {
+        cout << "No se pudo abrir el archivo de salida." << endl;
+    }
 
     return 0;
 }

@@ -8,7 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-
+#include <stdexcept>
 
 using namespace std;
 
@@ -38,7 +38,7 @@ ofstream generarArchivoASM(string path,const string& nombreArchivo) {
 		archivoASM << "includelib \\masm32\\lib\\kernel32.lib" << std::endl;
 		archivoASM << "includelib \\masm32\\lib\\user32.lib" << std::endl;
         archivoASM << ".data" << endl;
-        cout << "Se ha generado el archivo " << nombreArchivo << " exitosamente." << endl;
+        cout << endl << "Se ha generado el archivo " << nombreArchivo << " exitosamente." << endl;
     } else {
         cout << "No se pudo abrir el archivo " << nombreArchivo << endl;
     }
@@ -51,9 +51,8 @@ fstream generarASM(string path,const string& nombreArchivo) {
 
     if (archivoASM.is_open()) {
         archivoASM << ".code" << endl;
-        cout << "Se ha generado el archivo " << nombreArchivo << " exitosamente." << endl;
     } else {
-        cout << "No se pudo abrir el archivo " << nombreArchivo << endl;
+    	throw runtime_error("No se ha podido generar la seccion .code del assembler");
     }
 
     return archivoASM;
@@ -200,36 +199,38 @@ void generarCodigo(string path, string nameFuente){
             archivoASMCODE << "\n";
         }
         archivoASMCODE << "main:\nfinit" << endl;
-        vector<EstructuraTercetos::terceto> tercetos = listaTercetos.find(":main")->second;
-        crearAssembler(tercetos,":main",error, print,archivoASMCODE);
-		if (error[0]){
-			archivoASMCODE << FINEJEC << endl;
-			archivoASMCODE << "etiqueta_divcero:" << endl;
-			archivoASMCODE << "invoke MessageBox, NULL, addr msj_div0, addr msj_div0, MB_OK" << endl;
-			archivoASM << "msj_div0 db \"Error: Division por cero\", 0" << endl;
+        if(listaTercetos.size() > 0){
+			vector<EstructuraTercetos::terceto> tercetos = listaTercetos.find(":main")->second;
+			crearAssembler(tercetos,":main",error, print,archivoASMCODE);
+			if (error[0]){
+				archivoASMCODE << FINEJEC << endl;
+				archivoASMCODE << "etiqueta_divcero:" << endl;
+				archivoASMCODE << "invoke MessageBox, NULL, addr msj_div0, addr msj_div0, MB_OK" << endl;
+				archivoASM << "msj_div0 db \"Error: Division por cero\", 0" << endl;
+			}
+			if (error[1]){
+				archivoASMCODE << FINEJEC << endl;
+				archivoASMCODE << "overflow_add_float:" << endl;
+				archivoASMCODE << "invoke MessageBox, NULL, addr msj_addfloat, addr msj_addfloat, MB_OK" << endl;
+				archivoASM << "msj_addfloat db \"Error: Overflow suma entre flotantes\", 0" << endl;
+				archivoASM << CERO << endl;
+				archivoASM << MAXPOSITIVO << endl;
+				archivoASM << MINPOSITIVO << endl;
+				archivoASM << MAXNEGATIVO << endl;
+				archivoASM << MINNEGATIVO << endl;
+			}
+			if (error[2]){
+				archivoASMCODE << FINEJEC << endl;
+				archivoASMCODE << "overflow_mulEnt:" << endl;
+				archivoASMCODE << "invoke MessageBox, NULL, addr msj_addEnt, addr msj_addEnt, MB_OK" << endl;
+				archivoASM << "msj_addEnt db \"Error: Overflow en producto de enteros\", 0" << endl;
+			}
+			if (print){
+				archivoASM << "SPRINTS DB \"PRINT\", 0" << endl;
+			}
 		}
-		if (error[1]){
-			archivoASMCODE << FINEJEC << endl;
-			archivoASMCODE << "overflow_add_float:" << endl;
-			archivoASMCODE << "invoke MessageBox, NULL, addr msj_addfloat, addr msj_addfloat, MB_OK" << endl;
-			archivoASM << "msj_addfloat db \"Error: Overflow suma entre flotantes\", 0" << endl;
-			archivoASM << CERO << endl;
-			archivoASM << MAXPOSITIVO << endl;
-			archivoASM << MINPOSITIVO << endl;
-			archivoASM << MAXNEGATIVO << endl;
-			archivoASM << MINNEGATIVO << endl;
-		}
-		if (error[2]){
-			archivoASMCODE << FINEJEC << endl;
-			archivoASMCODE << "overflow_mulEnt:" << endl;
-			archivoASMCODE << "invoke MessageBox, NULL, addr msj_addEnt, addr msj_addEnt, MB_OK" << endl;
-			archivoASM << "msj_addEnt db \"Error: Overflow en producto de enteros\", 0" << endl;
-		}
-		archivoASMCODE << FINEJEC << endl;
-		archivoASMCODE << "end main" << endl;
-        if (print){
-        	archivoASM << "SPRINTS DB \"PRINT\", 0" << endl;
-        }
+        archivoASMCODE << FINEJEC << endl;
+        archivoASMCODE << "end main" << endl;
         TablaDeSimbolos::inic();
         while(!TablaDeSimbolos::fin()){
         	string clave = TablaDeSimbolos::getClave();
