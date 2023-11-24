@@ -147,10 +147,10 @@ void crearAssembler(vector<EstructuraTercetos::terceto> tercetos, string claveTS
 				string scOp;
 				if (tercetos[i].operador == "BF"){
 					op = tercetos[getNro(tercetos[i].operando1)].operador+tercetos[getNro(tercetos[i].operando1)].tipo;
-					ftOp = reemplazarCaracter(tercetos[getNro(tercetos[i].operando2)].operador+claveTS,':','_');
+					ftOp = reemplazarCaracter(reemplazarCaracter(tercetos[getNro(tercetos[i].operando2)].operador+claveTS,':','_'),'-','_');
 				} else if (tercetos[i].operador == "BI"){
 					op = tercetos[i].operador;
-					ftOp = reemplazarCaracter(tercetos[getNro(tercetos[i].operando1)].operador+claveTS,':','_');
+					ftOp = reemplazarCaracter(reemplazarCaracter(tercetos[getNro(tercetos[i].operando1)].operador+claveTS,':','_'),'-','_');
 				}else if (tercetos[i].operador == "Call"){
 					op = "CALL";
 					ftOp = reemplazarCaracter(reemplazarCaracter(tercetos[i].operando1,':','@'),'-','_');
@@ -177,6 +177,37 @@ void crearAssembler(vector<EstructuraTercetos::terceto> tercetos, string claveTS
 				}
 			} else {
 				archivoASMCODE << reemplazarCaracter(reemplazarCaracter(tercetos[i].operador+claveTS,':','_'),'-','_')+":" << endl;
+			}
+		}
+	}
+}
+
+void cargarAtrObj(string atr, string obj, ofstream & archivoASM ){
+	if (TablaDeSimbolos::getTipo(atr) == "SHORT" || TablaDeSimbolos::getTipo(atr) == "ULONG" || TablaDeSimbolos::getTipo(atr) == "FLOAT"){
+		string nuevoObj = atr.substr(0,atr.find('-'))+"."+obj;
+		string reemplazo=reemplazarCaracter(reemplazarCaracter(nuevoObj,':','_'),'.','@');
+		if (TablaDeSimbolos::getTipo(atr) == "SHORT"){
+			archivoASM << reemplazo+DB << endl;
+		} else {
+			archivoASM << reemplazo+DD << endl;
+		}
+	} else {
+		obj = atr.substr(0,atr.find('-'))+"."+obj;
+		vector<string> clases = vector<string>();
+		clases.push_back(TablaDeSimbolos::getTipo(atr)+":main");
+		string clase2 = "", clase3 = "";
+		if(TablaDeSimbolos::nivelHerencia(clases[0]) > 1){
+			clases.push_back(TablaDeSimbolos::getHerencia(clases[0]));
+			if(TablaDeSimbolos::nivelHerencia(clases[1]) > 1){
+				clases.push_back(TablaDeSimbolos::getHerencia(clases[1]));
+			}
+		}
+		for(int i=0; i< clases.size(); i++){
+			string clase = clases[i];
+			if (i > 0){ obj = clase.substr(0,clase.find(':'))+"."+obj;}
+			vector<string> atributos = EstrDeclObj::getAtributos(clases[i]);
+			for (string & atributo: atributos){
+				cargarAtrObj(atributo,obj,archivoASM);
 			}
 		}
 	}
@@ -280,13 +311,7 @@ void generarCodigo(string path, string nameFuente){
         		if (i > 0){ atr = clase.substr(0,clase.find(':'))+"."+atr;}
         		vector<string> atributos = EstrDeclObj::getAtributos(clases[i]);
         		for(string & atributo: atributos){
-        			string nuevoObj = atributo.substr(0,atributo.find('-'))+"."+atr;
-        			string reemplazo=reemplazarCaracter(reemplazarCaracter(nuevoObj,':','_'),'.','@');
-        			if (TablaDeSimbolos::getTipo(atributo) == "SHORT"){
-        				archivoASM << reemplazo+DB << endl;
-        			} else {
-        				archivoASM << reemplazo+DD << endl;
-        			}
+        			cargarAtrObj(atributo,atr,archivoASM);
         		}
         	}
         	EstrDeclObj::avanzar();
