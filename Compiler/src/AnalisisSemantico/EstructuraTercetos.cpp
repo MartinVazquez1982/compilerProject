@@ -78,7 +78,7 @@ void EstructuraTercetos::mostrarTercetos(){
 		for (int i=0; i < entry.second.size(); i++) {
 			cout << i << "	( " << entry.second[i].operador << " , " << entry.second[i].operando1 << " , " << entry.second[i].operando2 << " )   " << entry.second[i].tipo  << endl;
 		}
-		cout << endl << "========================================" << endl;
+		cout << endl << "========================================" << endl << endl;
 	}
 	cout << RESET;
 }

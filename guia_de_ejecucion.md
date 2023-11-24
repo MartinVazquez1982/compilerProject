@@ -38,3 +38,4 @@ Aclaraciones:
 ```
 Aclaraciones: 
 - El path del codigo fuente no puede tener espacios
+- Para una buena visualizacion de la tabla de simbolos, colocar la consola en pantalla completa

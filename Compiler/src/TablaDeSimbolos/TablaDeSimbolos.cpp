@@ -79,8 +79,9 @@ void TablaDeSimbolos::imprimir() {
 	cout << left << setw(25) << "Parametro Formal";
 	cout << left << setw(15) << "Clase";
 	cout << left << setw(19) << "Hereda";
-	cout << left << setw(10) << "Nivel Her";
-	cout << left << "ForwDecl" << endl;
+	cout << left << setw(9) << "NivelHer";
+	cout << left << setw(9) << "ForwDecl" ;
+	cout << left << "VarAux" << endl;
 
 	cout << setfill('-') << setw(24) << "" << " ";
 	cout << setfill('-') << setw(6) << "" << " ";
@@ -89,8 +90,9 @@ void TablaDeSimbolos::imprimir() {
 	cout << setfill('-') << setw(24) << "" << " ";
 	cout << setfill('-') << setw(14) << "" << " ";
 	cout << setfill('-') << setw(18) << "" << " ";
-	cout << setfill('-') << setw(9) << "" << " ";
-	cout << setfill('-') << setw(9) << "" << endl;
+	cout << setfill('-') << setw(8) << "" << " ";
+	cout << setfill('-') << setw(8) << "" << " ";
+	cout << setfill('-') << setw(6) << "" << endl;
 	cout << setfill(' ');
 	for (const auto& par : TablaDeSimbolos::table) {
 		cout << left << setw(25) << par.first;
@@ -100,8 +102,9 @@ void TablaDeSimbolos::imprimir() {
 			cout << left << setw(25) << par.second.parametro_formal;
 			cout << left << setw(15) << par.second.clase;
 			cout << left << setw(19) << par.second.hereda;
-			cout << left << setw(10) << par.second.nivelHerencia;
-			cout << left << par.second.forwDecl << endl;
+			cout << left << setw(9) << par.second.nivelHerencia;
+			cout << left << setw(9) << par.second.forwDecl;
+			cout << left << par.second.varAux << endl;
 	}
 }
 
