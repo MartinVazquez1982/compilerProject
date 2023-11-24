@@ -1,0 +1,22 @@
+{
+	CLASS x,
+	obj x,
+	x obj2,
+	obj2.a.f(),
+	CLASS a{
+		VOID f(){
+			RETURN,
+		},
+	},
+	SHORT w
+	ULONG l
+	VOID fun(){
+		fun(),
+	},
+	CLASS b,
+	b obj,
+	obj.r=5_s,
+	CLASS b{
+		ULONG r,
+	},
+}

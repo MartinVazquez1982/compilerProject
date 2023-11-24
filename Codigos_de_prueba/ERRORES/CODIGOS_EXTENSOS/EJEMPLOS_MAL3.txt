@@ -1,0 +1,27 @@
+{
+	CLASS clase1,
+	clase1 obj,
+	obj.fun1(), *{no puede acceder a un metodo si la clase no esta definida}*
+	obj.x(),*{no puede acceder a un atributo si la clase no esta definida}*
+	CLASS clase1{
+	   FLOAT x,
+	},
+	SHORT y,
+	obj.x=w, *{variable no declarada}*
+	WHILE (obj.x>12.) do{ *{do en minuscula en lugar de mayuscula}*
+		y--,
+	},
+	IF (y>0_s) 
+		PRINT %RESTE%,
+	END_IF,
+	FLOAT z,
+	ULONG k,
+	FLOAT z, *{variable redeclarada}*
+	ULONG k, *{variable redeclarada}*
+	z= y+z/--k+z*y + k, *{el -- se debe hacer del otro lado de la variable}*
+	y=y/0, *{falta sufijo en la constante}*
+	CLASS clase2{
+		SHORT x,
+		clase1,
+	},
+}

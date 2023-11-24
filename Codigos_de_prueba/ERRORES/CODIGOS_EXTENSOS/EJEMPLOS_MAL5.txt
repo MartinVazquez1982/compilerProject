@@ -1,0 +1,33 @@
+{
+	CLASS x,
+	x obj,
+	obj.fun(5_s),
+	CLASS x{
+		VOID fun(ULONG u){
+			RETURN,
+		},
+	},
+	CLASS lac,
+	lca obj,
+	SHORT f,
+	fun3(),
+	VOID fun3(ULONG fun3){
+		FLOAT fun3,
+	},
+	VOID fun2(ULONG kut){
+		FLOAT kut,
+		RETURN,
+	},
+	VOID fun5(ULONG kut){
+		fun(),
+		RETURN,
+	},
+	f=10_s_ul,*{sufijo inexistente}*
+	SH loc, *{no existe SH}*
+	IF (5_s==5_ul){
+		CLASS def, *{no se puede declarar una clase dentro de un if}*
+		CLASS def{
+			SHORT x,
+		},
+	},
+}

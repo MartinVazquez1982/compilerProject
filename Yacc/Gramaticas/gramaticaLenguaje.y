@@ -730,7 +730,7 @@ void setearTipos(string tipo, string listVariable){
     while (getline(variableStream, var, '&')) {
         if (TablaDeSimbolos::getTipo(var) == " " || TablaDeSimbolos::getTipo(var) == "REVISAR"){
             TablaDeSimbolos::setTipo(var, tipo);
-        } else if(TablaDeSimbolos::getTipo(var) != tipo){
+        } else if(TablaDeSimbolos::getTipo(var) != tipo && InsideClass::insideClass()){
             yyerror("Tipo detectado en inferencia no coincide con su declaracion Atributo" + var);
         }
     }
@@ -942,7 +942,7 @@ bool noReDeclarada(string decl, string usoOriginal){
     string ambito=Ambito::get();
     string uso = TablaDeSimbolos::usoAsignado(decl+ambito);
     if (TablaDeSimbolos::getForwDecl(decl+ambito) != 0){
-        if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase" || uso == "Atr" || uso == "Metodo"){
+        if (uso == "Var" || uso == "Funcion" || uso == "Obj" || uso == "Clase" && usoOriginal != "Clase" || uso == "Atr" || uso == "Metodo" || uso == "PF"){
                 yyerror(uso + " " + decl + " se encuentra re-declarada como " + usoOriginal);
                 return false;
         } else if (uso == "Clase" && usoOriginal == "Clase" ){

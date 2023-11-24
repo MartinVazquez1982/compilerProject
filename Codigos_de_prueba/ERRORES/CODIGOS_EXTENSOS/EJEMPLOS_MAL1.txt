@@ -1,0 +1,41 @@
+{
+	SHORT a,
+	ULONG b,
+	FLOAT c,
+	CLASS clase1{
+           SHORT y,
+	   VOID fun1(){
+		y=a, *{No puede acceder a y porque es un atributo}*
+		RETURN,
+	   },
+	   CLASS clase5{ *{Clase dentro de clase}*
+		ULONG s,
+	   },
+	   VOID clase1(){
+		RETURN,
+	   },
+	   fun1(), *{no se puede llamar al metodo desde la clase}*
+	},
+	fun1(), *{no esta al alcance para llamar a fun1}*
+	CLASS clase2{
+	   SHORT x,
+           clase1,
+	},
+	VOID fun3(SHORT a){
+		PRINT %HOLA MUNDO%,
+		RETURN,
+	},
+	VOID fun3(){ *{fun3 redeclarada}*
+		RETURN,
+	},
+	VOID fun4(){
+		fun3(), 
+		RETURN
+	},
+	clase1 obj1,
+	clase2 obj2,
+	obj1.fun1(), *{no le pasa parametro}*
+	obj2.x=b, *{tipos incompatibles, no se le puede asignar ulong a short}*
+	c=b*a + c + a--/c, *{tipos incompatibles, no se puede multiplicar short con ulong}*
+	fun4(),
+}
