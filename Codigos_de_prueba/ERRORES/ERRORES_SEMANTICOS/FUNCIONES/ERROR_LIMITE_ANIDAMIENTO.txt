@@ -1,0 +1,18 @@
+{
+	CLASS a{
+		VOID met(){
+			RETURN,
+		},
+
+		VOID met2(){
+			VOID met3(){
+				VOID met4(){
+					RETURN,
+				},
+				RETURN,
+			},
+			RETURN,
+		},
+	},
+
+}

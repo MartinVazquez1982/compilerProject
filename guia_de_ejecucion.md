@@ -2,42 +2,39 @@
 
 Guia de ejecucion para el compilador desarrollado por Joaquin Benecier, David Burckhardt y Martin Vazquez Arispe
 
-## Indice
+## Salida del Compilador
 
-1. [Windows](#windows)
-2. [Linux](#linux)
+Mismo archivo que el codigo fuente, pero cada linea con su correspondiente número
+```
+codigoFuente(Lineas-Numeradas).txt
+```
 
-## Windows
+Archivo que contiene el codigo Assembler (Este se crea si no hubo errores en la compilacion)
+```
+codigoFuente.asm
+```
+Este archivo contiene el código objeto, que es una representación intermedia del código fuente antes de ser convertido en código ejecutable (Se genera automaticamente si *MASM32 Editor* se encuentra instalado)
+```
+codigoFuente.obj
+```
+Este archivo contiene el codigo ejecutable del codigo de fuente recibido (Se genera automaticamente si *MASM32 Editor* se encuentra instalado)
+```
+codigoFuente.exe
+```
+Aclaraciones: 
+- *"codigoFuente"* hace referencia al nombre que le coloco el usuario al archivo fuente.
+- Para tener la salida completa hay que instalar el ensamblador *MASM32 Editor*
+- El archivo *codigoFuente.asm* puede ser compilado a mano
+
+## Ejecucion
 
 **Pasos:**
 1. Abrir consola PowerShell o cmd
-2. Posicionarse dentro de la carpeta *Entrega/Codigo_Ejecutable/Windows*
+2. Posicionarse dentro de la carpeta *Entrega/Codigo_Ejecutable/*
 3. Escribir el siguiente comando:   
 
-``` bash
-./Compiler.exe {path_archivo_a_compilar}
-```
-Aclaracion: Si el path del archivo a compilar tiene una carpeta con un espacio en su nombre, colocar comillas dobles a toda la ruta
-
-## Linux
-
-**Pasos:**
-
-1. Abrir consola de bash
-2. Posicionarse dentro de la carpeta *Entrega/Codigo_Ejecutable/Linux*
-3. Es recomendable cambiar los archivos de prueba al formato de linea de finalización de Unix, para esto ejecutar los siguientes comandos:
 ```bash
-chmod +x cambiar_formato_txt.sh
+.\Compiler.exe {path_archivo_a_compilar}
 ```
-```bash
-./cambiar_formato_txt.sh
-```
-4. Luego se habilita la ejecución del compilador:
-```bash
-chmod +x Compiler.exe
-```
-5. Finalmente se ejecuta:
-```bash
-./Compiler.exe {path_archivo_a_compilar}
-```
-Aclaracion: Si el path del archivo a compilar tiene una carpeta con un espacio en su nombre, colocar comillas dobles a toda la ruta
+Aclaraciones: 
+- El path del codigo fuente no puede tener espacios

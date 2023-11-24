@@ -1,0 +1,31 @@
+1 {
+2 	VOID func(SHORT x){
+3 		RETURN,
+4 	},
+5 
+6 	VOID func2(){
+7 		RETURN
+8 	},
+9 
+10 	CLASS a{
+11 		VOID met(){
+12 			RETURN,
+13 		},
+14 	
+15 		VOID met2(ULONG y){
+16 			RETURN,
+17 		},
+18 	},
+19 
+20 	func(),
+21 	
+22 	func2(1_s),
+23 
+24 	a obj,
+25 
+26 	obj.met(23_s),
+27 
+28 	obj.met2(),
+29 }
+30 
+31 	

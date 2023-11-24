@@ -1,0 +1,13 @@
+{
+	CLASS a,
+
+	a obj,
+
+	obj.x = 12_ul,
+
+	obj.x = 9_s,
+
+	CLASS a {
+		FLOAT x,
+	},
+}

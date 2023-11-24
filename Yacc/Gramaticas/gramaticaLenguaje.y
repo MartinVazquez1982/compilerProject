@@ -42,8 +42,8 @@ sentenceList: sentenceList sentence
 
 sentence: declarative','
         | executable','
-        | declarative {yywarning("Falta coma");}
-        | executable {yywarning("Falta coma");}
+        | declarative {yyerror("Se ha detectado una falta de coma");}
+        | executable {yyerror("Se ha detectado una falta de coma");}
         ;
 
 declarative: function
@@ -417,8 +417,7 @@ bloque: iterativeBody
 else: ELSE {jumpEndThen();}
     ;
 
-whileStatement: while condition DO iterativeBody {yymenssage("While");jumpEndWhile();} 
-              | while condition DO  {yywarning("While vacio");yymenssage("While");jumpEndWhile();}
+whileStatement: while condition DO bloque {yymenssage("While");jumpEndWhile();} 
               ;
               
 while: WHILE {EstructuraTercetos::apilar();EstructuraTercetos::addLabel();}
@@ -672,6 +671,7 @@ bool converAsig(string izq, string der, string & tipo){
         }
     } else {
         TablaDeSimbolos::setTipo(atrIzq,tipoDer);
+        yywarning("Se ha inferido el tipo de " + atrIzq + " como " + tipoDer);
         tipo = tipoDer;
     }
     return false;

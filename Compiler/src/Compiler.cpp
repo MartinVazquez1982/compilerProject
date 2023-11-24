@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
         codigoFuente.close();
         ContErrWar::mostrarMensajes();
         if (ContErrWar::getError() == 0){
-            //generarCodigo(path, nombreArchivoAssembler);
+            //generarCodigo(path, nombreArchivoAssembler); Me caen mal
             cout << endl << "Se ha generado el archivo con las lineas numeradas como: " << path + "\\" + nombreArchivoLineas << endl << endl;
             EstructuraTercetos::mostrarTercetos();
             TablaDeSimbolos::imprimir();

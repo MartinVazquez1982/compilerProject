@@ -3,9 +3,12 @@
 		x(),
 		RETURN,
 	},
-	VOID y(){
-		x(),
-		RETURN,
-	},
 
+	CLASS a{
+		VOID met(){
+			a obj,
+			obj.met(),
+			RETURN,
+		},
+	},
 }
