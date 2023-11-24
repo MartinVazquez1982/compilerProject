@@ -1,0 +1,63 @@
+{
+	CLASS _a3,
+	CLASS _a4{
+		FLOAT y,
+		SHORT x,
+		VOID met_a4(SHORT l){
+			WHILE ( l > 9_s ) DO {
+				PRINT %WHILE%,
+			},
+			RETURN,
+		},
+	},
+	CLASS _a1{
+		FLOAT y,
+		SHORT x,
+		VOID met_a1(){
+			PRINT %hola%,
+			RETURN,
+		},
+		_a4,
+	},
+	CLASS _a2{
+		SHORT x,
+		FLOAT y,
+		ULONG j,
+		_a1 obj_a1,
+		VOID met_a2(FLOAT h){
+			SHORT i,
+			i = 9_s,
+			IF ( h > i )
+				PRINT %IF%,
+			END_IF,
+			RETURN,
+		},
+	},
+	_a3 p3,
+	_a1 p1,
+	_a2 p2,
+	p2.j = p2.j + 456_ul,
+	p3._a3g = 56_ul,
+	p3._a3g--,
+	p1.x = 4_s,
+	p1._a4.met_a4(p1._a4.x),
+	p3.met_a3(p2.j),
+	p2.obj_a1._a4.y--,
+	p2.obj_a1._a4.x = p2.obj_a1._a4.x / p2.obj_a1.x - p2.x,
+
+	CLASS _a3{
+		ULONG _a3g,
+		VOID met_a3(ULONG k){
+			VOID func_a3(ULONG u){
+				PRINT %func_a3%,
+				RETURN,
+			},
+			k = 9_ul,
+			func_a3(k),
+			PRINT %func_a3%,
+			RETURN,
+		},
+	},
+
+
+}
