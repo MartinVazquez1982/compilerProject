@@ -1,0 +1,37 @@
+{
+	SHORT a,
+	ULONG b,
+	FLOAT c,
+	CLASS clase1{
+	   SHORT x,
+	},
+	CLASS clase2{
+           SHORT y,
+	   VOID fun1(){
+		SHORT y,
+		y=a,
+		RETURN,
+	   },
+	   clase1,
+	},
+	CLASS clase3{
+	   SHORT x,
+           clase2,
+	},
+	VOID func1(FLOAT x){
+		PRINT %HOLA MUNDO%,
+		ULONG h,
+		WHILE(h>20_ul) DO{
+			h--,
+	   	},
+		RETURN,
+	},
+	func1(a*c),
+	IF (a>12_s){
+		b=25_ul,
+	}ELSE{
+		b=5_ul,
+	}END_IF,
+	SHORT l,
+	a= a + l,
+}

@@ -1,0 +1,24 @@
+{
+	ULONG base,
+	ULONG result,
+
+	base = 2_ul, *{colocar la base}*
+	result = 1_ul,
+
+	VOID potencia(ULONG exp){
+		WHILE (exp > 0_ul) DO {
+			result = result * base,
+			exp--,
+		},
+		RETURN,
+	},
+
+	potencia(6_ul) *{En el parametro colocar el exponente}*
+
+	IF (result == 64_ul){ *{colocar el resultado para ver si es el correcto}*
+		PRINT %El resultado fue el correcto%,
+	} ELSE {
+		PRINT %El resultado NO fue el correcto%,
+	} END_IF
+
+}

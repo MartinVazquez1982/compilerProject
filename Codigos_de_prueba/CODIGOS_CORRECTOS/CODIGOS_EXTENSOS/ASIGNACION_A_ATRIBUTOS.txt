@@ -1,0 +1,82 @@
+{
+	CLASS pais{
+		SHORT pref_pais,
+	},
+
+	CLASS provincia{
+		SHORT pref_prov,
+		pais,
+	},
+
+	CLASS estado{
+		SHORT pref_est,
+		pais,
+	},
+	
+	CLASS intendencia{
+		SHORT pref_int,
+		estado,
+	},
+	
+	CLASS partido{
+		SHORT pref_part,
+		provincia,
+	},
+
+	CLASS departamento{
+		SHORT pref_dep,
+		provincia,
+	},
+
+	CLASS conjunto{
+		partido part,
+	},
+
+	pais arg,
+	pais eeuu,
+	provincia bsas,
+	estado california,
+	intendencia manhattan,
+	partido tandil,
+	departamento colon,
+	conjunto conj,
+
+	*{Pais}*
+
+	arg.pref_pais = 54_s,
+	eeuu.pref_pais = 1_s,
+
+	*{Provincia}*
+
+	bsas.pref_prov = 23_s,
+	bsas.pais.pref_pais = 45_s,
+
+	*{Estado}*
+
+	california.pref_est = 33_s,
+	california.pais.pref_pais = 8_s,
+
+	*{intendencia}*
+
+	manhattan.pref_int = 9_s,
+	manhattan.estado.pref_est = 87_s,
+	manhattan.estado.pais.pref_pais = 56_s,
+
+	*{Partido}*
+
+	tandil.pref_part = 23_s,
+	tandil.provincia.pref_prov = 77_s,
+	tandil.provincia.pais.pref_pais = 4_s,
+
+	*{departamento}*
+	
+	colon.pref_dep = 4_s,
+	colon.provincia.pref_prov = 65_s,
+	colon.provincia.pais.pref_pais = 50_s,
+
+	*{conjunto}*
+
+	conj.part.pref_part = 10_s,
+	conj.part.provincia.pref_prov = 22_s,
+	conj.part.provincia.pais.pref_pais = 8_s,
+}

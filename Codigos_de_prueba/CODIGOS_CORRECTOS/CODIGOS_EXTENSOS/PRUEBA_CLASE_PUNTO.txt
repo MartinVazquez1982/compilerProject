@@ -1,0 +1,32 @@
+{
+
+	CLASS punto{
+		SHORT x,
+		SHORT y,
+	},
+
+	
+	punto p1,
+	punto p2,
+
+	SHORT result,
+
+	VOID mul_puntos(){
+		result = p1.x * p2.x + p1.y * p2.y,
+		RETURN,
+	},
+
+	p1.x = 2_s,
+	p1.y = 3_s,
+	p2.x = 4_s,
+	p2.y = 2_s,
+
+	mul_puntos(), 
+
+	IF (result == 14_s){ *{colocar el resultado para ver si es el correcto}*
+		PRINT %El resultado fue el correcto%,
+	} ELSE {
+		PRINT %El resultado NO fue el correcto%,
+	} END_IF, 
+
+}

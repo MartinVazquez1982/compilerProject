@@ -1,0 +1,86 @@
+{
+
+	*{Variables}*
+	FLOAT x,
+	FLOAT y,
+	FLOAT z,
+
+	*{Coeficientes}*
+
+	FLOAT a,
+	FLOAT b,
+	FLOAT c,
+
+	*{Resultado}*
+
+	FLOAT result,
+
+	VOID lineal(FLOAT ter_idp){
+		result = a * x + ter_idp,
+		RETURN,
+	},
+
+	VOID lineal2var(FLOAT ter_idp){
+		lineal(ter_idp),
+		result = result + b * y,
+		RETURN,
+	},
+
+	VOID lineal3var(FLOAT ter_idp){
+		lineal2var(ter_idp),
+		result = result + c * z,
+		RETURN,
+	},
+
+	VOID identidad(FLOAT ter_idp){
+		result = a*x*x + b * y + ter_idp,
+		RETURN,
+	},
+
+	VOID racional(FLOAT d){
+		IF (x !! 0.0){
+			result = a/x + d,
+		} ELSE {
+			PRINT %Indefinido%,
+		} END_IF,
+		RETURN,
+	},
+
+	x = 4.,
+	a = 3.,
+
+	lineal(12.),
+	lineal(-1.),
+	lineal(0.0),
+	lineal(5.6),
+
+	y = 2.5,
+	b = 5.,
+
+	lineal2var(12.),
+	lineal2var(-1.),
+	lineal2var(0.0),
+	lineal2var(5.6),
+
+	z = 6.9E+2,
+	c = 4.99,
+
+	lineal3var(12.),
+	lineal3var(-1.),
+	lineal3var(0.0),
+	lineal3var(5.6),
+
+	identidad(12.),
+	identidad(-1.),
+	identidad(0.0),
+	identidad(5.6),
+
+	racional(12.),
+	racional(-1.),
+	racional(0.0),
+	racional(5.6),
+
+	x = 0.0,
+
+	racional(8.45),
+}

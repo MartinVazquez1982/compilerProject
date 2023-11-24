@@ -1,0 +1,36 @@
+{
+	SHORT a,
+	ULONG b,
+	FLOAT c,
+	CLASS clase1{
+           SHORT y,
+	   VOID fun1(){
+		SHORT y,
+		y=a,
+		PRINT %func1 dentro de clase1%,
+		RETURN,
+	   },
+	   VOID fun2(){
+		RETURN,
+	   },
+	},
+	CLASS clase2{
+	   SHORT x,
+           clase1,
+	},
+	VOID fun3(SHORT k){
+		PRINT %HOLA MUNDO%,
+		RETURN,
+	},
+	VOID fun4(){
+		fun3(a),
+		RETURN,
+	},
+	clase1 obj1,
+	clase2 obj2,
+	obj1.fun1(),
+	c = 19.0,
+	obj2.x=obj2.clase1.y,
+	c=c*a + b + a--/c,
+	fun3(a),
+}

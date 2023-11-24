@@ -1,0 +1,24 @@
+{
+	CLASS clase1,
+	clase1 obj,
+	CLASS clase1{
+	   FLOAT x,
+	},
+	SHORT y,
+	obj.x=y,
+	WHILE (obj.x>12.) DO{
+		y--,
+	},
+	IF (y>0_s) 
+		PRINT %RESTE%,
+	END_IF,
+	FLOAT z,
+	ULONG k,
+	z= y+z/k--+z*y + k,
+	z--,
+	y=y/0_s,
+	CLASS clase2{
+		SHORT x,
+		clase1,
+	},
+}
