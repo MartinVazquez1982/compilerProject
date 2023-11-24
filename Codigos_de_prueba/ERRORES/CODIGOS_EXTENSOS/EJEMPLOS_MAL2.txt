@@ -1,0 +1,43 @@
+{
+	SHORT a,
+	ULONG b,
+	FLOAT c,
+	CLASS clase1{
+	   SHORT x,
+	},
+	CLASS clase2{
+           SHORT y,
+	   VOID fun1(){ *{Sobreescribe el metodo fun1 que hereda de clase1}*
+		SHORT y,
+		y=a,
+		VOID fun2(){
+			VOID fun3(){
+				RETURN,
+			},
+			RETURN,
+		},
+		*{falta return}*
+	   },
+	   clase1,
+	},
+	CLASS clase3{
+	   SHORT x,
+           clase2,
+	},
+	VOID func1(FLOAT x){
+		PRINT %HOLA MUNDO%,
+		ULONG h,
+		WHILE(h>20_ult) DO{ *{constante mal definida por el sufijo}*
+			h-, *{sintax error falta un menos}*
+	   	},
+		RETURN,
+	},
+	func1(a*c),
+	IF (a+12_s){ *{expresion no puede ir entre parentesis}*
+		b=25_ul,
+	}ELSE{
+		b=c, *{tipos incompatibles}*
+	}END_IF,
+	SHORT l,
+	a= a + l,
+}
