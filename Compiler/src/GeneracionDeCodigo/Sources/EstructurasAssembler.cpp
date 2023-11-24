@@ -50,8 +50,8 @@ unordered_map<string,EstructurasAssembler::FunctionType> EstructurasAssembler::c
 		{"<=FLOAT", EstructurasAssembler::getCompLessEqUF},
 		{">=FLOAT", EstructurasAssembler::getCompGreaterEqUF},
 		{"BI", EstructurasAssembler::getJump},
-		{"compSHORT",EstructurasAssembler::getCompInt},
-		{"compULONG",EstructurasAssembler::getCompInt},
+		{"compSHORT",EstructurasAssembler::getCompShort},
+		{"compULONG",EstructurasAssembler::getCompUlong},
 		{"compFLOAT", EstructurasAssembler::getCompFloat},
 		{"CALL", EstructurasAssembler::getCall},
 		{"RETURN", EstructurasAssembler::getReturn},
@@ -295,8 +295,16 @@ string EstructurasAssembler::getJump(string operando1, string operando2, string 
 	return JMP+operando1;
 }
 
-string EstructurasAssembler::getCompInt(string operando1, string operando2, string & varAux,bool error[]){
-	return CMP+operando1+", "+operando2;
+string EstructurasAssembler::getCompShort(string operando1, string operando2, string & varAux,bool error[]){
+	string salida= MOV+AL+", "+operando1;
+	salida= salida+ "\n"+ CMP+AL+", "+operando2;
+	return salida;
+}
+
+string EstructurasAssembler::getCompUlong(string operando1, string operando2, string & varAux,bool error[]){
+	string salida= MOV+EAX+", "+operando1;
+	salida= salida+ "\n"+  CMP+operando1+", "+operando2;
+	return salida;
 }
 
 string EstructurasAssembler::getCompFloat(string operando1, string operando2, string & varAux,bool error[]){

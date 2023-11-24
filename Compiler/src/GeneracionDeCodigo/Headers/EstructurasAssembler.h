@@ -56,7 +56,8 @@ class EstructurasAssembler {
 		static string getCompLessEqUF(string operando1, string operando2, string & varAux,bool error[]);
 		static string getCompGreaterEqUF(string operando1, string operando2, string & varAux,bool error[]);
 
-		static string getCompInt(string operando1, string operando2, string & varAux,bool error[]);
+		static string getCompShort(string operando1, string operando2, string & varAux,bool error[]);
+		static string getCompUlong(string operando1, string operando2, string & varAux,bool error[]);
 		static string getCompFloat(string operando1, string operando2, string & varAux,bool error[]);
 
 		static string getCall(string operando1, string operando2, string & varAux,bool error[]);

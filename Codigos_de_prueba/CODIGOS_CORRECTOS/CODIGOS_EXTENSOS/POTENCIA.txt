@@ -13,12 +13,12 @@
 		RETURN,
 	},
 
-	potencia(6_ul) *{En el parametro colocar el exponente}*
+	potencia(6_ul), *{En el parametro colocar el exponente}*
 
 	IF (result == 64_ul){ *{colocar el resultado para ver si es el correcto}*
 		PRINT %El resultado fue el correcto%,
 	} ELSE {
 		PRINT %El resultado NO fue el correcto%,
-	} END_IF
+	} END_IF,
 
 }
