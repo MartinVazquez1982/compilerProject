@@ -42,7 +42,8 @@ sentenceList: sentenceList sentence
 
 sentence: declarative','
         | executable','
-        | ',' {yywarning("Sentencia vacia");}
+        | declarative {yywarning("Falta coma");}
+        | executable {yywarning("Falta coma");}
         ;
 
 declarative: function
@@ -401,12 +402,17 @@ functionCall: nesting'('')' {
 realParameter: expression
              ;
 
-ifStatement: IF condition iterativeBody else iterativeBody ENDIF {yymenssage("IF");jumpEndIf();}
-           | IF condition iterativeBody ENDIF {yymenssage("IF");jumpEndIf();}
+ifStatement: IF condition bloque else bloque ENDIF {yymenssage("IF");jumpEndIf();}
+           | IF condition bloque ENDIF {yymenssage("IF");jumpEndIf();}
            | IF condition ENDIF {yywarning("If vacio");yymenssage("IF");jumpEndIf();} 
-           | IF condition iterativeBody else ENDIF {yywarning("Else vacio");yymenssage("IF");jumpEndIf();}
-           | IF condition else iterativeBody ENDIF {yywarning("If vacio");yymenssage("IF");jumpEndIf();}
+           | IF condition bloque else ENDIF {yywarning("Else vacio");yymenssage("IF");jumpEndIf();}
+           | IF condition else bloque ENDIF {yywarning("If vacio");yymenssage("IF");jumpEndIf();}
            ;
+
+bloque: iterativeBody
+       | executable','
+       | return
+       ;  
 
 else: ELSE {jumpEndThen();}
     ;
@@ -420,8 +426,6 @@ while: WHILE {EstructuraTercetos::apilar();EstructuraTercetos::addLabel();}
 
 iterativeBody: '{' executableList '}' 
             | '{' executableList return '}'
-            | executable','
-            | return
             | '{' '}' {yywarning("Bloque vacio");}
             ;
 

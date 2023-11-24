@@ -1,8 +1,0 @@
-{
-	aa=1_s,
-	bb=3_s,
-	aa = 13_s + b-- * 7_s,
-	IF (aa-- > 15_s){
-		PRINT %aa%,
-	}END_IF,
-}

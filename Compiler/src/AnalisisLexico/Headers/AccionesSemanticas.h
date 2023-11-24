@@ -43,6 +43,8 @@ class AccionesSemanticas{
 
 		static bool tokenReconocido();
 
+		static void restarContador();
+
 		static void AS1(char caracter);
 
 		static void AS2(char caracter);

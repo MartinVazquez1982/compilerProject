@@ -71,6 +71,10 @@ void AccionesSemanticas::AS1(char caracter){
 	if (caracter == '\n') nroLineas++;
 }
 
+void AccionesSemanticas::restarContador(){
+	nroLineas--;
+}
+
 
 /**
  * En caso de un error revisa de cual se trata
