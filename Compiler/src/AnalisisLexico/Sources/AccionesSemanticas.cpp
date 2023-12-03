@@ -190,7 +190,7 @@ void AccionesSemanticas::AS8(char caracter){
 }
 
 /**
- * Chequea rando de las constantes de tipo SHORT, si hay un overflow
+ * Chequea rando de las constantes positivas de tipo SHORT, si hay un overflow
  * llama a la AS10 y sino a la AS14
  */
 void AccionesSemanticas::AS9(char caracter){
@@ -274,8 +274,7 @@ void AccionesSemanticas::AS15(char caracter){
 
 /**
  * Agrega caracter al string siempre y cuando la longitud
- * sea menor a 7, dado que la palabra reservada mas larga
- * es de 6 caracteres
+ * sea menor a 10
  */
 void AccionesSemanticas::AS16(char caracter){
 	if (entrada.length() < 10){
@@ -419,7 +418,7 @@ void AccionesSemanticas::AS25(char caracter){
 }
 
 /**
- * Devuelve el token correspondiente al '=>', '=<', '<' o '>'
+ * Devuelve el token correspondiente al '>=', '<=', '<' o '>'
  */
 void AccionesSemanticas::AS26(char caracter){
 	tokenIdentificado = true;

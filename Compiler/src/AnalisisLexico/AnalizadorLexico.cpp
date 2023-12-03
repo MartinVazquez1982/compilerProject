@@ -5,6 +5,12 @@
 #include "./Headers/AccionesSemanticas.h"
 using namespace std;
 
+/**
+ * Impresion de los token reconocidos
+ *
+ * @param Nro_Token
+ */
+
 void impresionToken(int token){
 
 	if ( token < 273 || token == 278 ){
@@ -22,13 +28,13 @@ void impresionToken(int token){
 int yylex(){
 	char caracter;
 	while (!codigoFuente.eof()){
-		if (AccionesSemanticas::LeerCaracter()){
+		if (AccionesSemanticas::LeerCaracter()){ // Retorna false cuando se termina con un caracter que no es el del token
 			codigoFuente.get(caracter);
 		} else {
-			caracter = AccionesSemanticas::caracterLeido();
+			caracter = AccionesSemanticas::caracterLeido(); // Caracter leido en la iteracion anterior
 		}
 		if (codigoFuente.eof()){
-			caracter='\0';
+			caracter='\0'; //Caracter Invalido
 		}
 		Dato estado = Automata::pasoAutomata(caracter);
 		if (estado.AS != nullptr) estado.AS(caracter);

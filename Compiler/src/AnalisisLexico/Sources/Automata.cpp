@@ -37,7 +37,7 @@ const unordered_map<char, int> Automata::hashIndices = {
 };
 
 /**
- * Busca el numero de fila correspondiente con el caracter
+ * Busca el numero de columna correspondiente con el caracter
  *
  * @param caracter al cual buscar su numero de columna
  *

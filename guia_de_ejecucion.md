@@ -30,7 +30,7 @@ Aclaraciones:
 
 **Pasos:**
 1. Abrir consola PowerShell o cmd
-2. Posicionarse dentro de la carpeta *Entrega/Codigo_Ejecutable/*
+2. Posicionarse dentro de la carpeta *Entrega_Grupo_8_Benecier_Burckhardt_Vazquez/Compilador/*
 3. Escribir el siguiente comando:   
 
 ```bash
