@@ -20,13 +20,13 @@ Estructura resumida del repositorio:
 compilerProject
 |-- Codigos_de_prueba
 |-- Lenguaje
-    |-- 
-    |-- 
-    |-- 
-    |-- 
+    |-- Lexico.pdf
+    |-- Sintactico.pdf
+    |-- Semantico.pdf
+    |-- Generacion_de_codigo.pdf
 |-- Informes
-    |-- 
-    |-- 
+    |-- Informe_Lexico_Sintactico.pdf
+    |-- Informe_Semantica_GeneracionDeCodigo.pdf
 |-- Compiler
     |-- src
 |-- Yacc
