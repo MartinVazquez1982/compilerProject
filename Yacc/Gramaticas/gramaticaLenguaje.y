@@ -425,6 +425,7 @@ while: WHILE {EstructuraTercetos::apilar();EstructuraTercetos::addLabel();}
 
 iterativeBody: '{' executableList '}' 
             | '{' executableList return '}'
+            | '{' return '}'
             | '{' '}' {yywarning("Bloque vacio");}
             ;
 
