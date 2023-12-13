@@ -82,7 +82,13 @@ Aclaraciones:
 
 Para ejecutar el compilador no se necesita tener nada instalado, pero si se desea que se genera la salida completa es necesario tener instalado el *MASM32*.
 
-En caso de querer compilar el 
+En caso de querer compilar es un proyecto desarrollado en Eclipse, se recomiendo utilizarlo en caso de querer añadir alguna funcionalidad. Al realizar una modificación en el archivo ```Yacc/gramatica.y```, se tiene que generar el parse ejecutando el siguiente comando:
+
+```
+./yacc.exe gramatica.y
+```
+
+Cabe aclarar que se debe colocar la consola dentro de la carpeta ```Yacc```, luego se generar un archivo ```y.tab.c```. A este se tiene que cambiar el nombre a ```Parse.cpp``` y a ```STYPE``` colocarle tipo *String*. Con estos cambios realizado reemplzar el viejo archivo por el nuevo, que se encuentra en la carpeta ```/Compiler/src/AnalisisSintactico```. Finalmente compilar el proyecto.
 
 ## Ejecución
 
